@@ -1,14 +1,22 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link> | <router-link to="/about">About</router-link> |
+      <router-link to="/ol">ol</router-link> |
+      <router-link to="/cesium">cesium</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style lang="scss">
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,7 +26,7 @@
 }
 
 #nav {
-  padding: 30px;
+  line-height: 0.8rem;
 
   a {
     font-weight: bold;
