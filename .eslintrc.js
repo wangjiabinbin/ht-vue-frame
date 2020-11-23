@@ -1,3 +1,11 @@
+/*
+ * @Author: 王磊
+ * @Date: 2020-11-20 16:05:37
+ * @LastEditTime: 2020-11-23 09:56:29
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \ht-vue-frame\.eslintrc.js
+ */
 const env = process.env.NODE_ENV;
 
 module.exports = {
@@ -18,5 +26,6 @@ module.exports = {
     ],
     'no-debugger': env === 'production' ? 'warn' : 'off',
     'no-unused-vars': 'warn',
+    'linebreak-style': ['off', 'windows'],
   },
 };
