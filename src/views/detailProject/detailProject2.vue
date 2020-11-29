@@ -132,7 +132,7 @@ export default {
 
 <style scoped lang="scss">
 .projectTop {
-  padding: 0 0.2rem;
+  padding: 0 0.1rem;
 }
 .projectClassify {
   display: flex;

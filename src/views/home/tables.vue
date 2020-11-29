@@ -63,6 +63,7 @@
               }"
               >详情<img :src="iconDetail" alt=""
             /></router-link>
+            <span v-else class="iconDetail"></span>
           </div>
         </div>
       </div>
@@ -115,12 +116,14 @@ export default {
   .tableCont {
     display: flex;
     justify-content: space-between;
-    // background-color: #808080;
+    background-color: #e7e7e7;
     font-size: 0.12rem;
-    height: 0.24rem;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    margin-bottom: 0.03rem;
+
     > span {
       text-align: center;
-      line-height: 0.24rem;
       min-width: 0.4rem;
       color: #010713;
       font-weight: 500;
@@ -133,8 +136,7 @@ export default {
   .tableTrCont {
     font-size: 0.1rem;
     height: 0.3rem;
-    background: #e8ebf6;
-    margin-bottom: 0.05rem;
+    background: #f4f4f4;
     border-radius: 0.05rem;
     display: flex;
     justify-content: space-between;
@@ -143,14 +145,14 @@ export default {
       float: left;
       text-align: center;
       line-height: 0.3rem;
-      min-width: 0.44rem;
+      min-width: 0.34rem;
       margin-right: 0.04rem;
     }
     :first-child {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      width: 0.5rem;
+      width: 0.55rem;
       padding: 0 0 0 0.02rem;
       line-height: 0.12rem;
       img {
@@ -163,11 +165,13 @@ export default {
     }
     .iconDetail {
       display: flex;
+      width: 0.5rem;
       align-items: center;
       justify-content: center;
       transform: scale(0.92);
       // font-size: 0.09rem;
       color: #4063e7;
+      margin-right: 0;
       img {
         width: 0.05rem;
         height: 0.08rem;
@@ -194,16 +198,19 @@ export default {
         // float: left;
         text-align: center;
         line-height: 0.3rem;
-        min-width: 0.44rem;
+        min-width: 0.34rem;
         margin-right: 0.04rem;
       }
       :first-child {
         display: inline-block;
-        width: 0.52rem;
+        width: 0.55rem;
         overflow: hidden;
+        padding-left: 0.02rem;
       }
       .iconDetail {
         display: flex;
+        width: 0.5rem;
+        margin-right: 0;
         align-items: center;
         justify-content: center;
         transform: scale(0.92);
