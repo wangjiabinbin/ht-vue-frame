@@ -120,7 +120,7 @@ export default {
           zoom: 1.17,
           //地图大小
           top: '30rpx',
-          left: '40rpx',
+          left: 'center',
           label: {
             normal: {
               show: !0,
