@@ -77,10 +77,16 @@
           :options="swiperOptions"
         >
           <swiper-slide
-            ><ProjectProgress :serversData="serversData" :jsonData="jsonData"
+            ><ProjectProgress
+              :serversData="serversData"
+              :jsonData="jsonData"
+              :isShow="!isShowMinistries"
           /></swiper-slide>
           <swiper-slide
-            ><ProjectProgress :serversData="serversData2" :jsonData="jsonData"
+            ><ProjectProgress
+              :serversData="serversData2"
+              :jsonData="jsonData"
+              :isShow="isShowMinistries"
           /></swiper-slide>
         </swiper>
       </div>
@@ -329,25 +335,8 @@ export default {
     },
   },
   async created() {
-    getMapJson(100000).then((res) => {
-      this.jsonData = res.data;
-    });
-    // JSon  数据
-    getMapInfo({
-      parent: 100000,
-      type: 1,
-    }).then((res) => {
-      this.serversData2 = res.data.data;
-    });
-    // 地图数据
-    getMapInfo({
-      parent: 100000,
-      type: 0,
-    }).then((res) => {
-      this.serversData = res.data.data;
-    });
     // 折线图
-    await getAllProject().then((res) => {
+    getAllProject().then((res) => {
       this.projectData.forEach((i, n) => {
         res.data.data.week.forEach((item, index) => {
           if (i.name === item.progress) {
@@ -369,6 +358,23 @@ export default {
       this.lineCutData.YZB = res.data.data.Classify[0].WBD;
       this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
       this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
+    });
+    await getMapJson(100000).then((res) => {
+      this.jsonData = res.data;
+    });
+    // JSon  数据
+    getMapInfo({
+      parent: 100000,
+      type: 1,
+    }).then((res) => {
+      this.serversData2 = res.data.data;
+    });
+    // 地图数据
+    getMapInfo({
+      parent: 100000,
+      type: 0,
+    }).then((res) => {
+      this.serversData = res.data.data;
     });
   },
   mounted() {

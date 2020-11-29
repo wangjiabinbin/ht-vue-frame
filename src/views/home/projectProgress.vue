@@ -13,6 +13,7 @@ export default {
   props: {
     serversData: Array,
     jsonData: Object,
+    isShow: Boolean,
   },
   data() {
     return {
@@ -43,10 +44,14 @@ export default {
             省份:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.name}</span>
             </div>
             <div  style="color:#ccccca">
-            项目总量:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
+            ${
+              this.isShow ? '项目总量' : '新增项目'
+            }:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
             </div>
             <div  style="color:#ccccca">
-            负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;"> ${e.data.charge}</span>
+            负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;"> ${
+              e.data.charge
+            }</span>
             </div>
             </div>
             </div>
@@ -99,7 +104,7 @@ export default {
             {
               gt: 0,
               lt: 5,
-              label: ' 1 ~ 5',
+              label: ' 1 ~ 6',
               color: '#ddeff1',
             },
             {
@@ -156,7 +161,6 @@ export default {
         ],
       });
       mapChart.on('click', (e) => {
-        console.log(e);
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
           this.$router.push({
@@ -173,9 +177,7 @@ export default {
   watch: {
     jsonData(val) {},
     serversData(val) {
-      console.log(val);
       echarts.registerMap('china', this.$props.jsonData);
-      console.log(this.$props.serversData);
       this.option = val;
       this.initMap();
     },

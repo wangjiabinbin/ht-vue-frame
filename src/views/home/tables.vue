@@ -152,7 +152,6 @@ export default {
       align-items: center;
       width: 0.5rem;
       padding: 0 0 0 0.02rem;
-      overflow: hidden;
       line-height: 0.12rem;
       img {
         width: 0.1rem;

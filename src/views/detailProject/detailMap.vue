@@ -32,12 +32,11 @@ export default {
           triggerOn: 'click',
           enterable: true, //可以进入悬浮层
           formatter: (e) => {
-            console.log(e);
             if (!e.value && e.value !== 0) {
               e.value = '0';
             }
             const str = `
-            <div style="width: 0.86rem;height: 0.74rem;padding: 0 0 0rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
+            <div style="width: 1rem;height: 0.74rem;padding: 0 0 0rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
             <div style="width: 0.63rem;height: 0.39rem;">
             <div style="color:#ccccca">
             省份:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.name}</span>
@@ -154,13 +153,14 @@ export default {
         ],
       });
       mapChart.on('click', (e) => {
+        console.log(e);
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
           this.$router.push({
             name: 'detailProjectS',
             query: {
               name: e.name,
-              value: e.value,
+              id: e.data.adcode,
             },
           });
         });
@@ -169,14 +169,11 @@ export default {
   },
   watch: {
     jsonData(val) {
-      console.log(this.$props.name);
       echarts.registerMap(this.$props.name, val);
       this.option = this.$props.serversData;
       this.initMap();
     },
-    serversData(val) {
-      // console.log(JSON.stringify(this.option), '数据');
-    },
+    serversData(val) {},
     deep: true,
   },
 };

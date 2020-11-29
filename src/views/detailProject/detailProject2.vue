@@ -59,6 +59,9 @@ export default {
         {
           name: '验收结项',
         },
+        {
+          name: '招标中',
+        },
       ],
       serversData: null,
       tableData: [],
@@ -89,7 +92,7 @@ export default {
           bjColor: '#8970B0',
         },
       ],
-      projectDataNum: null,
+      projectDataNum: [],
     };
   },
   components: {

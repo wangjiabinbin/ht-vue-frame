@@ -111,7 +111,6 @@ export default {
     this.queryS = this.$route.query;
     await getAdcode({ adcode: this.queryS.id }).then((r) => {
       this.projectDataNum = r.data.data;
-      console.log(this.projectDataNum);
     });
     await getMapInfo({
       parent: this.queryS.id,
