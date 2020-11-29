@@ -38,8 +38,8 @@ export default {
               e.value = '0';
             }
             const str = `
-            <div style="width: 1.16rem;height: 0.74rem;">
-            <div style="width: 0.86rem;height: 0.64rem;padding: 0 0 0.08rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
+            <div style="width: 0.86rem;height: 0.74rem;padding: 0 0 0.08rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
+            <div style="width: 0.63rem;height: 0.39rem;">
             <div style="color:#ccccca">
             省份:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.name}</span>
             </div>
