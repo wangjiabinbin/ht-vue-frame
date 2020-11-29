@@ -7,11 +7,7 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div
-            class="homeEvolve1"
-            @click="isShowData = true"
-            :class="{ actives: isShowData }"
-          >
+          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
             项目进展信息
           </div>
           <div>人员安排信息</div>
@@ -598,7 +594,7 @@ export default {
 }
 // table样式
 .tableDetail {
-  padding: 0 0.13rem;
+  padding: 0 0.1rem;
   .projectTableTitle {
     height: 0.45rem;
     font-size: 0.16rem;
