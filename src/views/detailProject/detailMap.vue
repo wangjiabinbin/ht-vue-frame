@@ -57,52 +57,54 @@ export default {
         visualMap: {
           min: 0,
           max: 1000,
-          orient: 'horizontal',
+          orient: 'vertical',
           bottom: 0,
           showLabel: true,
           textGap: 1,
           //两端字体间距
-          itemWidth: 10,
+          itemWidth: 25,
+          itemHeight: 8,
           //图元宽高
-          itemGap: 10,
+          itemGap: 6,
           // 图元间距
           textStyle: {
-            fontSize: '10rpx',
+            fontSize: '10',
           },
           //lable文字大小
           pieces: [
             {
               gt: 30,
-              label: '> 30',
+              label: ' > 30',
               color: '#7f1100',
             },
             {
               gte: 21,
               lte: 30,
-              label: '21 ~ 30 ',
+              label: ' 21 ~ 30 ',
               color: '#f1bab5',
             },
             {
               gte: 11,
               lt: 20,
-              label: '11 ~ 20',
+              label: ' 11 ~ 20',
               color: '#ff8c71',
             },
             {
               gt: 6,
               lt: 10,
-              label: '6 ~ 10',
+              label: ' 6 ~ 10',
               color: '#fef3df',
             },
             {
               gt: 0,
               lt: 5,
-              label: '1 ~ 5',
+              label: ' 1 ~ 6',
               color: '#ddeff1',
             },
             {
               value: 0,
               color: '#ffffff',
+              label: ' 0',
             },
           ],
           show: true,
@@ -118,7 +120,7 @@ export default {
           zoom: 1.17,
           //地图大小
           top: '30rpx',
-          left: '40rpx',
+          left: 'center',
           label: {
             normal: {
               show: !0,
