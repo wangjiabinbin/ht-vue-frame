@@ -1,14 +1,28 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> | <router-link to="/about">About</router-link> |
-      <router-link to="/ol">ol</router-link> |
-      <router-link to="/cesium">cesium</router-link>
+  <div id="app" ref="box">
+    <div class="header">
+      <Header v-if="this.$route.meta.isShow" />
     </div>
-    <router-view />
+    <div class="main" ref="mainScrool">
+      <router-view ref="scrollTop" />
+    </div>
+    <FooterTab class="footer" v-if="!this.$route.meta.isShowLogin" />
   </div>
 </template>
+<script>
+import FooterTab from './components/footerTab/index.vue';
+import Header from './components/header/index.vue';
 
+export default {
+  mounted() {},
+  methods: {},
+  components: {
+    FooterTab,
+    Header,
+  },
+  watch: {},
+};
+</script>
 <style lang="scss">
 html,
 body,
@@ -18,16 +32,20 @@ body,
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  .main {
+    flex: 1;
+    overflow: auto;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 }
 
 #nav {
-  line-height: 0.8rem;
-
   a {
     font-weight: bold;
     color: #2c3e50;

@@ -18,6 +18,7 @@ html {
  */
 body {
   margin: 0;
+  font-size: 0.14rem;
 }
 /**
  * Render the `main` element consistently in IE.
@@ -147,6 +148,10 @@ textarea {
   margin: 0;
   /* 2 */
 }
+/**
+ *
+ *
+ */
 /**
  * Show the overflow in IE.
  * 1. Show the overflow in Edge.

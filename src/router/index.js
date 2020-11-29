@@ -1,38 +1,58 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-import About from '../views/About.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'home',
+    component: () => import('../views/home/Home.vue'),
   },
+  // 新增发布
   {
-    path: '/ol',
-    name: 'OL',
-    component: () => import(/* webpackChunkName: "about" */ '../components/OLMapView'),
+    path: '/NewCon',
+    name: 'newCon',
+    component: () => import('../views/newCon/newCon.vue'),
   },
+  // 个人中心
   {
-    path: '/cesium',
-    name: 'Cesium',
-    component: () => import(/* webpackChunkName: "about" */ '../components/CesiumMapView'),
+    path: '/Person',
+    name: 'person',
+    component: () => import('../views/person/person.vue'),
   },
+  // 项目
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: About,
+    path: '/Projects',
+    name: 'projects',
+    component: () => import('../views/projects/projects.vue'),
+  },
+  //发布
+  {
+    path: '/Issue',
+    name: 'issue',
+    component: () => import('../views/newCon/issueCon.vue'),
+    meta: {
+      isShow: true,
+    },
+  },
+  //详情
+  {
+    path: '/DetailProject',
+    name: 'detailProject',
+    component: () => import('../views/detailProject/detailProject.vue'),
+  },
+  // 登录’
+  {
+    path: '/Login',
+    name: 'login',
+    component: () => import('../views/login/login.vue'),
+    meta: {
+      isShowLogin: true,
+    },
   },
 ];
 
-const router = new VueRouter({
+export default new VueRouter({
   routes,
 });
-
-export default router;

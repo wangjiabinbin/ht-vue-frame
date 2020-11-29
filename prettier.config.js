@@ -1,5 +1,7 @@
+// const { all } = require("core-js/fn/promise");
+
 module.exports = {
-  printWidth: 120,
+  printWidth: 95,
   tabWidth: 2,
   useTabs: false,
   semi: true,
