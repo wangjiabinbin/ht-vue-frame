@@ -13,9 +13,11 @@
       <div class="tableBodyCont" v-for="(i, n) in tableData" :key="n + 'b'">
         <div class="tableTrCont" @click="clickHandle" :data-index="n">
           <span
-            ><img v-if="i.children.length ? true : false" :src="cutDetail" alt="" />{{
-              i.name
-            }}</span
+            ><img v-if="i.children.length ? true : false" :src="cutDetail" alt="" /><img
+              v-else
+              src=""
+              alt=""
+            />{{ i.name }}</span
           >
           <span>{{ i.detail[0].num }}</span>
           <span>{{ i.detail[1].num }}</span>
@@ -32,6 +34,7 @@
             class="iconDetail"
             >详情<img :src="iconDetail" alt=""
           /></router-link>
+          <span v-else class="iconDetail"></span>
         </div>
         <div class="isShowTable">
           <div

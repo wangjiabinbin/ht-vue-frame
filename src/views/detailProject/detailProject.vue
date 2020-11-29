@@ -124,7 +124,7 @@ export default {
     const res = await getTables({
       parent: this.queryS.id,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 100,
     });
     this.tableData = res.data.data.list;
     // 数据分类

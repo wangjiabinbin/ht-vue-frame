@@ -101,9 +101,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    this.initMap();
-  },
+  mounted() {},
   methods: {
     initMap() {
       const mapChart = echarts.init(this.$refs.lineChartsMap);
@@ -112,12 +110,16 @@ export default {
   },
   watch: {
     lineMapData(val) {
+      const seriesData = [];
+      const xAxisData = [];
       val.reverse().forEach((item) => {
-        option.series[0].data.push(item.num);
-        option.xAxis.data.push(item.projectDate);
-        option.title.text = this.$props.name;
-        option.series[0].name = this.$props.name;
+        seriesData.push(item.num);
+        xAxisData.push(item.projectDate);
       });
+      option.series[0].data = seriesData;
+      option.xAxis.data = xAxisData;
+      option.title.text = this.$props.name;
+      option.series[0].name = this.$props.name;
       this.initMap();
     },
   },

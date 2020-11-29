@@ -7,7 +7,11 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
+          <div
+            class="homeEvolve1"
+            @click="isShowData = true"
+            :class="{ actives: isShowData }"
+          >
             项目进展信息
           </div>
           <div>人员安排信息</div>
@@ -220,8 +224,8 @@ export default {
           bjColor: '#5E7093',
         },
         {
-          color: '#79CBEA',
-          bjColor: 'e4f6fa',
+          color: '#79cbea',
+          bjColor: '#79cbea',
         },
         {
           color: '#719bd5',
@@ -355,6 +359,7 @@ export default {
       this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
       this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
     });
+    console.log(this.lineCutData);
     await getMapJson(100000).then((res) => {
       this.jsonData = res.data;
     });
