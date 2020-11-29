@@ -41,11 +41,17 @@ const routes = [
     path: '/DetailProject',
     name: 'detailProject',
     component: () => import('../views/detailProject/detailProject.vue'),
+    meta: {
+      isShowCache: true,
+    },
   },
   {
     path: '/DetailProjectS',
     name: 'detailProjectS',
     component: () => import('../views/detailProject/detailProject2.vue'),
+    meta: {
+      isShowCache: true,
+    },
   },
   // 登录’
   {
