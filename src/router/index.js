@@ -42,6 +42,11 @@ const routes = [
     name: 'detailProject',
     component: () => import('../views/detailProject/detailProject.vue'),
   },
+  {
+    path: '/DetailProjectS',
+    name: 'detailProjectS',
+    component: () => import('../views/detailProject/detailProject2.vue'),
+  },
   // 登录’
   {
     path: '/Login',

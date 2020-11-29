@@ -7,7 +7,11 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
+          <div
+            class="homeEvolve1"
+            @click="isShowData = true"
+            :class="{ actives: isShowData }"
+          >
             项目进展信息
           </div>
           <div>人员安排信息</div>
@@ -98,13 +102,27 @@
           :options="swiperOptions"
           style="width: 3.13rem; height: 1.92rem"
         >
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
-          <swiper-slide><LineChartsMap /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.XZZB" :name="tabLineMap[0].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.XZYS" :name="tabLineMap[1].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.SQZC" :name="tabLineMap[2].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.SQSS" :name="tabLineMap[3].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.YZB" :name="tabLineMap[4].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.ZSSS" :name="tabLineMap[5].name"
+          /></swiper-slide>
+          <swiper-slide
+            ><LineChartsMap :lineMapData="lineCutData.YSJX" :name="tabLineMap[6].name"
+          /></swiper-slide>
         </swiper>
         <div class="tendencyMap">
           <div
@@ -137,7 +155,6 @@
 </template>
 
 <script>
-import { randomData, servers } from '../../utils/mapConfig';
 import { getTables, getMapInfo, getMapJson, getAllProject } from '../../api/api';
 import getNowFormatDate from '../../utils/dateS';
 import ProjectProgress from './projectProgress.vue';
@@ -247,10 +264,10 @@ export default {
       tableS: {
         tableData: [],
         load: this.loadHandle,
-        page: 1,
+        page: 0,
         finished: false,
         loading: false,
-        totals: 1,
+        totals: 4,
       },
       getDate: '',
       lineCutData: {},
@@ -271,15 +288,15 @@ export default {
     },
     // 下拉加载
     async loadHandle() {
-      // this.tableS.page++;
+      this.tableS.page++;
       await this.getTableData(this.tableS.page);
-      const TableList = Array.from(document.getElementsByClassName('isShowTable'));
-      if (!this.isShowMinistries) {
-        TableList.forEach((item) => {
-          const isShowDetail = item.firstElementChild.lastElementChild;
-          isShowDetail.innerHTML = '';
-        });
-      }
+      // const TableList = Array.from(document.getElementsByClassName('isShowTable'));
+      // if (!this.isShowMinistries) {
+      //   TableList.forEach((item) => {
+      //     const isShowDetail = item.firstElementChild.lastElementChild;
+      //     isShowDetail.innerHTML = '';
+      //   });
+      // }
       this.tableS.loading = false;
       if (this.tableS.page === this.tableS.totals) {
         this.tableS.finished = true;
@@ -290,7 +307,7 @@ export default {
       const res = await getTables({
         parent: 100000,
         pageNum: page,
-        pageSize: 33,
+        pageSize: 10,
       });
       this.tableS.tableData = [...this.tableS.tableData, ...res.data.data.list];
     },
@@ -312,28 +329,24 @@ export default {
     },
   },
   async created() {
-    // await servers().then((res) => {
-    //   this.serversData = res;
-    // });
-    // await servers2().then((res) => {
-    //   this.serversData2 = res;
-    //   console.log(res);
-    // });
-    await getMapInfo({
+    getMapJson(100000).then((res) => {
+      this.jsonData = res.data;
+    });
+    // JSon  数据
+    getMapInfo({
       parent: 100000,
       type: 1,
     }).then((res) => {
       this.serversData2 = res.data.data;
     });
-    await getMapInfo({
+    // 地图数据
+    getMapInfo({
       parent: 100000,
       type: 0,
     }).then((res) => {
       this.serversData = res.data.data;
     });
-    await getMapJson(100000).then((res) => {
-      this.jsonData = res.data;
-    });
+    // 折线图
     await getAllProject().then((res) => {
       this.projectData.forEach((i, n) => {
         res.data.data.week.forEach((item, index) => {
@@ -349,9 +362,13 @@ export default {
           }
         });
       });
-      this.lineCutData.WBD = res.data.data.Classify[0].WBD;
-      this.lineCutData.WBD = res.data.data.Classify[0].WBD;
-      // this.projectDataWeek = res.data.data.week;
+      this.lineCutData.XZZB = res.data.data.Classify[0].addWBD;
+      this.lineCutData.XZYS = res.data.data.Classify[0].addCBA;
+      this.lineCutData.SQZC = res.data.data.Classify[0].PST;
+      this.lineCutData.SQSS = res.data.data.Classify[0].PIT;
+      this.lineCutData.YZB = res.data.data.Classify[0].WBD;
+      this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
+      this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
     });
   },
   mounted() {

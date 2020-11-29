@@ -12,13 +12,24 @@
       </div>
       <div class="tableBodyCont" v-for="(i, n) in tableData" :key="n + 'b'">
         <div class="tableTrCont" @click="clickHandle" :data-index="n">
-          <span><img :src="cutDetail" alt="" />{{ i.name }}</span>
+          <span
+            ><img v-if="i.children.length ? true : false" :src="cutDetail" alt="" />{{
+              i.name
+            }}</span
+          >
           <span>{{ i.detail[0].num }}</span>
           <span>{{ i.detail[1].num }}</span>
           <span>{{ i.detail[2].num }}</span>
           <span>{{ i.detail[3].num }}</span>
           <span>{{ i.detail[4].num }}</span>
-          <router-link tag="div" :to="{ name: 'detailProject' }" class="iconDetail"
+          <router-link
+            v-if="i.children.length ? true : false"
+            tag="div"
+            :to="{
+              name: mapBoll ? 'detailProjectS' : 'detailProject',
+              query: { id: i.id, name: i.name },
+            }"
+            class="iconDetail"
             >详情<img :src="iconDetail" alt=""
           /></router-link>
         </div>
@@ -35,7 +46,21 @@
             <span>{{ item.detail[2].num }}</span>
             <span>{{ item.detail[3].num }}</span>
             <span>{{ item.detail[4].num }}</span>
-            <router-link class="iconDetail" tag="div" :to="{ name: 'detailProject' }"
+            <router-link
+              v-if="
+                item.name === '市局' || item.name === '省厅' || item.level === 'district'
+                  ? false
+                  : true
+              "
+              class="iconDetail"
+              tag="div"
+              :to="{
+                name: 'detailProjectS',
+                query: {
+                  id: item.id,
+                  name: item.name,
+                },
+              }"
               >详情<img :src="iconDetail" alt=""
             /></router-link>
           </div>
@@ -52,6 +77,7 @@ export default {
   props: {
     tableData: Array,
     isShowMinistries: Boolean,
+    mapBoll: Boolean,
   },
   data() {
     return {
@@ -81,7 +107,6 @@ export default {
       }
     },
   },
-  watch: {},
 };
 </script>
 
@@ -128,6 +153,7 @@ export default {
       width: 0.5rem;
       padding: 0 0 0 0.02rem;
       overflow: hidden;
+      line-height: 0.12rem;
       img {
         width: 0.1rem;
         height: 0.06rem;

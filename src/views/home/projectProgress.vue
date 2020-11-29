@@ -23,7 +23,6 @@ export default {
   },
   created() {},
   methods: {
-    clickHandle2() {},
     initMap() {
       const mapChart = echarts.init(this.$refs.projectProgressMap);
       mapChart.setOption({
@@ -47,9 +46,7 @@ export default {
             项目总量:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
             </div>
             <div  style="color:#ccccca">
-            负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${
-              e.charge ? e.charge : '暂无'
-            }</span>
+            负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;"> ${e.data.charge}</span>
             </div>
             </div>
             </div>
@@ -62,13 +59,13 @@ export default {
           min: 0,
           max: 1000,
           orient: 'horizontal',
-          bottom: 80,
+          bottom: 0,
           showLabel: true,
           textGap: 1,
           //两端字体间距
           itemWidth: 10,
           //图元宽高
-          itemGap: 10,
+          itemGap: 30,
           // 图元间距
           textStyle: {
             fontSize: '10rpx',
@@ -119,10 +116,10 @@ export default {
             min: 1,
             max: 2,
           },
-          zoom: 1.17,
+          zoom: 1.6,
           //地图大小
-          top: '30rpx',
-          left: '40rpx',
+          top: '80',
+          left: 'center',
           label: {
             normal: {
               show: !0,
@@ -157,13 +154,14 @@ export default {
         ],
       });
       mapChart.on('click', (e) => {
+        console.log(e);
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
           this.$router.push({
             name: 'detailProject',
             query: {
               name: e.name,
-              value: e.value,
+              id: e.data.adcode,
             },
           });
         });
@@ -171,13 +169,13 @@ export default {
     },
   },
   watch: {
-    jsonData(val) {
-      echarts.registerMap('china', val);
-      this.option = this.$props.serversData;
-      this.initMap();
-    },
+    jsonData(val) {},
     serversData(val) {
-      // console.log(JSON.stringify(this.option), '数据');
+      console.log(val);
+      echarts.registerMap('china', this.$props.jsonData);
+      console.log(this.$props.serversData);
+      this.option = val;
+      this.initMap();
     },
     deep: true,
   },
@@ -187,6 +185,6 @@ export default {
 <style scoped lang="scss">
 .projectProgressMap {
   width: 100%;
-  height: 3.6rem;
+  height: 2.8rem;
 }
 </style>

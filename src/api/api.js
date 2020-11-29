@@ -27,6 +27,10 @@ export const getMapInfo = (params) => {
 export const getAllProject = () => {
   return axios.get(`${urlConfig.url}/home/getAllProject`);
 };
+// 分类数据
+export const getAdcode = (params) => {
+  return axios.get(`${urlConfig.url}/area/getAdcode`, { params: params });
+};
 // 全国省市县json数据
 
 export const getMapJson = (id) => {

@@ -6,32 +6,21 @@
 
 <script>
 import echarts from 'echarts';
-import chinaJson from 'echarts/map/json/province/jiangsu.json';
-import axios from 'axios';
-import { mydata, servers, jiangsuData } from '../../utils/mapConfig';
-
-echarts.registerMap('江苏', chinaJson);
 
 export default {
   props: {
     serversData: Array,
+    jsonData: Object,
+    name: String,
   },
   data() {
     return {
       hookTip: null,
       option: [],
+      jsonMapData: null,
     };
   },
   created() {},
-  async mounted() {
-    this.initMap();
-    // const res = await axios.get(
-    //   'http://192.168.1.199:8099/area/getMapInfo?parent=100000&type=0'
-    // );
-    // await servers().then((res) => {
-    //   this.option = res;
-    // });
-  },
   methods: {
     initMap() {
       const mapChart = echarts.init(this.$refs.projectProgressMap);
@@ -39,25 +28,29 @@ export default {
         backgroundColor: '#f4f4f4',
         tooltip: {
           trigger: 'item',
-          backgroundColor: 'rgba(0,0,0,0.5)',
+          backgroundColor: 'rgba(1, 7, 19, 0.5)',
           triggerOn: 'click',
           enterable: true, //可以进入悬浮层
           formatter: (e) => {
+            console.log(e);
+            if (!e.value && e.value !== 0) {
+              e.value = '0';
+            }
             const str = `
-            <div style="min-width: 0.86rem;height: 0.74rem;">
-            <div style="min-width: 0.78rem;height: 0.64rem;margin:auto;border-bottom:1px solid #fff">
-            <div>
-            省份:<span style="color:#fff">${e.name}</span>
+            <div style="width: 0.86rem;height: 0.74rem;padding: 0 0 0rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
+            <div style="width: 0.63rem;height: 0.39rem;">
+            <div style="color:#ccccca">
+            省份:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.name}</span>
             </div>
-            <div>
-            项目总量:<span style="color:#fff">${e.value}</span>
+            <div  style="color:#ccccca">
+            项目总量:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
             </div>
-            <div>
-            负责人:<span style="color:#fff">张三</span>
+            <div  style="color:#ccccca">
+            负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">负责人</span>
             </div>
             </div>
-            <div id="skipRouter" style="height:0.2rem;float:right;margin:0.05rem 0">详请></div>
             </div>
+            <div id="skipRouter" style="height:0.2rem;float:right;">详请></div>
             `;
             return str;
           },
@@ -72,7 +65,7 @@ export default {
           //两端字体间距
           itemWidth: 10,
           //图元宽高
-          itemGap: 5,
+          itemGap: 10,
           // 图元间距
           textStyle: {
             fontSize: '10rpx',
@@ -117,20 +110,20 @@ export default {
           //控制左侧按钮显示
         },
         geo: {
-          map: '江苏',
+          map: this.$props.name,
           roam: !1,
           scaleLimit: {
             min: 1,
             max: 2,
           },
-          zoom: 1.2,
+          zoom: 1.17,
           //地图大小
           top: '30rpx',
           left: '40rpx',
           label: {
             normal: {
               show: !0,
-              fontSize: '8',
+              fontSize: '6',
               color: 'rgba(0,0,0,0.7)',
               //文字颜色
             },
@@ -153,10 +146,10 @@ export default {
         },
         series: [
           {
-            name: '项目总量',
+            name: '总量',
             type: 'map',
             geoIndex: 0,
-            data: this.$props.serversData,
+            data: this.option,
           },
         ],
       });
@@ -164,7 +157,7 @@ export default {
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
           this.$router.push({
-            name: 'detailProject',
+            name: 'detailProjectS',
             query: {
               name: e.name,
               value: e.value,
@@ -174,7 +167,18 @@ export default {
       });
     },
   },
-  watch: {},
+  watch: {
+    jsonData(val) {
+      console.log(this.$props.name);
+      echarts.registerMap(this.$props.name, val);
+      this.option = this.$props.serversData;
+      this.initMap();
+    },
+    serversData(val) {
+      // console.log(JSON.stringify(this.option), '数据');
+    },
+    deep: true,
+  },
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <van-nav-bar
       :title="queryS.name + '项目'"
       left-text="返回"
@@ -9,12 +9,6 @@
     <div class="projectTop">
       <div class="detailTitle">{{ queryS.name }}项目</div>
       <!-- 项目分类 -->
-      <!-- <div class="projectClassify">
-      <div v-for="(item, index) in projectData" :key="index" class="projectClassifyData">
-        <span>{{ projectDataNum.length ? projectDataNum[index].num : '' }}</span>
-        <div>{{ item.name }}</div>
-      </div>
-    </div> -->
       <div class="projectDetail">
         <!-- 较上周增加数量 -->
         <div
@@ -35,13 +29,12 @@
       <div>
         <DetailMap :serversData="serversData" :jsonData="jsonData" :name="queryS.name" />
       </div>
-      <Tables :tableData="tableData" :mapBoll="mapBoll" />
+      <Tables :tableData="tableData" />
     </div>
   </div>
 </template>
 
 <script>
-import { randomData, jiangsuData } from '../../utils/mapConfig';
 import { getTables, getMapInfo, getMapJson, getAdcode } from '../../api/api';
 import DetailMap from './detailMap.vue';
 import Tables from '../home/tables.vue';
@@ -66,10 +59,10 @@ export default {
         {
           name: '验收结项',
         },
-        {
-          name: '招标中',
-        },
       ],
+      serversData: null,
+      tableData: [],
+      jsonData: null,
       colorData: [
         {
           color: '#6cbd78',
@@ -96,11 +89,7 @@ export default {
           bjColor: '#8970B0',
         },
       ],
-      projectDataNum: [],
-      serversData: null,
-      tableData: [],
-      jsonData: null,
-      mapBoll: true,
+      projectDataNum: null,
     };
   },
   components: {
@@ -111,7 +100,6 @@ export default {
     this.queryS = this.$route.query;
     await getAdcode({ adcode: this.queryS.id }).then((r) => {
       this.projectDataNum = r.data.data;
-      console.log(this.projectDataNum);
     });
     await getMapInfo({
       parent: this.queryS.id,
@@ -128,7 +116,6 @@ export default {
       pageSize: 10,
     });
     this.tableData = res.data.data.list;
-    // 数据分类
   },
   methods: {
     onClickLeft() {
