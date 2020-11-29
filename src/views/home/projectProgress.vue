@@ -38,15 +38,13 @@ export default {
               e.value = '0';
             }
             const str = `
-            <div style="width: 0.86rem;height: 0.74rem;padding: 0 0 0.08rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5);">
+            <div style="width: 0.86rem;height: 0.74rem;padding: 0 0 0rem 0.05rem;border-bottom:1px solid  rgba(255, 255, 255, 0.5); z-index: 999;">
             <div style="width: 0.63rem;height: 0.39rem;">
             <div style="color:#ccccca">
             省份:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.name}</span>
             </div>
             <div  style="color:#ccccca">
-            项目总量:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${
-              e.value
-            }</span>
+            项目总量:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
             </div>
             <div  style="color:#ccccca">
             负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${
@@ -54,8 +52,8 @@ export default {
             }</span>
             </div>
             </div>
-            <div id="skipRouter" style="height:0.2rem;float:right;margin:0.05rem 0">详请></div>
             </div>
+            <div id="skipRouter" style="height:0.2rem;float:right;">详请></div>
             `;
             return str;
           },

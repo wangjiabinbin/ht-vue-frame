@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #f0f0f0">
+  <div style="background: #f8f7fa">
     <!-- banner -->
     <div class="imgBanner">
       <img src="../../assets/banner.png" alt="" />
@@ -7,18 +7,14 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div
-            class="homeEvolve1"
-            @click="isShowData = true"
-            :class="{ actives: isShowData }"
-          >
+          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
             项目进展信息
           </div>
           <div>人员安排信息</div>
         </div>
         <div class="homeProjectMain">
           <div class="homeDate">
-            <span> 当前时间: </span>
+            <span class="homeDate-title"> 当前时间: </span>
             <span> {{ getDate }} </span>
           </div>
           <!-- 数据 -->
@@ -126,7 +122,7 @@
     <!-- 主体图表结束 -->
     <!-- table -->
     <div class="tableDetail" style="background-color: #f8f8fa; margin-top: 0.2rem">
-      <div class="projectTableTitle">全国省市县项目</div>
+      <div class="projectTableTitle">全国省市项目</div>
       <van-list
         v-model="tableS.loading"
         :finished="tableS.finished"
@@ -373,11 +369,11 @@ export default {
   img {
     width: 100%;
     height: 1.5rem;
+    display: block;
   }
 }
 
 .projectHomeDetail {
-  margin-top: -0.1rem;
   background-color: #f9f9fb !important;
 }
 .homeProject {
@@ -388,45 +384,35 @@ export default {
   box-shadow: 0px 0px 0.1rem #d5e4ff;
   .homeHeader {
     height: 0.4rem;
-    border-radius: 0.05rem 0.05rem 0 0;
     display: flex;
     position: relative;
-    // top: -0.14rem;
+
     > div {
       width: 50%;
       text-align: center;
       line-height: 0.4rem;
-
-      background-image: linear-gradient(
-        to bottom,
-        rgba(248, 248, 251, 1),
-        26%,
-        rgba(248, 248, 251, 1)
-      );
-      // background-image: linear-gradient(to bottom, #f8f7fc, 80%, #e8ebf4);
-      // background-color: #e4e3e3;
-      font-size: 0.1.4rem;
+      font-size: 0.14rem;
       font-weight: normal;
     }
+
     :nth-child(1) {
-      border-radius: 0.05rem 0.05rem 0 0;
       z-index: 9999;
     }
     :nth-child(2) {
-      border-radius: 0 0.05rem 0 0;
+      box-shadow: inset 0px 0px 20px 2px #e3e4ea;
       position: absolute;
       right: 0;
       top: 0;
-      width: 52%;
+      width: 50%;
     }
   }
   // 项目主体
   .homeProjectMain {
-    height: 2.2rem;
     border-radius: 0.05rem;
     position: relative;
-    top: -0.05rem;
     background-color: #fff;
+    box-shadow: 0px 0px 8px 4px #e3e4ea;
+
     // 时间
     .homeDate {
       // background-color: #cad8ff;
@@ -438,13 +424,16 @@ export default {
       font-weight: 400;
       color: #010713;
       margin-left: 0.15rem;
+
+      .homeDate-title {
+        margin-right: 0.1rem;
+      }
     }
     // 项目信息
     .projectDetail {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
-      height: 1.2rem;
       .afterRight::after {
         content: '';
         width: 0.01rem;
@@ -462,30 +451,31 @@ export default {
         width: 1.06rem;
         height: 0.68rem;
         background-color: #fff;
-        margin-bottom: 0.24rem;
+        margin-bottom: 0.22rem;
         .projectHead {
           min-width: 0.55rem;
           display: flex;
           justify-content: center;
           padding: 0.02rem 0.08rem;
           > span:nth-child(1) {
-            font-size: 0.08rem;
+            margin-right: 0.05rem;
+            font-size: 0.1rem;
             color: #848484;
-            // height: 0.3rem;
-            // line-height: 0.3rem;
           }
           > span:nth-child(2) {
-            font-size: 0.01rem;
-            // height: 0.3rem;
-            // line-height: 0.3rem;
+            font-size: 0.1rem;
           }
         }
         .projectNum {
           display: inline-block;
+          margin: 0.08rem 0;
+          line-height: 0.24rem;
           font-size: 0.24rem;
           font-weight: bold;
-          height: 0.36rem;
-          line-height: 0.36rem;
+        }
+
+        .projectName {
+          font-size: 0.12rem;
         }
       }
     }
@@ -494,19 +484,20 @@ export default {
 // 图表内容
 .homeMain {
   padding: 0 0.13rem;
-  background-color: #f8f8fa;
+
   // 态势图切换
   .situationMapTitle {
-    height: 0.45rem;
-    font-size: 0.16rem;
-    font-weight: bold;
-    line-height: 0.45rem;
     display: flex;
     align-items: center;
+    padding: 0.22rem 0 0.14rem 0;
+    line-height: 0.18rem;
+    font-size: 0.18rem;
+    font-weight: bold;
+
     img {
       width: 0.15rem;
       height: 0.12rem;
-      margin-left: 0.02rem;
+      margin-left: 0.05rem;
     }
   }
   .situationMapSwiper {
@@ -517,7 +508,8 @@ export default {
   // 态势图
   .situationMaptap {
     display: flex;
-    margin-bottom: 0.09rem;
+    margin-bottom: 0.1rem;
+
     > div {
       width: 0.87rem;
       height: 0.26rem;
@@ -535,18 +527,37 @@ export default {
   // 趋势图
   .situationMapBoss {
     position: relative;
+
+    .iconButtonLeft,
+    .iconButtonRight {
+      background-color: #b1aeae;
+      border-radius: 50%;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform: scale(0.6);
+      }
+    }
+
     .iconButtonLeft {
       position: absolute;
-      z-index: 999;
+      width: 0.3rem;
+      height: 0.3rem;
       top: 1.41rem;
       left: -0.1rem;
+      transform: scale(0.8);
+      z-index: 999;
     }
     .iconButtonRight {
       position: absolute;
-      z-index: 999;
       top: 1.41rem;
       right: -0.1rem;
-      transform: rotate(180deg);
+      width: 0.3rem;
+      height: 0.3rem;
+      transform: rotate(180deg) scale(0.8);
+      z-index: 999;
     }
   }
   .tendencyMap {
@@ -561,10 +572,10 @@ export default {
       text-align: center;
       line-height: 0.32rem;
       background-color: #f4f4f4;
-      margin-bottom: 0.09rem;
+      margin-bottom: 0.05rem;
     }
     > div:not(:nth-child(4)) {
-      margin-right: 0.05rem;
+      margin-right: 0.03rem;
     }
   }
 }
@@ -586,6 +597,6 @@ export default {
 .tapsituationMapActive {
   background-color: #e0e6f4 !important;
   color: #5c77ea;
-  border: none !important;
+  border-color: transparent !important;
 }
 </style>

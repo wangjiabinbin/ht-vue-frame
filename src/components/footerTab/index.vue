@@ -7,7 +7,9 @@
       @click="tabbarCut(index, item)"
     >
       <img :src="activeTap === index ? item.icons : item.iconsGrey" alt="" />
-      <div>{{ item.name }}</div>
+      <div class="footer-nav-name" :class="{ active: activeTap === index }">
+        {{ item.name }}
+      </div>
     </div>
   </div>
 </template>
@@ -63,15 +65,26 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+
   .footerNav {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 0.08rem;
     color: #a4a4a4;
+
     img {
       width: 0.21rem;
       height: 0.21rem;
+      display: block;
+    }
+
+    .footer-nav-name {
+      margin-top: 0.04rem;
+
+      &.active {
+        color: #4063e7;
+      }
     }
   }
 }

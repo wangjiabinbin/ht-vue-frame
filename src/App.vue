@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-11-29 11:47:25
+ * @LastEditTime: 2020-11-29 13:23:36
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \survey_app_web\src\App.vue
+-->
 <template>
   <div id="app" ref="box">
     <div class="header">
@@ -40,8 +48,10 @@ body,
   }
   .footer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
+    padding: 0 0.37rem;
   }
 }
 

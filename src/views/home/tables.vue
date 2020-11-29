@@ -131,8 +131,9 @@ export default {
       img {
         width: 0.1rem;
         height: 0.06rem;
-        transition: 1s;
+        transition: all 0.2s;
         transform: rotate(-90deg);
+        margin-right: 0.05rem;
       }
     }
     .iconDetail {

@@ -72,7 +72,7 @@ export default {
         grid: {
           left: 50,
           right: 40,
-          top: 70,
+          top: 65,
           bottom: 200,
           borderWidth: 1,
         },
@@ -83,6 +83,7 @@ export default {
           axisLabel: {
             interval: 0,
             color: '#a0a9bc',
+            fontSize: 10,
             //     //X轴标签 label 做了特殊处理，防止左右溢出
             //   formatter: (value, index) => {
             //       if (index === 0 || index === xAxisData.length - 1) {
@@ -121,6 +122,9 @@ export default {
           },
           axisTick: {
             show: false,
+          },
+          axisLabel: {
+            fontSize: 10,
           },
         },
         series: [
