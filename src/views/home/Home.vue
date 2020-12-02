@@ -7,11 +7,7 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div
-            class="homeEvolve1"
-            @click="isShowData = true"
-            :class="{ actives: isShowData }"
-          >
+          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
             项目进展信息
           </div>
           <div>人员安排信息</div>
@@ -26,11 +22,7 @@
               数据说明
             </div>
             <!-- 遮罩层 -->
-            <van-overlay
-              :show="overlayShow"
-              z-index="999999"
-              @click="overlayShow = false"
-            >
+            <van-overlay :show="overlayShow" z-index="999999" @click="overlayShow = false">
               <div class="overlayDetail">
                 <div class="overlayText">
                   <div
@@ -41,10 +33,7 @@
                     <p>
                       {{ item.name }}
                     </p>
-                    <p
-                      v-for="(i, n) in item.children ? item.children : null"
-                      :key="n + 's'"
-                    >
+                    <p v-for="(i, n) in item.children ? item.children : null" :key="n + 's'">
                       {{ i }}
                     </p>
                   </div>
@@ -140,7 +129,7 @@
           ref="tendencyMapSwiper"
           class="swiper-no-swiping tendencyMapSwiper"
           :options="swiperOptions"
-          style="width: 3.45rem; height: 1.92rem"
+          style="width: 100%; height: 1.92rem"
         >
           <swiper-slide
             ><LineChartsMap :lineMapData="lineCutData.XZZB" :name="tabLineMap[0].name"
@@ -492,7 +481,8 @@ export default {
   }
   .situationMapSwiper {
     border: 0.01rem solid #e1e1e1;
-    width: 3.45rem;
+    // width: 3.45rem;
+    width: 100%;
     height: 2.805rem;
   }
   // 态势图

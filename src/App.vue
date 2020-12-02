@@ -29,12 +29,23 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import FooterTab from './components/footerTab/index.vue';
 import Header from './components/header/index.vue';
 import { isShowStorage } from './utils/localstorageS';
 
 export default {
-  mounted() {},
+  mounted() {
+    document.addEventListener(
+      'touchmove',
+      (event) => {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      },
+      false
+    );
+  },
   methods: {},
   components: {
     FooterTab,
@@ -62,9 +73,12 @@ body,
 #app {
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+
   .main {
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .footer {
     display: flex;

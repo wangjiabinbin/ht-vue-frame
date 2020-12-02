@@ -10,6 +10,7 @@ import {
   Form,
   Icon,
   Toast,
+  Dialog,
 } from 'vant';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 // 轮播组件
@@ -37,7 +38,9 @@ Vue.use(NavBar)
   .use(Form)
   .use(Icon)
   .use(Overlay)
-  .use(Toast);
+  .use(Toast)
+  .use(Dialog);
+
 Vue.config.productionTip = false;
 
 new Vue({

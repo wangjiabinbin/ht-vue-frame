@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div ref="projectProgressMap" class="projectProgressMap"></div>
-  </div>
+  <div ref="projectProgressMap" class="projectProgressMap"></div>
 </template>
 
 <script>
@@ -30,9 +28,7 @@ export default {
   methods: {
     initMap() {
       const mapChart = echarts.init(this.$refs.projectProgressMap);
-      mapChart.setOption(
-        mapOption(this.isShow, this.option, this.name, this.permissions)
-      );
+      mapChart.setOption(mapOption(this.isShow, this.option, this.name, this.permissions));
       mapChart.on('click', (e) => {
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {

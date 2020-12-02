@@ -17,6 +17,7 @@
               v-else
               src=""
               alt=""
+              style="visibility: hidden"
             />{{ i.name }}</span
           >
           <span>{{ i.detail[0].num }}</span>
