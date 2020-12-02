@@ -22,14 +22,11 @@
       <!-- 项目分类 -->
       <div class="detailTitle">城市项目分布</div>
       <div class="mapProject">
-        <ProjectProgress
-          :serversData="serversData"
-          :jsonData="jsonData"
-          :name="queryS.name"
-        />
+        <ProjectProgress :serversData="serversData" :jsonData="jsonData" :name="queryS.name" />
       </div>
       <Tables :tableData="tableData" />
     </div>
+    <div class="bottomTitle">没有更多啦</div>
   </div>
 </template>
 
@@ -76,20 +73,18 @@ export default {
     });
     getTables({
       parent: this.queryS.id,
-      pageNum: 1,
-      pageSize: 100,
     }).then((res) => {
       // this.tableData = res.data.data.list;
-      res.data.data.list.sort((a, b) => {
-        return b.detail[0].num - a.detail[0].num;
-      });
-      res.data.data.list.forEach((item, index) => {
-        if (item.name === '省厅' || item.name === '市局') {
-          const city = res.data.data.list.splice(index, 1);
-          res.data.data.list.unshift(city[0]);
-        }
-      });
-      this.tableData = res.data.data.list;
+      // res.data.data.sort((a, b) => {
+      //   return b.detail[0].num - a.detail[0].num;
+      // });
+      // res.data.data.forEach((item, index) => {
+      //   if (item.name === '省厅' || item.name === '市局') {
+      //     const city = res.data.data.splice(index, 1);
+      //     res.data.data.unshift(city[0]);
+      //   }
+      // });
+      this.tableData = res.data.data;
     });
 
     // 数据分类
@@ -139,5 +134,12 @@ export default {
     height: 2.81rem;
     margin-bottom: 0.2rem;
   }
+}
+.bottomTitle {
+  width: 100%;
+  color: #969799;
+  font-size: 0.14rem;
+  line-height: 0.5rem;
+  text-align: center;
 }
 </style>

@@ -34,14 +34,12 @@ export function mapOption(isShow, option, name, permissions) {
         }:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;">${e.value}</span>
         </div>
         <div  style="color:#ccccca">
-        负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;"> ${
-          e.data.charge
-        }</span>
+        负责人:<span style="color:#fff;margin: 0 0 0.055rem 0.05rem;"> ${e.data.charge}</span>
         </div>
         </div>
         </div>
         <div  id="skipRouter" style="height:0.2rem;float:right;display:${
-          permissions ? 'none' : e.data.level === 'district' ? 'none' : 'block'
+          permissions ? 'none!important' : e.data.level === 'district' ? 'none' : 'block'
         }">详请></div>
         `;
         return str;

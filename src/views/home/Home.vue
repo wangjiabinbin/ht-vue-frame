@@ -7,11 +7,7 @@
     <div class="projectHomeDetail">
       <div class="homeProject">
         <div class="homeHeader">
-          <div
-            class="homeEvolve1"
-            @click="isShowData = true"
-            :class="{ actives: isShowData }"
-          >
+          <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
             项目进展信息
           </div>
           <div>人员安排信息</div>
@@ -26,11 +22,7 @@
               数据说明
             </div>
             <!-- 遮罩层 -->
-            <van-overlay
-              :show="overlayShow"
-              z-index="999999"
-              @click="overlayShow = false"
-            >
+            <van-overlay :show="overlayShow" z-index="999999" @click="overlayShow = false">
               <div class="overlayDetail">
                 <div class="overlayText">
                   <div
@@ -41,10 +33,7 @@
                     <p>
                       {{ item.name }}
                     </p>
-                    <p
-                      v-for="(i, n) in item.children ? item.children : null"
-                      :key="n + 's'"
-                    >
+                    <p v-for="(i, n) in item.children ? item.children : null" :key="n + 's'">
                       {{ i }}
                     </p>
                   </div>
@@ -181,15 +170,15 @@
     <!-- table -->
     <div class="tableDetail" style="background-color: #f8f8fa; margin-top: 0.2rem">
       <div class="projectTableTitle">全国省市项目</div>
-      <van-list
+      <!-- <van-list
         v-model="tableS.loading"
         :finished="tableS.finished"
         finished-text="没有更多啦"
         offset="40"
         @load="loadHandle"
-      >
-        <Tables :tableData="tableS.tableData" :isShowMinistries="isShowMinistries" />
-      </van-list>
+      > -->
+      <Tables :tableData="tableS.tableData" :isShowMinistries="isShowMinistries" />
+      <!-- </van-list> -->
     </div>
   </div>
 </template>
@@ -197,7 +186,7 @@
 <script>
 import { getTables, getMapInfo, getMapJson, getAllProject } from '../../api/api';
 import getNowFormatDate from '../../utils/dateS';
-import dataDeclaration from '../../utils/headerline';
+import { headerLineS } from '../../utils/headerline';
 import { ProjectProgress, LineChartsMap, Tables } from '../../utils/routers';
 import { tabMap, tabLineMap, projectData, colorData } from '../../utils/mapConfig';
 
@@ -209,7 +198,7 @@ export default {
   },
   data() {
     return {
-      dataDeclaration: dataDeclaration,
+      dataDeclaration: headerLineS,
       overlayShow: false,
       serversData2: [],
       serversData: [],
@@ -257,22 +246,20 @@ export default {
       this.$refs.tendencyMapSwiper.$swiper.slideTo(i + 1);
     },
     // 下拉加载
-    async loadHandle() {
-      this.tableS.page++;
-      await this.getTableData(this.tableS.page);
-      this.tableS.loading = false;
-      if (this.tableS.page === this.tableS.totals) {
-        this.tableS.finished = true;
-      }
-    },
+    // async loadHandle() {
+    //   this.tableS.page++;
+    //   await this.getTableData(this.tableS.page);
+    //   this.tableS.loading = false;
+    //   if (this.tableS.page === this.tableS.totals) {
+    //     this.tableS.finished = true;
+    //   }
+    // },
     // 获取table数据
-    async getTableData(page) {
+    async getTableData() {
       const res = await getTables({
         parent: 100000,
-        pageNum: page,
-        pageSize: 10,
       });
-      this.tableS.tableData = [...this.tableS.tableData, ...res.data.data.list];
+      this.tableS.tableData = res.data.data;
     },
     // 左右按钮切换
     cutSwiperHandle(val) {
@@ -292,6 +279,7 @@ export default {
     },
   },
   async created() {
+    this.getTableData();
     // 折线图
     getAllProject().then((res) => {
       this.projectData.forEach((i, n) => {

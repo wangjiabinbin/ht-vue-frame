@@ -44,9 +44,7 @@ export default {
           iconsGrey: require('../../assets/icon_wo_grey.png'),
         },
       ],
-      activeTap: sessionStorage.getItem('activeTap')
-        ? sessionStorage.getItem('activeTap')
-        : 0,
+      activeTap: sessionStorage.getItem('activeTap') ? sessionStorage.getItem('activeTap') : 0,
     };
   },
   methods: {
@@ -58,10 +56,7 @@ export default {
       });
     },
   },
-  created() {
-    // this.activeTap = sessionStorage.getItem('activeTap');
-    console.warn(this.activeTap);
-  },
+  created() {},
 };
 </script>
 

@@ -12,18 +12,14 @@
       <Header v-if="this.$route.meta.isShow" />
     </div>
     <div class="main" ref="mainScrool">
-      <keep-alive>
+      <!-- <keep-alive>
         <router-view
           :key="$route.fullPath"
           v-if="this.$route.meta.isShowCache ? false : true"
           ref="scrollTop"
-      /></keep-alive>
-
-      <router-view
-        :key="$route.fullPath"
-        v-if="this.$route.meta.isShowCache ? true : false"
-        ref="scrollTop"
-      />
+      /></keep-alive> -->
+      <!-- v-if="this.$route.meta.isShowCache ? true : false" -->
+      <router-view :key="$route.fullPath" ref="scrollTop" />
     </div>
     <FooterTab class="footer" v-if="!this.$route.meta.isShowLogin" />
   </div>

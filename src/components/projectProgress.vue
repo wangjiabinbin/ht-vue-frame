@@ -30,9 +30,7 @@ export default {
   methods: {
     initMap() {
       const mapChart = echarts.init(this.$refs.projectProgressMap);
-      mapChart.setOption(
-        mapOption(this.isShow, this.option, this.name, this.permissions)
-      );
+      mapChart.setOption(mapOption(this.isShow, this.option, this.name, this.permissions));
       mapChart.on('click', (e) => {
         this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
@@ -49,11 +47,19 @@ export default {
     },
   },
   watch: {
-    jsonData(val) {},
+    jsonData(val) {
+      if (this.serversData) {
+        echarts.registerMap(this.$props.name, this.$props.jsonData);
+        this.option = val;
+        this.initMap();
+      }
+    },
     serversData(val) {
-      echarts.registerMap(this.$props.name, this.$props.jsonData);
-      this.option = val;
-      this.initMap();
+      if (this.jsonData) {
+        echarts.registerMap(this.$props.name, this.$props.jsonData);
+        this.option = val;
+        this.initMap();
+      }
     },
     deep: true,
   },

@@ -2,7 +2,7 @@
   <div class="WxAccredit">
     <div class="WxLogin">
       <div class="logo"></div>
-      <div class="title">选择登陆方式</div>
+      <div class="title">选择登录方式</div>
       <div class="login">
         <div class="WxLogind">
           <img src="../../assets/loginImages/icon_w.png" alt="" />

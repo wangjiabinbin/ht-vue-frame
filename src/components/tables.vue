@@ -13,11 +13,11 @@
       <div class="tableBodyCont" v-for="(i, n) in tableData" :key="n + 'b'">
         <div class="tableTrCont" @click="clickHandle" :data-index="n">
           <span
-            ><img v-if="i.children.length ? true : false" :src="cutDetail" alt="" /><img
-              v-else
-              src=""
+            ><img
+              v-if="i.children && i.children.length ? true : false"
+              :src="cutDetail"
               alt=""
-            />{{ i.name }}</span
+            /><img v-else src="" alt="" />{{ i.name }}</span
           >
           <span>{{ i.detail[0].num }}</span>
           <span>{{ i.detail[1].num }}</span>
@@ -25,7 +25,15 @@
           <span>{{ i.detail[3].num }}</span>
           <span>{{ i.detail[4].num }}</span>
           <router-link
-            v-if="i.children.length ? true : false"
+            v-if="
+              permissions
+                ? false
+                : i.level === 'area'
+                ? false
+                : i.children && i.children.length
+                ? true
+                : false
+            "
             tag="div"
             :to="{
               name: 'detailProject',
@@ -38,7 +46,7 @@
         </div>
         <div class="isShowTable">
           <div
-            v-for="(item, index) in i.children"
+            v-for="(item, index) in i.children ? i.children : null"
             :key="index + 'a'"
             class="tableCityCont"
             @click="skipRouter(item)"
@@ -51,7 +59,10 @@
             <span>{{ item.detail[4].num }}</span>
             <router-link
               v-if="
-                item.name === '市局' || item.name === '省厅' || item.level === 'district'
+                item.name === '市局' ||
+                item.name === '省厅' ||
+                item.level === 'district' ||
+                permissions
                   ? false
                   : true
               "
@@ -75,6 +86,8 @@
 </template>
 
 <script>
+import { permissions } from '../utils/localstorageS';
+
 export default {
   props: {
     tableData: Array,
@@ -87,6 +100,7 @@ export default {
       finished: false,
       loading: false,
       sortData: [],
+      permissions: null,
     };
   },
   methods: {
@@ -107,7 +121,9 @@ export default {
       }
     },
   },
-  created() {},
+  created() {
+    this.permissions = permissions();
+  },
 };
 </script>
 
@@ -129,7 +145,7 @@ export default {
       font-weight: 500;
     }
     :first-child {
-      width: 0.5rem;
+      width: 0.7rem;
       min-width: 0.4rem;
     }
   }
@@ -152,7 +168,7 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      width: 0.55rem;
+      width: 0.7rem;
       padding: 0 0 0 0.02rem;
       line-height: 0.12rem;
       img {

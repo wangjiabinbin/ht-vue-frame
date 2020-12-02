@@ -1,10 +1,10 @@
-export default [
+export const headerLineS = [
   {
     name: '数据说明',
   },
   {
     name: '1)数据来源：',
-    children: ['来自各地区负责人在线表格数据；'],
+    children: ['各地区负责人的在线表格数据；'],
   },
   {
     name: '2)实时数据统计原则：',
@@ -18,3 +18,6 @@ export default [
     children: ['全国数据使用各地公布上报的数量数据,数据会根据实时数据发生变化。'],
   },
 ];
+export const Logo = require('../assets/loginImages/logo.png');
+export const WX = require('../assets/loginImages/icon_w.png');
+export const SJ = require('../assets/loginImages/icon_i.png');

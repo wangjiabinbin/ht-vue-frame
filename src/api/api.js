@@ -19,7 +19,7 @@ export const loginByPhone = (params) => {
 
 // parent id pageNum 起始页 pageSize 页数
 export const getTables = (params) => {
-  return axios.get(`${urlConfig.url}/area/getListInfo`, { params: params });
+  return axios.get(`${urlConfig.url}/area/getListInfos`, { params: params });
 };
 export const getMapInfo = (params) => {
   return axios.get(`${urlConfig.url}/area/getMapInfo`, { params: params });

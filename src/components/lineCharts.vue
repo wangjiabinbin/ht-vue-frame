@@ -43,7 +43,7 @@ const option = {
   grid: {
     left: 50,
     right: 40,
-    top: 70,
+    top: 50,
     bottom: 200,
     borderWidth: 1,
   },
