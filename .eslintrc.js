@@ -44,5 +44,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'newline-per-chained-call': 'off',
     indent: 'off',
+    'no-nested-ternary': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

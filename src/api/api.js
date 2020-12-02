@@ -13,9 +13,9 @@ import urlConfig from '../../public/config';
 // export const Login = (params) => {
 //   return axios.post(`${base}sm/sm0105/login`, params);
 // };
-// export const GetUserData = (params) => {
-//   return axios.post(`${base}sm/sm0105/select`, params);
-// };
+export const loginByPhone = (params) => {
+  return axios.post(`${urlConfig.url}/sysUser/loginByPhone`, params);
+};
 
 // parent id pageNum 起始页 pageSize 页数
 export const getTables = (params) => {
@@ -35,4 +35,8 @@ export const getAdcode = (params) => {
 
 export const getMapJson = (id) => {
   return axios.get(`http://area.zzpeng.cn/${id}_full.json`);
+};
+// 验证码
+export const getPhoneCode = (params) => {
+  return axios.get(`${urlConfig.url}/sysUser/getPhoneCode`, { params: params });
 };

@@ -1,6 +1,5 @@
 <template>
   <div class="newCon">
-    <router-link :to="{ name: 'login' }">登录</router-link>
     <div class="issueCon" @click="issueHandle">发布</div>
   </div>
 </template>

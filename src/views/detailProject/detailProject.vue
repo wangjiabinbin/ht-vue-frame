@@ -1,20 +1,8 @@
 <template>
   <div class="">
-    <van-nav-bar
-      :title="queryS.name + '项目'"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar left-text="返回" title="项目详情" left-arrow @click-left="onClickLeft" />
     <div class="projectTop">
       <div class="detailTitle">{{ queryS.name }}项目</div>
-      <!-- 项目分类 -->
-      <!-- <div class="projectClassify">
-      <div v-for="(item, index) in projectData" :key="index" class="projectClassifyData">
-        <span>{{ projectDataNum.length ? projectDataNum[index].num : '' }}</span>
-        <div>{{ item.name }}</div>
-      </div>
-    </div> -->
       <div class="projectDetail">
         <!-- 较上周增加数量 -->
         <div
@@ -26,192 +14,130 @@
           :key="index"
         >
           <span class="projectNum" :style="{ color: colorData[index].bjColor }">
-            {{ projectDataNum.length ? projectDataNum[index].num : '' }}
+            {{ projectDataNum.length ? projectDataNum[index] : '' }}
           </span>
           <span class="projectName"> {{ item.name }} </span>
         </div>
       </div>
       <!-- 项目分类 -->
-      <div>
-        <DetailMap :serversData="serversData" :jsonData="jsonData" :name="queryS.name" />
+      <div class="detailTitle">城市项目分布</div>
+      <div class="mapProject">
+        <ProjectProgress
+          :serversData="serversData"
+          :jsonData="jsonData"
+          :name="queryS.name"
+        />
       </div>
-      <Tables :tableData="tableData" :mapBoll="mapBoll" />
+      <Tables :tableData="tableData" />
     </div>
   </div>
 </template>
 
 <script>
-import { randomData, jiangsuData } from '../../utils/mapConfig';
 import { getTables, getMapInfo, getMapJson, getAdcode } from '../../api/api';
-import DetailMap from './detailMap.vue';
-import Tables from '../home/tables.vue';
+import { ProjectProgress, Tables } from '../../utils/routers';
+import { projectData, colorData } from '../../utils/mapConfig';
 
 export default {
   data() {
     return {
       queryS: {},
-      projectData: [
-        {
-          name: '售前支持',
-        },
-        {
-          name: '售前实施',
-        },
-        {
-          name: '已中标',
-        },
-        {
-          name: '正式实施',
-        },
-        {
-          name: '验收结项',
-        },
-        {
-          name: '招标中',
-        },
-      ],
-      colorData: [
-        {
-          color: '#6cbd78',
-          bjColor: '#6CBD78',
-        },
-        {
-          color: '#f09329',
-          bjColor: '#EF9228',
-        },
-        {
-          color: '#5f6f93',
-          bjColor: '#5E7093',
-        },
-        {
-          color: '#79CBEA',
-          bjColor: 'e4f6fa',
-        },
-        {
-          color: '#719bd5',
-          bjColor: '#709BD2',
-        },
-        {
-          color: '#8970b2',
-          bjColor: '#8970B0',
-        },
-      ],
+      projectData: projectData,
+      colorData: colorData,
       projectDataNum: [],
       serversData: null,
       tableData: [],
       jsonData: null,
-      mapBoll: true,
     };
   },
   components: {
-    DetailMap,
+    ProjectProgress,
     Tables,
   },
   async created() {
     this.queryS = this.$route.query;
-    await getAdcode({ adcode: this.queryS.id }).then((r) => {
-      this.projectDataNum = r.data.data;
+    getAdcode({ adcode: this.queryS.id }).then((r) => {
+      this.projectData.forEach((i, n) => {
+        r.data.data.forEach((item, index) => {
+          if (i.name === item.progress) {
+            this.projectDataNum.push(item.num);
+          }
+        });
+      });
     });
-    await getMapInfo({
+    await getMapJson(this.queryS.id).then((res) => {
+      this.jsonData = res.data;
+    });
+    getMapInfo({
       parent: this.queryS.id,
       type: 0,
     }).then((res) => {
       this.serversData = res.data.data;
     });
-    await getMapJson(this.queryS.id).then((res) => {
-      this.jsonData = res.data;
-    });
-    const res = await getTables({
+    getTables({
       parent: this.queryS.id,
       pageNum: 1,
       pageSize: 100,
+    }).then((res) => {
+      // this.tableData = res.data.data.list;
+      res.data.data.list.sort((a, b) => {
+        return b.detail[0].num - a.detail[0].num;
+      });
+      res.data.data.list.forEach((item, index) => {
+        if (item.name === '省厅' || item.name === '市局') {
+          const city = res.data.data.list.splice(index, 1);
+          res.data.data.list.unshift(city[0]);
+        }
+      });
+      this.tableData = res.data.data.list;
     });
-    this.tableData = res.data.data.list;
+
     // 数据分类
   },
   methods: {
     onClickLeft() {
-      this.$router.push({
-        name: 'home',
-      });
+      this.$router.go(-1);
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@import '../../style/projectDetail/_projectDetail.scss';
 .projectTop {
-  padding: 0 0.1rem;
-}
-.projectClassify {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 0 0.1rem;
-  .projectClassifyData {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin: 0.1rem 0;
-    > div {
-      width: 100%;
-      height: 0.3rem;
-      border: 1px solid #232323;
-      text-align: center;
-      line-height: 0.3rem;
+  padding: 0 0.15rem;
+  background: #f9f9fb;
+  .projectDetail {
+    width: 3.45rem;
+    background: #ffffff;
+    .projectData {
+      margin-bottom: 0.11rem;
+      margin-top: 0.11rem;
     }
   }
-}
-.projectDetail {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  .afterRight::after {
-    content: '';
-    width: 0.01rem;
-    height: 0.28rem;
-    background: #d0d0d0;
-    position: absolute;
-    right: 0;
-  }
-  .projectData {
+  .detailTitle {
+    height: 0.17rem;
+    font-size: 0.18rem;
+    font-family: 'CNBold';
+    font-weight: bold;
+    color: #000000;
+    // margin-left: 0.14rem;
+    padding: 0.14rem 0 0.14rem 0.14rem;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 1.06rem;
-    height: 0.68rem;
-    background-color: #fff;
-    margin-bottom: 0.22rem;
-    .projectHead {
-      min-width: 0.55rem;
-      display: flex;
-      justify-content: center;
-      padding: 0.02rem 0.08rem;
-      > span:nth-child(1) {
-        margin-right: 0.05rem;
-        font-size: 0.1rem;
-        color: #848484;
-      }
-      > span:nth-child(2) {
-        font-size: 0.1rem;
-      }
-    }
-    .projectNum {
-      display: inline-block;
-      margin: 0.08rem 0;
-      line-height: 0.24rem;
-      font-size: 0.24rem;
-      font-weight: bold;
-    }
-
-    .projectName {
-      font-size: 0.12rem;
-    }
+  }
+  .detailTitle::after {
+    content: '';
+    width: 0.03rem;
+    height: 0.2rem;
+    background: #4063e7;
+    border-radius: 1px;
+    position: absolute;
+    left: 0;
+  }
+  .mapProject {
+    width: 3.45rem;
+    height: 2.81rem;
+    margin-bottom: 0.2rem;
   }
 }
 </style>

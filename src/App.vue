@@ -13,9 +13,17 @@
     </div>
     <div class="main" ref="mainScrool">
       <keep-alive>
-        <router-view v-if="this.$route.meta.isShowCache ? false : true" ref="scrollTop"
+        <router-view
+          :key="$route.fullPath"
+          v-if="this.$route.meta.isShowCache ? false : true"
+          ref="scrollTop"
       /></keep-alive>
-      <router-view v-if="this.$route.meta.isShowCache ? true : false" ref="scrollTop" />
+
+      <router-view
+        :key="$route.fullPath"
+        v-if="this.$route.meta.isShowCache ? true : false"
+        ref="scrollTop"
+      />
     </div>
     <FooterTab class="footer" v-if="!this.$route.meta.isShowLogin" />
   </div>
@@ -23,6 +31,7 @@
 <script>
 import FooterTab from './components/footerTab/index.vue';
 import Header from './components/header/index.vue';
+import { isShowStorage } from './utils/localstorageS';
 
 export default {
   mounted() {},
@@ -31,7 +40,15 @@ export default {
     FooterTab,
     Header,
   },
-  watch: {},
+  watch: {
+    $route(to) {
+      if (!isShowStorage() && to.name !== 'login') {
+        this.$router.push({
+          name: 'wxAccredit',
+        });
+      }
+    },
+  },
 };
 </script>
 <style lang="scss">

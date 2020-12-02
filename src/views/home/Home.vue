@@ -18,8 +18,40 @@
         </div>
         <div class="homeProjectMain">
           <div class="homeDate">
-            <span class="homeDate-title"> 当前时间: </span>
-            <span> {{ getDate }} </span>
+            <div>
+              <span class="homeDate-title"> 更新时间: </span> <span> {{ getDate }} </span>
+            </div>
+            <div @click="overlayShow = true" class="homeExplain">
+              <van-icon name="question-o" />
+              数据说明
+            </div>
+            <!-- 遮罩层 -->
+            <van-overlay
+              :show="overlayShow"
+              z-index="999999"
+              @click="overlayShow = false"
+            >
+              <div class="overlayDetail">
+                <div class="overlayText">
+                  <div
+                    :class="{ overlayTitle: index === 0 }"
+                    v-for="(item, index) in dataDeclaration"
+                    :key="index"
+                  >
+                    <p>
+                      {{ item.name }}
+                    </p>
+                    <p
+                      v-for="(i, n) in item.children ? item.children : null"
+                      :key="n + 's'"
+                    >
+                      {{ i }}
+                    </p>
+                  </div>
+                </div>
+                <div class="overlayDown">X</div>
+              </div>
+            </van-overlay>
           </div>
           <!-- 数据 -->
 
@@ -35,9 +67,9 @@
             >
               <div class="projectHead">
                 <span class="">较上周</span
-                ><span :style="{ color: colorData[index].color }"
-                  >+{{ projectDataWeek[index] }}</span
-                >
+                ><span :style="{ color: colorData[index].color }">{{
+                  projectDataWeek[index]
+                }}</span>
               </div>
               <span class="projectNum" :style="{ color: colorData[index].bjColor }">
                 {{ projectDataAll[index] }}
@@ -80,13 +112,15 @@
             ><ProjectProgress
               :serversData="serversData"
               :jsonData="jsonData"
-              :isShow="!isShowMinistries"
+              :isShow="isShowMinistries"
+              :name="china"
           /></swiper-slide>
           <swiper-slide
             ><ProjectProgress
               :serversData="serversData2"
               :jsonData="jsonData"
-              :isShow="isShowMinistries"
+              :isShow="!isShowMinistries"
+              :name="china"
           /></swiper-slide>
         </swiper>
       </div>
@@ -106,7 +140,7 @@
           ref="tendencyMapSwiper"
           class="swiper-no-swiping tendencyMapSwiper"
           :options="swiperOptions"
-          style="width: 3.13rem; height: 1.92rem"
+          style="width: 3.45rem; height: 1.92rem"
         >
           <swiper-slide
             ><LineChartsMap :lineMapData="lineCutData.XZZB" :name="tabLineMap[0].name"
@@ -163,9 +197,9 @@
 <script>
 import { getTables, getMapInfo, getMapJson, getAllProject } from '../../api/api';
 import getNowFormatDate from '../../utils/dateS';
-import ProjectProgress from './projectProgress.vue';
-import LineChartsMap from './lineCharts.vue';
-import Tables from './tables.vue';
+import dataDeclaration from '../../utils/headerline';
+import { ProjectProgress, LineChartsMap, Tables } from '../../utils/routers';
+import { tabMap, tabLineMap, projectData, colorData } from '../../utils/mapConfig';
 
 export default {
   components: {
@@ -175,9 +209,12 @@ export default {
   },
   data() {
     return {
+      dataDeclaration: dataDeclaration,
+      overlayShow: false,
       serversData2: [],
       serversData: [],
       jsonData: null,
+      china: 'china',
       swiperOptions: {
         observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
         observerParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
@@ -190,83 +227,10 @@ export default {
       isShowData: true,
       projectDataAll: [],
       projectDataWeek: [],
-      projectData: [
-        {
-          name: '正式实施',
-        },
-        {
-          name: '已中标',
-        },
-        {
-          name: '验收结项',
-        },
-        {
-          name: '招标中',
-        },
-        {
-          name: '售前实施',
-        },
-        {
-          name: '售前支持',
-        },
-      ],
-      colorData: [
-        {
-          color: '#6cbd78',
-          bjColor: '#6CBD78',
-        },
-        {
-          color: '#f09329',
-          bjColor: '#EF9228',
-        },
-        {
-          color: '#5f6f93',
-          bjColor: '#5E7093',
-        },
-        {
-          color: '#79cbea',
-          bjColor: '#79cbea',
-        },
-        {
-          color: '#719bd5',
-          bjColor: '#709BD2',
-        },
-        {
-          color: '#8970b2',
-          bjColor: '#8970B0',
-        },
-      ],
-      tabMap: [
-        {
-          name: '累计项目总量',
-        },
-        {
-          name: '每周新增数量',
-        },
-      ],
-      tabLineMap: [
-        {
-          name: '新增中标',
-        },
-        {
-          name: '新增验收',
-        },
-        {
-          name: '售前支持',
-        },
-        {
-          name: '售前实施',
-        },
-        {
-          name: '已中标',
-        },
-        {
-          name: '正式实施',
-        },
-        {
-          name: '验收结项',
-        },
-      ],
+      projectData: projectData,
+      colorData: colorData,
+      tabMap: tabMap,
+      tabLineMap: tabLineMap,
       tableS: {
         tableData: [],
         load: this.loadHandle,
@@ -296,13 +260,6 @@ export default {
     async loadHandle() {
       this.tableS.page++;
       await this.getTableData(this.tableS.page);
-      // const TableList = Array.from(document.getElementsByClassName('isShowTable'));
-      // if (!this.isShowMinistries) {
-      //   TableList.forEach((item) => {
-      //     const isShowDetail = item.firstElementChild.lastElementChild;
-      //     isShowDetail.innerHTML = '';
-      //   });
-      // }
       this.tableS.loading = false;
       if (this.tableS.page === this.tableS.totals) {
         this.tableS.finished = true;
@@ -340,7 +297,9 @@ export default {
       this.projectData.forEach((i, n) => {
         res.data.data.week.forEach((item, index) => {
           if (i.name === item.progress) {
-            this.projectDataWeek.push(item.num);
+            item.num === 0
+              ? this.projectDataWeek.push('无变化')
+              : this.projectDataWeek.push('+' + item.num);
           }
         });
       });
@@ -359,7 +318,6 @@ export default {
       this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
       this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
     });
-    console.log(this.lineCutData);
     await getMapJson(100000).then((res) => {
       this.jsonData = res.data;
     });
@@ -384,6 +342,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@import '../../style/projectDetail/_projectDetail.scss';
 .projectProgress div {
   width: 5rem;
 }
@@ -441,68 +400,75 @@ export default {
     .homeDate {
       // background-color: #cad8ff;
       height: 0.5rem;
-      width: 80%;
       border-radius: 0.05rem;
-      text-align: left;
-      line-height: 0.5rem;
       font-weight: 400;
       color: #010713;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-left: 0.15rem;
-
       .homeDate-title {
         margin-right: 0.1rem;
       }
-    }
-    // 项目信息
-    .projectDetail {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      .afterRight::after {
-        content: '';
-        width: 0.01rem;
-        height: 0.28rem;
-        background: #d0d0d0;
-        position: absolute;
-        right: 0;
+      .homeExplain {
+        width: 0.76rem;
+        height: 0.2rem;
+        background: #eff0f8;
+        border-radius: 0.1rem 0 0 0.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
       }
-      .projectData {
-        position: relative;
+      .overlayDetail {
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 1.06rem;
-        height: 0.68rem;
-        background-color: #fff;
-        margin-bottom: 0.22rem;
-        .projectHead {
-          min-width: 0.55rem;
-          display: flex;
-          justify-content: center;
-          padding: 0.02rem 0.08rem;
-          > span:nth-child(1) {
-            margin-right: 0.05rem;
-            font-size: 0.1rem;
-            color: #848484;
+        .overlayText {
+          width: 2.17rem;
+          height: 2.95rem;
+          background: #ffffff;
+          border-radius: 0.02rem;
+          padding: 0 0.17rem 0 0.15rem;
+          margin: 0;
+          > div {
+            font-size: 0.12rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: #010713;
+            margin-bottom: 0.19rem;
+            p {
+              margin: 0;
+            }
           }
-          > span:nth-child(2) {
-            font-size: 0.1rem;
+          > div:nth-child(1) p {
+            margin: 0;
+          }
+          .overlayTitle {
+            font-size: 0.15rem;
+            font-family: CNBold;
+            font-weight: bold;
+            color: #4163e8;
+            line-height: 18px;
+            margin-bottom: 0.26rem;
+            margin-top: 0.18rem;
           }
         }
-        .projectNum {
-          display: inline-block;
-          margin: 0.08rem 0;
-          line-height: 0.24rem;
-          font-size: 0.24rem;
-          font-weight: bold;
-        }
-
-        .projectName {
-          font-size: 0.12rem;
+        .overlayDown {
+          width: 0.28rem;
+          height: 0.28rem;
+          background: #010713;
+          opacity: 0.6;
+          border-radius: 50%;
+          color: #fff;
+          line-height: 0.28rem;
+          text-align: center;
+          margin-top: 0.1rem;
         }
       }
     }
+    // 项目信息
   }
 }
 // 图表内容
@@ -590,12 +556,12 @@ export default {
     margin-bottom: 0.2rem;
     margin-top: 0.2rem;
     > div {
-      height: 0.32rem;
-      width: 0.78rem;
+      height: 0.34rem;
+      width: 0.83rem;
       border: 1px solid #e9e9eb;
       text-align: center;
-      line-height: 0.32rem;
-      background-color: #f4f4f4;
+      line-height: 0.34rem;
+      background: #f4f4f4;
       margin-bottom: 0.05rem;
     }
     > div:not(:nth-child(4)) {
@@ -620,7 +586,7 @@ export default {
 }
 .tapsituationMapActive {
   background-color: #e0e6f4 !important;
-  color: #5c77ea;
+  color: #4063e7;
   border-color: transparent !important;
 }
 </style>

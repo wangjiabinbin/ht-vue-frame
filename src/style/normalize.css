@@ -308,3 +308,15 @@ template {
 [hidden] {
   display: none;
 }
+@font-face {
+  font-family: 'DinBlack';
+  src: url('../assets/fontFace/DIN-Black.otf');
+}
+@font-face {
+  font-family: 'HeiTiStd';
+  src: url('../assets/fontFace/AdobeHeitiStd-Regular.woff.ttf');
+}
+@font-face {
+  font-family: 'CNBold';
+  src: url('../assets/fontFace/SourceHanSansCN-Bold.otf');
+}

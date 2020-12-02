@@ -6,8 +6,8 @@
       :key="index"
       @click="tabbarCut(index, item)"
     >
-      <img :src="activeTap === index ? item.icons : item.iconsGrey" alt="" />
-      <div class="footer-nav-name" :class="{ active: activeTap === index }">
+      <img :src="$route.meta.index === index ? item.icons : item.iconsGrey" alt="" />
+      <div class="footer-nav-name" :class="{ active: $route.meta.index === index }">
         {{ item.name }}
       </div>
     </div>
@@ -44,16 +44,23 @@ export default {
           iconsGrey: require('../../assets/icon_wo_grey.png'),
         },
       ],
-      activeTap: 0,
+      activeTap: sessionStorage.getItem('activeTap')
+        ? sessionStorage.getItem('activeTap')
+        : 0,
     };
   },
   methods: {
     tabbarCut(index, item) {
       this.activeTap = index;
+      sessionStorage.setItem('activeTap', index);
       this.$router.push({
         name: item.path,
       });
     },
+  },
+  created() {
+    // this.activeTap = sessionStorage.getItem('activeTap');
+    console.warn(this.activeTap);
   },
 };
 </script>
