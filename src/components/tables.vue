@@ -17,7 +17,8 @@
               v-if="i.children && i.children.length ? true : false"
               :src="cutDetail"
               alt=""
-            /><img v-else src="" alt="" />{{ i.name }}</span
+              style="visibility: hidden"
+            />{{ i.name }}</span
           >
           <span>{{ i.detail[0].num }}</span>
           <span>{{ i.detail[1].num }}</span>

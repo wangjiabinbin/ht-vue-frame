@@ -19,6 +19,7 @@
         <div>{{ userMessge.roleName }}</div>
       </div>
     </div>
+    <section class="logout" @click="logout">退出登录</section>
   </div>
 </template>
 
@@ -40,13 +41,25 @@ export default {
     });
     this.userMessge = getStorage();
   },
+  methods: {
+    logout() {
+      this.$dialog.confirm({ message: '您确认要注销？' }).then(() => {
+        window.localStorage.removeItem('token');
+        this.$router.push({
+          name: 'wxAccredit',
+        });
+      });
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .person {
+  position: relative;
   width: 100%;
   height: 100%;
+
   .myDetali {
     width: 3.75rem;
     height: 0.99rem;
@@ -109,6 +122,20 @@ export default {
     > div:nth-child(1) {
       border-bottom: 1px solid #d0d0d0;
     }
+  }
+
+  // 退出登录
+  .logout {
+    position: absolute;
+    left: 5%;
+    bottom: 0;
+    width: 90%;
+    height: 0.4rem;
+    color: #fff;
+    background: red;
+    font-size: 0.14rem;
+    text-align: center;
+    line-height: 0.4rem;
   }
 }
 </style>

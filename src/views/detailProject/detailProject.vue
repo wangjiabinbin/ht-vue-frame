@@ -103,7 +103,7 @@ export default {
   padding: 0 0.15rem;
   background: #f9f9fb;
   .projectDetail {
-    width: 3.45rem;
+    width: 100%;
     background: #ffffff;
     .projectData {
       margin-bottom: 0.11rem;
@@ -130,7 +130,8 @@ export default {
     left: 0;
   }
   .mapProject {
-    width: 3.45rem;
+    // width: 3.45rem;
+    width: 100%;
     height: 2.81rem;
     margin-bottom: 0.2rem;
   }

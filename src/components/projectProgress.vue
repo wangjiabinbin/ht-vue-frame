@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div ref="projectProgressMap" class="projectProgressMap"></div>
-  </div>
+  <div ref="projectProgressMap" class="projectProgressMap"></div>
 </template>
 
 <script>

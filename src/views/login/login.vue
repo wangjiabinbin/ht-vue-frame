@@ -159,7 +159,7 @@ export default {
       width: 100%;
     }
     .sendCode {
-      width: 1.5rem;
+      width: 1.8rem;
       font-size: 0.15rem;
       font-weight: 400;
       color: #4063e7;

@@ -129,7 +129,7 @@
           ref="tendencyMapSwiper"
           class="swiper-no-swiping tendencyMapSwiper"
           :options="swiperOptions"
-          style="width: 3.45rem; height: 1.92rem"
+          style="width: 100%; height: 1.92rem"
         >
           <swiper-slide
             ><LineChartsMap :lineMapData="lineCutData.XZZB" :name="tabLineMap[0].name"
@@ -480,7 +480,8 @@ export default {
   }
   .situationMapSwiper {
     border: 0.01rem solid #e1e1e1;
-    width: 3.45rem;
+    // width: 3.45rem;
+    width: 100%;
     height: 2.805rem;
   }
   // 态势图
