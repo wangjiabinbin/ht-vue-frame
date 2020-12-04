@@ -16,7 +16,6 @@ export default {
   },
   data() {
     return {
-      hookTip: null,
       option: [],
       jsonMapData: null,
       permissions: null,
@@ -30,20 +29,26 @@ export default {
       const mapChart = echarts.init(this.$refs.projectProgressMap);
       mapChart.setOption(mapOption(this.isShow, this.option, this.name, this.permissions));
       mapChart.on('click', (e) => {
-        this.hookTip = e.dataIndex;
         document.getElementById('skipRouter').addEventListener('click', () => {
           this.$router.push({
             name: 'detailProject',
             query: {
               name: e.name,
               id: e.data.adcode,
-              cache: new Date().getTime(),
             },
           });
         });
       });
+      mapChart.getZr().on('click', (e) => {
+        if (!e.target) {
+          mapChart.dispatchAction({
+            type: 'hideTip',
+          });
+        }
+      });
     },
   },
+  // 监听父组件传过来的数据在渲染
   watch: {
     jsonData(val) {
       if (this.serversData) {

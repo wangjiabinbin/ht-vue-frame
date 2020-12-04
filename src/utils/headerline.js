@@ -18,6 +18,6 @@ export const headerLineS = [
     children: ['全国数据使用各地公布上报的数量数据,数据会根据实时数据发生变化。'],
   },
 ];
-export const Logo = require('../assets/loginImages/logo.png');
-export const WX = require('../assets/loginImages/icon_w.png');
-export const SJ = require('../assets/loginImages/icon_i.png');
+export const Logo = require('../static/loginImages/logo.png');
+export const WX = require('../static/loginImages/icon_w.png');
+export const SJ = require('../static/loginImages/icon_i.png');

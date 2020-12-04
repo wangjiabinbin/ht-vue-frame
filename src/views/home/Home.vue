@@ -2,7 +2,7 @@
   <div style="background: #f8f7fa">
     <!-- banner -->
     <div class="imgBanner">
-      <img src="../../assets/banner.png" alt="" />
+      <img src="../../static/banner.png" alt="" />
     </div>
     <div class="projectHomeDetail">
       <div class="homeProject">
@@ -10,9 +10,16 @@
           <div class="homeEvolve1" @click="isShowData = true" :class="{ actives: isShowData }">
             项目进展信息
           </div>
-          <div>人员安排信息</div>
+          <div @click="isShowData = false" :class="{ actives: !isShowData }">人员安排信息</div>
         </div>
-        <div class="homeProjectMain">
+        <div
+          :class="{
+            homeProjectMain: true,
+            homeProjectMainS: isShowData,
+            homeProjectMainF: !isShowData,
+          }"
+          v-show="isShowData"
+        >
           <div class="homeDate">
             <div>
               <span class="homeDate-title"> 更新时间: </span> <span> {{ getDate }} </span>
@@ -67,6 +74,17 @@
             </div>
           </div>
         </div>
+        <div
+          :class="{
+            homeProjectMain: true,
+            homeProjectMainS: isShowData,
+            homeProjectMainF: !isShowData,
+          }"
+          style="height: 2.3rem; display: flex; justify-content: center; align-items: center"
+          v-show="!isShowData"
+        >
+          页面建设中，敬请期待~~
+        </div>
       </div>
     </div>
     <!-- 主体图表 -->
@@ -74,7 +92,7 @@
       <!-- 态势图 -->
       <div>
         <div class="situationMapTitle">
-          风险普查态势图<img src="../../assets/icon_1.png" alt="" />
+          风险普查态势图<img src="../../static/icon_1.png" alt="" />
         </div>
         <div class="situationMaptap">
           <div
@@ -117,13 +135,13 @@
       <!-- 趋势图 -->
       <div class="situationMapBoss">
         <div class="situationMapTitle">
-          风险普查趋势图<img src="../../assets/icon_2.png" alt="" />
+          风险普查趋势图<img src="../../static/icon_2.png" alt="" />
         </div>
         <div class="iconButtonLeft" @click="cutSwiperHandle(0)">
-          <img src="../../assets/icon_left.png" alt="" />
+          <img src="../../static/icon_left.png" alt="" />
         </div>
         <div class="iconButtonRight" @click="cutSwiperHandle(1)">
-          <img src="../../assets/icon_left.png" alt="" />
+          <img src="../../static/icon_left.png" alt="" />
         </div>
         <swiper
           ref="tendencyMapSwiper"
@@ -169,7 +187,7 @@
     <!-- 主体图表结束 -->
     <!-- table -->
     <div class="tableDetail" style="background-color: #f8f8fa; margin-top: 0.2rem">
-      <div class="projectTableTitle">全国省市项目</div>
+      <div class="projectTableTitle">全国省市县项目</div>
       <!-- <van-list
         v-model="tableS.loading"
         :finished="tableS.finished"
@@ -180,6 +198,7 @@
       <Tables :tableData="tableS.tableData" :isShowMinistries="isShowMinistries" />
       <!-- </van-list> -->
     </div>
+    <div class="bottomTitle" v-if="tableS.tableData.length ? true : false">没有更多啦</div>
   </div>
 </template>
 
@@ -233,6 +252,54 @@ export default {
       isShowMinistries: false,
     };
   },
+  async created() {
+    this.getTableData();
+    // 折线图
+    getAllProject().then((res) => {
+      this.projectData.forEach((i, n) => {
+        res.data.data.week.forEach((item, index) => {
+          if (i.name === item.progress) {
+            item.num === 0
+              ? this.projectDataWeek.push('无变化')
+              : item.num < 0
+              ? this.projectDataWeek.push(item.num)
+              : this.projectDataWeek.push('+' + item.num);
+          }
+        });
+      });
+      this.projectData.forEach((i, n) => {
+        res.data.data.All.forEach((item, index) => {
+          if (i.name === item.progress) {
+            this.projectDataAll.push(item.num);
+          }
+        });
+      });
+      this.lineCutData.XZZB = res.data.data.Classify[0].addWBD;
+      this.lineCutData.XZYS = res.data.data.Classify[0].addCBA;
+      this.lineCutData.SQZC = res.data.data.Classify[0].PST;
+      this.lineCutData.SQSS = res.data.data.Classify[0].PIT;
+      this.lineCutData.YZB = res.data.data.Classify[0].WBD;
+      this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
+      this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
+    });
+    await getMapJson(100000).then((res) => {
+      this.jsonData = res.data;
+    });
+    // JSon  数据
+    getMapInfo({
+      parent: 100000,
+      type: 1,
+    }).then((res) => {
+      this.serversData2 = res.data.data;
+    });
+    // 地图数据
+    getMapInfo({
+      parent: 100000,
+      type: 0,
+    }).then((res) => {
+      this.serversData = res.data.data;
+    });
+  },
   methods: {
     clickHandle() {},
     // 点击轮播
@@ -278,52 +345,7 @@ export default {
       }
     },
   },
-  async created() {
-    this.getTableData();
-    // 折线图
-    getAllProject().then((res) => {
-      this.projectData.forEach((i, n) => {
-        res.data.data.week.forEach((item, index) => {
-          if (i.name === item.progress) {
-            item.num === 0
-              ? this.projectDataWeek.push('无变化')
-              : this.projectDataWeek.push('+' + item.num);
-          }
-        });
-      });
-      this.projectData.forEach((i, n) => {
-        res.data.data.All.forEach((item, index) => {
-          if (i.name === item.progress) {
-            this.projectDataAll.push(item.num);
-          }
-        });
-      });
-      this.lineCutData.XZZB = res.data.data.Classify[0].addWBD;
-      this.lineCutData.XZYS = res.data.data.Classify[0].addCBA;
-      this.lineCutData.SQZC = res.data.data.Classify[0].PST;
-      this.lineCutData.SQSS = res.data.data.Classify[0].PIT;
-      this.lineCutData.YZB = res.data.data.Classify[0].WBD;
-      this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
-      this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
-    });
-    await getMapJson(100000).then((res) => {
-      this.jsonData = res.data;
-    });
-    // JSon  数据
-    getMapInfo({
-      parent: 100000,
-      type: 1,
-    }).then((res) => {
-      this.serversData2 = res.data.data;
-    });
-    // 地图数据
-    getMapInfo({
-      parent: 100000,
-      type: 0,
-    }).then((res) => {
-      this.serversData = res.data.data;
-    });
-  },
+
   mounted() {
     this.getDate = getNowFormatDate();
   },
@@ -364,17 +386,13 @@ export default {
       line-height: 0.4rem;
       font-size: 0.14rem;
       font-weight: normal;
-    }
-
-    :nth-child(1) {
+      box-shadow: inset 0px 0px 20px 2px #e3e4ea;
+      // position: absolute;
+      // right: 0;
+      // top: 0;
       z-index: 9999;
     }
     :nth-child(2) {
-      box-shadow: inset 0px 0px 20px 2px #e3e4ea;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 50%;
     }
   }
   // 项目主体
@@ -388,7 +406,6 @@ export default {
     .homeDate {
       // background-color: #cad8ff;
       height: 0.5rem;
-      border-radius: 0.05rem;
       font-weight: 400;
       color: #010713;
       display: flex;
@@ -425,8 +442,9 @@ export default {
             font-family: Source Han Sans CN;
             font-weight: 400;
             color: #010713;
-            margin-bottom: 0.19rem;
+            margin-bottom: 0.17rem;
             p {
+              line-height: 0.16rem;
               margin: 0;
             }
           }
@@ -439,8 +457,8 @@ export default {
             font-weight: bold;
             color: #4163e8;
             line-height: 18px;
-            margin-bottom: 0.26rem;
-            margin-top: 0.18rem;
+            margin-bottom: 0.17rem;
+            margin-top: 0.23rem;
           }
         }
         .overlayDown {
@@ -461,7 +479,7 @@ export default {
 }
 // 图表内容
 .homeMain {
-  padding: 0 0.13rem;
+  padding: 0 3.46%;
 
   // 态势图切换
   .situationMapTitle {
@@ -546,7 +564,7 @@ export default {
     margin-top: 0.2rem;
     > div {
       height: 0.34rem;
-      width: 0.83rem;
+      width: 23.78%;
       border: 1px solid #e9e9eb;
       text-align: center;
       line-height: 0.34rem;
@@ -554,9 +572,16 @@ export default {
       margin-bottom: 0.05rem;
     }
     > div:not(:nth-child(4)) {
-      margin-right: 0.03rem;
+      margin-right: 0.8%;
     }
   }
+}
+.bottomTitle {
+  width: 100%;
+  color: #969799;
+  font-size: 0.14rem;
+  line-height: 0.5rem;
+  text-align: center;
 }
 // table样式
 .tableDetail {
@@ -569,9 +594,16 @@ export default {
   }
 }
 .actives {
-  // background-color: #ffffff !important;
-  background-image: linear-gradient(#ffffff, #ffffff) !important;
+  box-shadow: none !important;
+  background-color: #ffffff !important;
+  // background-image: linear-gradient(#ffffff, #ffffff) !important;
   font-weight: bold;
+}
+.homeProjectMainS {
+  border-radius: 0 0.05rem 0.05rem 0.05rem !important;
+}
+.homeProjectMainF {
+  border-radius: 0.05rem 0 0.05rem 0.05rem !important;
 }
 .tapsituationMapActive {
   background-color: #e0e6f4 !important;

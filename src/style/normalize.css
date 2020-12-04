@@ -310,13 +310,40 @@ template {
 }
 @font-face {
   font-family: 'DinBlack';
-  src: url('../assets/fontFace/DIN-Black.otf');
+  src: url('../static/fontFace/DIN-Black.ttf');
 }
 @font-face {
   font-family: 'HeiTiStd';
-  src: url('../assets/fontFace/AdobeHeitiStd-Regular.woff.ttf');
+  src: url('../static/fontFace/AdobeHeitiStd-Regular.woff.ttf');
 }
 @font-face {
   font-family: 'CNBold';
-  src: url('../assets/fontFace/SourceHanSansCN-Bold.otf');
+  src: url('../static/fontFace/SourceHanSansCN-Bold.ttf');
 }
+/* 切换效果 */
+/* .slide-fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: white;
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  left: 0;
+  top: 0;
+  right: 0;
+  position: absolute;
+  transform: translateX(500px);
+  opacity: 1;
+}
+.slide-fade-enter-active {
+  background-color: white;
+  transition: all 0.6s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.7s ease;
+  background-color: white;
+  transform: translateX(-500px);
+  z-index: 100;
+} */

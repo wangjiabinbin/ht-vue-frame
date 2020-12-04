@@ -9,6 +9,16 @@
  */
 
 module.exports = {
+  // 静态资源
+  configureWebpack: {
+    externals: {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      vuex: 'Vuex',
+      axios: 'axios',
+      echarts: 'echarts',
+    },
+  },
   publicPath: './',
   // 热更新
   devServer: {
@@ -29,7 +39,7 @@ module.exports = {
   outputDir: 'build',
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
-      args[0].title = '航天宏图风险普查态势图';
+      args[0].title = '航天宏图风险普查';
       return args;
     });
   },

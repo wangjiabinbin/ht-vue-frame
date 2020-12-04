@@ -1,33 +1,38 @@
 <template>
   <div class="loginD">
-    <div class="logo">
-      <img :src="Logo" alt="" />
-      <div>
-        <span>航天宏图</span>
-        <span>风险普查</span>
-      </div>
-    </div>
-    <div class="main">
-      <div class="loginPhone afterBottom">
-        <span>+86</span>
-        <van-field v-model="phone" clearable placeholder="输入手机号" />
-      </div>
-      <div class="authCode afterBottom">
-        <van-field @ v-model="code" @keyup="submitLogin" placeholder="输入验证码" />
-        <div class="sendCode">
-          <button @click="sendPhoneCode" :disabled="isClick">{{ text }}</button>
+    <div>
+      <div class="logo">
+        <img :src="Logo" alt="" />
+        <div>
+          <span>航天宏图</span>
+          <span>风险普查</span>
         </div>
       </div>
-      <div class="submit" @click="submitHandle"><span>登录</span></div>
+      <div class="loginMain">
+        <div class="loginPhone afterBottom">
+          <span>+86</span>
+          <van-field v-model="phone" clearable placeholder="输入手机号" />
+        </div>
+        <div class="authCode afterBottom">
+          <van-field @ v-model="code" @keyup="submitLogin" placeholder="输入验证码" />
+          <div class="sendCode">
+            <button @click="sendPhoneCode" :disabled="isClick">{{ text }}</button>
+          </div>
+        </div>
+        <button
+          class="submit"
+          :disabled="phone.length && code.length ? false : true"
+          @click="submitHandle"
+          :style="{ background: phone.length && code.length === 6 ? '#4063E7' : '#E5E5E5' }"
+        >
+          <span>登录</span>
+        </button>
+      </div>
     </div>
     <!-- 版本 -->
     <div class="copy">
-      <span
-        >若手机号未注册，请返回<span @click="$router.push({ name: 'wxAccredit' })"
-          >&nbsp;微信登录</span
-        ></span
-      >
-      <span>版本信息1.0.0</span>
+      <span>若手机号未注册，请返回&nbsp;微信登录</span>
+      <span>版本信息V0.1.0</span>
     </div>
   </div>
 </template>
@@ -51,7 +56,7 @@ export default {
   methods: {
     submitHandle() {
       // testPhone(this.phone)
-      if (this.phone || this.code) {
+      if (testPhone(this.phone) && this.code.length === 6) {
         loginByPhone({
           phone: this.phone,
           code: this.code,
@@ -62,13 +67,14 @@ export default {
             this.phone = '';
             this.$router.push({
               name: 'home',
+              replace: true,
             });
           } else {
             this.$toast.fail('请输入正确验证码或手机');
           }
         });
       } else {
-        this.$toast.fail('请输入手机号');
+        this.$toast.fail('请输入正确验证码或手机');
       }
     },
     sendPhoneCode(e) {
@@ -76,10 +82,12 @@ export default {
         getPhoneCode({
           phone: this.phone,
         }).then((res) => {
-          if (res.code === 502) {
+          if (res.data.code === 502) {
             this.$toast.fail('没有权限登录');
-          } else if (res.code === 200) {
+          } else if (res.data.code === 200) {
             this.$toast.success('已发送验证码');
+          } else if (res.data.code === 501) {
+            this.$toast.fail('没有权限登录');
           }
         });
         let timeo = 60;
@@ -116,9 +124,14 @@ export default {
   height: 100%;
   background: #f8f8fa;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   .logo {
     display: flex;
-    margin: 0.6rem 0 0 0.28rem;
+    margin: 0.6rem auto;
+    width: 3.21rem;
     img {
       width: 0.49rem;
       height: 0.49rem;
@@ -148,9 +161,9 @@ export default {
       }
     }
   }
-  .main {
-    width: 2.8rem;
-    margin: 0.6rem 0 0 0.28rem;
+  .loginMain {
+    width: 3.21rem;
+    margin: 0.6rem auto;
 
     /deep/.van-cell {
       background: none !important;
@@ -159,7 +172,6 @@ export default {
       width: 100%;
     }
     .sendCode {
-      width: 1.8rem;
       font-size: 0.15rem;
       font-weight: 400;
       color: #4063e7;
@@ -207,6 +219,7 @@ export default {
       font-size: 0.18rem;
       line-height: 0.4rem;
       margin-top: 0.4rem;
+      border: none;
       span {
         margin: auto;
       }
@@ -214,11 +227,7 @@ export default {
   }
   .copy {
     height: 0.33rem;
-    margin-left: -0.97rem;
-    position: absolute;
-    bottom: 0.3rem;
-    left: 50%;
-    width: 1.94rem;
+    margin-bottom: 0.3rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

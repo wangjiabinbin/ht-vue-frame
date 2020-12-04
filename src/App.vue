@@ -12,6 +12,7 @@
       <Header v-if="this.$route.meta.isShow" />
     </div>
     <div class="main" ref="mainScrool">
+      <van-loading v-show="false" size="24px" class="kkkk" vertical>加载中...</van-loading>
       <!-- <keep-alive>
         <router-view
           :key="$route.fullPath"
@@ -19,7 +20,9 @@
           ref="scrollTop"
       /></keep-alive> -->
       <!-- v-if="this.$route.meta.isShowCache ? true : false" -->
-      <router-view :key="$route.fullPath" ref="scrollTop" />
+      <transition name="slide-fade">
+        <router-view :key="$route.fullPath" ref="scrollTop" />
+      </transition>
     </div>
     <FooterTab class="footer" v-if="!this.$route.meta.isShowLogin" />
   </div>
@@ -32,30 +35,24 @@ import { isShowStorage } from './utils/localstorageS';
 
 export default {
   mounted() {
-    document.addEventListener(
-      'touchmove',
-      (event) => {
-        if (event.touches.length > 1) {
-          event.preventDefault();
-        }
-      },
-      false
-    );
+    // document.addEventListener(
+    //   'touchmove',
+    //   (event) => {
+    //     console.warn(event);
+    //     if (event.touches.length > 1) {
+    //       event.preventDefault();
+    //     }
+    //   },
+    //   false
+    // );
   },
   methods: {},
   components: {
     FooterTab,
     Header,
   },
-  watch: {
-    $route(to) {
-      if (!isShowStorage() && to.name !== 'login') {
-        this.$router.push({
-          name: 'wxAccredit',
-        });
-      }
-    },
-  },
+  created() {},
+  watch: {},
 };
 </script>
 <style lang="scss">
@@ -69,12 +66,18 @@ body,
 #app {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-
   .main {
     flex: 1;
     overflow-y: auto;
-    overflow-x: hidden;
+    position: relative;
+    .kkkk {
+      position: absolute;
+      top: 50%;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999999999;
+    }
   }
   .footer {
     display: flex;

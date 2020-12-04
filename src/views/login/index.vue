@@ -4,12 +4,12 @@
       <div class="logo"></div>
       <div class="title">选择登录方式</div>
       <div class="login">
-        <div class="WxLogind">
-          <img src="../../assets/loginImages/icon_w.png" alt="" />
+        <!-- <div class="WxLogind">
+          <img src="../../static/loginImages/icon_w.png" alt="" />
           微信登录
-        </div>
+        </div> -->
         <div class="phoneLogin" @click="loginPhone">
-          <img src="../../assets/loginImages/icon_i.png" alt="" />
+          <img src="../../static/loginImages/icon_i.png" alt="" />
           手机登录
         </div>
       </div>
@@ -47,7 +47,7 @@ export default {
       background: #143980;
       border-radius: 0.05rem;
       margin: 0.37rem auto;
-      background: url('../../assets/loginImages/logo.png') 100% 100%;
+      background: url('../../static/loginImages/logo.png') 100% 100%;
       background-size: 100% 100%;
     }
     .title {
@@ -87,7 +87,8 @@ export default {
       line-height: 0;
       margin: auto;
       display: flex;
-      justify-content: space-between;
+      // justify-content: space-between;//微信
+      justify-content: center;
       img {
         width: 0.42rem;
         height: 0.42rem;

@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <div class="main">
+  <div class="projectS">
+    <div class="yetCityS">
+      <div class="yetCityBJ"></div>
+      <div class="YetTitle">页面建设中，敬请期待~~</div>
+    </div>
+    <!-- 缺省页 -->
+    <!-- <div class="main">
       <div class="mainTitle">项目进展</div>
-      <!-- 项目进展 -->
+      项目进展
       <div class="projectEvolve">
         <div
           v-for="(item, index) in projectData"
@@ -13,9 +18,9 @@
           <div>{{ item.name }}</div>
         </div>
       </div>
-      <!-- 项目进展 -->
+      项目进展
       <div class="mainTitle">项目进展</div>
-      <!-- 项目类型 -->
+      项目类型
       <div class="projectPropress">
         <div
           v-for="(item, index) in projectData2"
@@ -27,8 +32,8 @@
           </div>
         </div>
       </div>
-      <!-- 项目类型 -->
-    </div>
+      项目类型
+    </div> -->
   </div>
 </template>
 
@@ -110,6 +115,7 @@ export default {
       activtiy: 0,
     };
   },
+  created() {},
   methods: {
     clickHandle(value) {
       this.activtiy = value;
@@ -119,6 +125,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../style/yetCity/yetCity.scss';
+.projectS {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+// 缺省页
 .projectEvolve {
   display: flex;
   flex-wrap: wrap;

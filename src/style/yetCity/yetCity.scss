@@ -1,0 +1,21 @@
+.yetCityS {
+  width: 2rem;
+  height: 2.25rem;
+  .yetCityBJ {
+    width: 100%;
+    height: 2rem;
+    background: url('../../static/loginImages/yetCityIMG.png') no-repeat;
+    background-size: 100% 100%;
+  }
+  .YetTitle {
+    height: 0.75rem;
+    width: 100%;
+    line-height: 0.75rem;
+    text-align: center;
+    font-size: 0.16rem;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #000000;
+    opacity: 0.89;
+  }
+}

@@ -17,8 +17,7 @@
               v-if="i.children && i.children.length ? true : false"
               :src="cutDetail"
               alt=""
-              style="visibility: hidden"
-            />{{ i.name }}</span
+            /><img v-else src="" alt="" style="visibility: hidden" />{{ i.name }}</span
           >
           <span>{{ i.detail[0].num }}</span>
           <span>{{ i.detail[1].num }}</span>
@@ -52,7 +51,9 @@
             class="tableCityCont"
             @click="skipRouter(item)"
           >
-            <span>{{ item.name }}</span>
+            <span
+              ><span style="visibility: hidden; width: 0.15rem"></span>{{ item.name }}</span
+            >
             <span>{{ item.detail[0].num }}</span>
             <span>{{ item.detail[1].num }}</span>
             <span>{{ item.detail[2].num }}</span>
@@ -96,13 +97,16 @@ export default {
   },
   data() {
     return {
-      iconDetail: require('../assets/icon_right_blue.png'),
-      cutDetail: require('../assets/icon_down.png'),
+      iconDetail: require('../static/icon_right_blue.png'),
+      cutDetail: require('../static/icon_down.png'),
       finished: false,
       loading: false,
       sortData: [],
       permissions: null,
     };
+  },
+  created() {
+    this.permissions = permissions();
   },
   methods: {
     skipRouter(e) {
@@ -122,9 +126,6 @@ export default {
       }
     },
   },
-  created() {
-    this.permissions = permissions();
-  },
 };
 </script>
 
@@ -133,37 +134,38 @@ export default {
   .tableCont {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #e7e7e7;
     font-size: 0.12rem;
     height: 0.3rem;
-    line-height: 0.3rem;
     margin-bottom: 0.03rem;
 
-    > span {
+    > span:not(:first-child) {
+      width: 0.6rem;
       text-align: center;
-      min-width: 0.4rem;
       color: #010713;
       font-weight: 500;
     }
     :first-child {
+      text-align: center;
       width: 0.7rem;
-      min-width: 0.4rem;
     }
   }
   .tableTrCont {
     font-size: 0.1rem;
-    height: 0.3rem;
+    // height: 0.3rem;
     background: #f4f4f4;
     border-radius: 0.05rem;
     display: flex;
     justify-content: space-between;
-    > span,
-    div {
-      float: left;
+    align-items: center;
+  }
+  .tableCityCont,
+  .tableTrCont {
+    > span:not(:first-child) {
       text-align: center;
+      width: 0.5rem;
       line-height: 0.3rem;
-      min-width: 0.34rem;
-      margin-right: 0.04rem;
     }
     :first-child {
       display: flex;
@@ -196,49 +198,19 @@ export default {
       }
     }
   }
-  // 二级菜单
-  .isShowTable {
-    display: none;
-
-    .tableCityCont {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.1rem;
-      height: 0.3rem;
-      margin-bottom: 0.05rem;
-      border-bottom: 0.01rem solid #d0d0d0;
-      &:last-child {
-        border-bottom: none;
-      }
-      > span,
-      div {
-        // float: left;
-        text-align: center;
-        line-height: 0.3rem;
-        min-width: 0.34rem;
-        margin-right: 0.04rem;
-      }
-      :first-child {
-        display: inline-block;
-        width: 0.55rem;
-        overflow: hidden;
-        padding-left: 0.02rem;
-      }
-      .iconDetail {
-        display: flex;
-        width: 0.5rem;
-        margin-right: 0;
-        align-items: center;
-        justify-content: center;
-        transform: scale(0.92);
-        // font-size: 0.09rem;
-        color: #4063e7;
-        img {
-          width: 0.05rem;
-          height: 0.08rem;
-          margin-left: 0.05rem;
-        }
-      }
+}
+// 二级菜单
+.isShowTable {
+  display: none;
+  .tableCityCont {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.1rem;
+    height: 0.3rem;
+    margin-bottom: 0.05rem;
+    border-bottom: 0.01rem solid #d0d0d0;
+    &:last-child {
+      border-bottom: none;
     }
   }
 }

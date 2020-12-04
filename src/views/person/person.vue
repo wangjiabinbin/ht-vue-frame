@@ -1,7 +1,16 @@
 <template>
   <div class="person">
     <div class="myDetali">
-      <img src="../../assets/loginImages/picture.png" alt="" />
+      <img
+        :src="
+          userMessge.roleName === '高管'
+            ? GGimg
+            : userMessge.roleName === '管理员'
+            ? GLRYimg
+            : XSimg
+        "
+        alt=""
+      />
       <div class="phoneTitle">
         <span>{{ userMessge.userName }}</span>
         <p>
@@ -31,24 +40,25 @@ export default {
   data() {
     return {
       userMessge: {},
+      GGimg: require('../../static/person/GGimg.png'),
+      GLRYimg: require('../../static/person/GLRYimg.png'),
+      XSimg: require('../../static/person/XSimg.png'),
     };
   },
   async created() {
-    const res = await getTables({
-      parent: 100000,
-      pageNum: 1,
-      pageSize: 10,
-    });
     this.userMessge = getStorage();
   },
   methods: {
     logout() {
-      this.$dialog.confirm({ message: '您确认要注销？' }).then(() => {
-        window.localStorage.removeItem('token');
-        this.$router.push({
-          name: 'wxAccredit',
-        });
-      });
+      this.$dialog
+        .confirm({ message: '您确认要退出吗？' })
+        .then(() => {
+          window.localStorage.removeItem('token');
+          this.$router.push({
+            name: 'wxAccredit',
+          });
+        })
+        .catch(() => {});
     },
   },
 };
@@ -61,9 +71,8 @@ export default {
   height: 100%;
 
   .myDetali {
-    width: 3.75rem;
     height: 0.99rem;
-    background: url('../../assets/loginImages/bj.png') #4063e7;
+    background: url('../../static/loginImages/bj.png') #4063e7;
     background-size: 100% 100%;
     display: flex;
     align-items: center;
@@ -126,16 +135,19 @@ export default {
 
   // 退出登录
   .logout {
+    background: #e5e5e5;
+    border-radius: 20px;
     position: absolute;
-    left: 5%;
-    bottom: 0;
-    width: 90%;
-    height: 0.4rem;
+    left: 12%;
+    bottom: 0.35rem;
+    width: 74%;
     color: #fff;
-    background: red;
     font-size: 0.14rem;
     text-align: center;
     line-height: 0.4rem;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #010713;
   }
 }
 </style>

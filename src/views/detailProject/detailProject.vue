@@ -1,8 +1,23 @@
 <template>
-  <div class="">
+  <div class="mainScrool">
     <van-nav-bar left-text="返回" title="项目详情" left-arrow @click-left="onClickLeft" />
     <div class="projectTop">
-      <div class="detailTitle">{{ queryS.name }}项目</div>
+      <div class="detailTitle">
+        {{ queryS.name }}项目
+        <!-- <span
+          @click="areaList = !areaList"
+          style="float: right; color: #4063e7"
+          >切换省份</span
+        > -->
+      </div>
+      <!-- <van-popup
+        v-model="areaList"
+        position="bottom"
+        :get-container="getContainer"
+        :style="{ height: '50%' }"
+      >
+        <van-area title="标题" :area-list="areaList2" />
+      </van-popup> -->
       <div class="projectDetail">
         <!-- 较上周增加数量 -->
         <div
@@ -22,11 +37,13 @@
       <!-- 项目分类 -->
       <div class="detailTitle">城市项目分布</div>
       <div class="mapProject">
+        <!-- 组件传参到地图组件中 -->
         <ProjectProgress :serversData="serversData" :jsonData="jsonData" :name="queryS.name" />
       </div>
+      <!-- 组件传参到Table组件中 -->
       <Tables :tableData="tableData" />
     </div>
-    <div class="bottomTitle">没有更多啦</div>
+    <div class="bottomTitle" v-if="tableData.length ? true : false">没有更多啦</div>
   </div>
 </template>
 
@@ -36,8 +53,13 @@ import { ProjectProgress, Tables } from '../../utils/routers';
 import { projectData, colorData } from '../../utils/mapConfig';
 
 export default {
+  components: {
+    ProjectProgress,
+    Tables,
+  },
   data() {
     return {
+      areaList: false,
       queryS: {},
       projectData: projectData,
       colorData: colorData,
@@ -45,11 +67,28 @@ export default {
       serversData: null,
       tableData: [],
       jsonData: null,
+      areaList2: {
+        province_list: {
+          110000: '北京',
+          120000: '天津',
+        },
+        city_list: {
+          110100: '北京',
+          120100: '天津',
+        },
+        county_list: {
+          120103: '河西',
+          120104: '南开',
+          120105: '河北',
+          110101: '东城',
+          110102: '西城',
+          110105: '朝阳',
+          110106: '丰台',
+          120101: '和平',
+          120102: '河东',
+        },
+      },
     };
-  },
-  components: {
-    ProjectProgress,
-    Tables,
   },
   async created() {
     this.queryS = this.$route.query;
@@ -90,6 +129,9 @@ export default {
     // 数据分类
   },
   methods: {
+    getContainer() {
+      return this.$parent.$refs.mainScrool;
+    },
     onClickLeft() {
       this.$router.go(-1);
     },
@@ -100,7 +142,7 @@ export default {
 <style scoped lang="scss">
 @import '../../style/projectDetail/_projectDetail.scss';
 .projectTop {
-  padding: 0 0.15rem;
+  padding: 0 3.46%;
   background: #f9f9fb;
   .projectDetail {
     width: 100%;

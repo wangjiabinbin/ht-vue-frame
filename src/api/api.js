@@ -1,11 +1,11 @@
 import axios from 'axios';
+import Vue from 'vue';
 import urlConfig from '../../public/config';
 // import {config} from '../../static/config'
 // const urlConfig = require("urlConfig");
 // let base = urlConfig.url
 // let base2 = urlConfig.url2
 // let base3 = urlConfig.pcrqdlURL
-
 //
 // export const getAPfuncTree = (params) => {
 //   return axios.post(`${base}sm/sm02/sm0201/getMkTree`, params).then((res) => res.data);

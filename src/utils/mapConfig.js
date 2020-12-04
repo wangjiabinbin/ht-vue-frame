@@ -142,6 +142,7 @@ export function mapOption(isShow, option, name, permissions) {
         type: 'map',
         geoIndex: 0,
         data: option,
+        nameProperty: 'code',
       },
     ],
   };
