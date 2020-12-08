@@ -11,7 +11,7 @@ export function isShowStorage() {
   return false;
 }
 export function permissions() {
-  if (getStorage().roleName === '高管' || getStorage().roleName === '管理员') {
+  if (getStorage().roleName === '高管' || getStorage().roleName === '管理人员') {
     return 0;
   } else {
     return 1;

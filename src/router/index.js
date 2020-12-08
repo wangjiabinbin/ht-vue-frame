@@ -24,6 +24,14 @@ const routes = [
       index: 2,
     },
   },
+  {
+    path: '/IssueCon',
+    name: 'issueCon',
+    component: () => import('../views/newCon/issueCon.vue'),
+    meta: {
+      index: 2,
+    },
+  },
   // 个人中心
   {
     path: '/Person',

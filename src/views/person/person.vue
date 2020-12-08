@@ -5,7 +5,7 @@
         :src="
           userMessge.roleName === '高管'
             ? GGimg
-            : userMessge.roleName === '管理员'
+            : userMessge.roleName === '管理人员'
             ? GLRYimg
             : XSimg
         "

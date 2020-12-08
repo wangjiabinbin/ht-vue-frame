@@ -36,5 +36,11 @@ export default function getNowFormatDate() {
     hours +
     seperator2 +
     minutef;
-  return currentdate;
+  const F = new Date().getMinutes();
+  const M = new Date().getSeconds();
+  const S = new Date().getHours();
+  return {
+    currentdate,
+    date: S + ':' + F + ':' + M,
+  };
 }

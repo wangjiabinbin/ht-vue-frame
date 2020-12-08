@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:08
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-08 10:35:39
+ * @Description: 登录
+ * @FilePath: \src\views\login\login.vue
+-->
 <template>
   <div class="loginD">
     <div>
@@ -61,8 +69,8 @@ export default {
           phone: this.phone,
           code: this.code,
         }).then((res) => {
-          if (res.data.code === 200) {
-            setStorage(JSON.stringify(res.data.data));
+          if (res.code === 200) {
+            setStorage(JSON.stringify(res.data));
             this.code = '';
             this.phone = '';
             this.$router.push({

@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:08
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-07 17:07:39
+ * @Description: Please set Description
+ * @FilePath: \src\views\home\Home.vue
+-->
 <template>
   <div style="background: #f8f7fa">
     <!-- banner -->
@@ -107,7 +115,7 @@
             @click="tapsituation(2)"
             :class="{ tapsituationMapActive: tapsituationIndex === 2 }"
           >
-            每周新增数量
+            本周新增数量
           </div>
         </div>
         <swiper
@@ -171,7 +179,7 @@
             ><LineChartsMap :lineMapData="lineCutData.YSJX" :name="tabLineMap[6].name"
           /></swiper-slide>
         </swiper>
-        <div class="tendencyMap">
+        <div class="progressClassin">
           <div
             v-for="(item, index) in tabLineMap"
             :key="index"
@@ -257,7 +265,7 @@ export default {
     // 折线图
     getAllProject().then((res) => {
       this.projectData.forEach((i, n) => {
-        res.data.data.week.forEach((item, index) => {
+        res.data.week.forEach((item, index) => {
           if (i.name === item.progress) {
             item.num === 0
               ? this.projectDataWeek.push('无变化')
@@ -268,36 +276,36 @@ export default {
         });
       });
       this.projectData.forEach((i, n) => {
-        res.data.data.All.forEach((item, index) => {
+        res.data.All.forEach((item, index) => {
           if (i.name === item.progress) {
             this.projectDataAll.push(item.num);
           }
         });
       });
-      this.lineCutData.XZZB = res.data.data.Classify[0].addWBD;
-      this.lineCutData.XZYS = res.data.data.Classify[0].addCBA;
-      this.lineCutData.SQZC = res.data.data.Classify[0].PST;
-      this.lineCutData.SQSS = res.data.data.Classify[0].PIT;
-      this.lineCutData.YZB = res.data.data.Classify[0].WBD;
-      this.lineCutData.ZSSS = res.data.data.Classify[0].FIE;
-      this.lineCutData.YSJX = res.data.data.Classify[0].CBA;
+      this.lineCutData.XZZB = res.data.Classify[0].addWBD;
+      this.lineCutData.XZYS = res.data.Classify[0].addCBA;
+      this.lineCutData.SQZC = res.data.Classify[0].PST;
+      this.lineCutData.SQSS = res.data.Classify[0].PIT;
+      this.lineCutData.YZB = res.data.Classify[0].WBD;
+      this.lineCutData.ZSSS = res.data.Classify[0].FIE;
+      this.lineCutData.YSJX = res.data.Classify[0].CBA;
     });
     await getMapJson(100000).then((res) => {
-      this.jsonData = res.data;
+      this.jsonData = res;
     });
     // JSon  数据
     getMapInfo({
       parent: 100000,
       type: 1,
     }).then((res) => {
-      this.serversData2 = res.data.data;
+      this.serversData2 = res.data;
     });
     // 地图数据
     getMapInfo({
       parent: 100000,
       type: 0,
     }).then((res) => {
-      this.serversData = res.data.data;
+      this.serversData = res.data;
     });
   },
   methods: {
@@ -326,7 +334,7 @@ export default {
       const res = await getTables({
         parent: 100000,
       });
-      this.tableS.tableData = res.data.data;
+      this.tableS.tableData = res.data;
     },
     // 左右按钮切换
     cutSwiperHandle(val) {
@@ -347,7 +355,7 @@ export default {
   },
 
   mounted() {
-    this.getDate = getNowFormatDate();
+    this.getDate = getNowFormatDate().currentdate;
   },
 };
 </script>
@@ -557,24 +565,7 @@ export default {
       z-index: 999;
     }
   }
-  .tendencyMap {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 0.2rem;
-    margin-top: 0.2rem;
-    > div {
-      height: 0.34rem;
-      width: 23.78%;
-      border: 1px solid #e9e9eb;
-      text-align: center;
-      line-height: 0.34rem;
-      background: #f4f4f4;
-      margin-bottom: 0.05rem;
-    }
-    > div:not(:nth-child(4)) {
-      margin-right: 0.8%;
-    }
-  }
+  @import '../../style/progreesClassi/progressClassi.scss';
 }
 .bottomTitle {
   width: 100%;

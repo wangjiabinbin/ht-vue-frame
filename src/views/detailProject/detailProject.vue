@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:08
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-07 17:08:41
+ * @Description: Please set Description
+ * @FilePath: \src\views\detailProject\detailProject.vue
+-->
 <template>
   <div class="mainScrool">
     <van-nav-bar left-text="返回" title="项目详情" left-arrow @click-left="onClickLeft" />
@@ -94,7 +102,7 @@ export default {
     this.queryS = this.$route.query;
     getAdcode({ adcode: this.queryS.id }).then((r) => {
       this.projectData.forEach((i, n) => {
-        r.data.data.forEach((item, index) => {
+        r.data.forEach((item, index) => {
           if (i.name === item.progress) {
             this.projectDataNum.push(item.num);
           }
@@ -102,28 +110,28 @@ export default {
       });
     });
     await getMapJson(this.queryS.id).then((res) => {
-      this.jsonData = res.data;
+      this.jsonData = res;
     });
     getMapInfo({
       parent: this.queryS.id,
       type: 0,
     }).then((res) => {
-      this.serversData = res.data.data;
+      this.serversData = res.data;
     });
     getTables({
       parent: this.queryS.id,
     }).then((res) => {
-      // this.tableData = res.data.data.list;
-      // res.data.data.sort((a, b) => {
+      // this.tableData = res.data.list;
+      // res.data.sort((a, b) => {
       //   return b.detail[0].num - a.detail[0].num;
       // });
-      // res.data.data.forEach((item, index) => {
+      // res.data.forEach((item, index) => {
       //   if (item.name === '省厅' || item.name === '市局') {
-      //     const city = res.data.data.splice(index, 1);
-      //     res.data.data.unshift(city[0]);
+      //     const city = res.data.splice(index, 1);
+      //     res.data.unshift(city[0]);
       //   }
       // });
-      this.tableData = res.data.data;
+      this.tableData = res.data;
     });
 
     // 数据分类

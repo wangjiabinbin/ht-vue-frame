@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 17:15:55
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-07 22:04:28
+ * @Description: 底部标签
+ * @FilePath: \src\components\footerTab\index.vue
+-->
 <template>
   <div class="footer">
     <div

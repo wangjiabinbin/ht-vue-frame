@@ -1,10 +1,10 @@
 /*
  * @Author: 王磊
  * @Date: 2020-11-20 16:05:37
- * @LastEditTime: 2020-11-23 09:56:29
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-08 10:00:09
+ * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
- * @FilePath: \ht-vue-frame\.eslintrc.js
+ * @FilePath: \.eslintrc.js
  */
 const env = process.env.NODE_ENV;
 
@@ -46,5 +46,7 @@ module.exports = {
     indent: 'off',
     'no-nested-ternary': 'off',
     'import/prefer-default-export': 'off',
+    'no-irregular-whitespace': 'off',
+    'no-param-reassign': 'off',
   },
 };

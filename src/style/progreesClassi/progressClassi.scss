@@ -1,0 +1,18 @@
+.progressClassin {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+  margin-top: 0.2rem;
+  > div {
+    height: 0.34rem;
+    width: 23.7%;
+    border: 1px solid #e9e9eb;
+    text-align: center;
+    line-height: 0.34rem;
+    background: #f4f4f4;
+    margin-bottom: 0.05rem;
+  }
+  > div:not(:nth-child(4)) {
+    margin-right: 0.8%;
+  }
+}

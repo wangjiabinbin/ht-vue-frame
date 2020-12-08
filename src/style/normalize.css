@@ -320,6 +320,10 @@ template {
   font-family: 'CNBold';
   src: url('../static/fontFace/SourceHanSansCN-Bold.ttf');
 }
+@font-face {
+  font-family: 'CNRegular';
+  src: url('../static/fontFace/SourceHanSansCN-Regular.ttf');
+}
 /* 切换效果 */
 /* .slide-fade {
   position: fixed;

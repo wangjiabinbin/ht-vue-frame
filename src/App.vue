@@ -1,10 +1,10 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-11-29 13:23:36
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-08 10:46:54
+ * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
- * @FilePath: \survey_app_web\src\App.vue
+ * @FilePath: \src\App.vue
 -->
 <template>
   <div id="app" ref="box">
@@ -69,6 +69,7 @@ body,
   .main {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     .kkkk {
       position: absolute;

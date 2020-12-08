@@ -154,22 +154,28 @@ export function mapOption(isShow, option, name, permissions) {
 export const projectData = [
   {
     name: '售前支持',
+    type: 'PST',
   },
   {
     name: '售前实施',
+    type: 'PIT',
   },
   {
     name: '招标中',
+    type: 'BD',
   },
   {
     name: '已中标',
+    type: 'WBD',
   },
   {
     name: '正式实施',
+    type: 'FIE',
   },
 
   {
     name: '验收结项',
+    type: 'CBA',
   },
 ];
 /**
@@ -236,5 +242,56 @@ export const tabLineMap = [
   },
   {
     name: '验收结项',
+  },
+];
+/**
+ * 新建项目分类选择
+ */
+
+export const ClassificationData = [
+  {
+    name: '气象',
+    type: 'ML',
+  },
+  {
+    name: '水旱',
+    type: 'FAD',
+  },
+  {
+    name: '地质',
+    type: 'GY',
+  },
+  {
+    name: '地震',
+    type: 'EQ',
+  },
+  {
+    name: '应急',
+    type: 'CM',
+  },
+  {
+    name: '交通',
+    type: 'MOT',
+  },
+
+  {
+    name: '市政',
+    type: 'PF',
+  },
+  {
+    name: '房屋',
+    type: 'HB',
+  },
+  {
+    name: '林草',
+    type: 'FS',
+  },
+  {
+    name: '海洋',
+    type: 'ON',
+  },
+  {
+    name: '总包',
+    type: 'IA',
   },
 ];
