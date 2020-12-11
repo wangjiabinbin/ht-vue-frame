@@ -67,7 +67,7 @@ body,
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
-    background: rgb(248, 247, 250);
+    background: #f8f9fb;
     .kkkk {
       position: absolute;
       top: 50%;

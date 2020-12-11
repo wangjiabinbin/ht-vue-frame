@@ -37,4 +37,24 @@ export function dateFormat(date, fmt) {
   return fmt;
 }
 
-export function add() {}
+/**
+ * 表单必填项非空判断
+ * @param {*} requiredData 所有必填项
+ * @param {*} allFormItem 所有表单项
+ */
+export function isEmpty(requiredData, allFormItem) {
+  for (let i = 0; i < requiredData.length; i++) {
+    for (let j = 0; j < allFormItem.length; j++) {
+      const requiredKey = requiredData[i].key;
+      const itemKey = allFormItem[j][0];
+      const itemValue = allFormItem[j][1];
+      if (requiredKey === itemKey) {
+        if (!itemValue || !itemValue.length) {
+          return requiredData[i];
+        }
+        break;
+      }
+    }
+  }
+  return false;
+}

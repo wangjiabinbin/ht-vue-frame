@@ -120,7 +120,7 @@ import { addProject, getOneProject } from 'api/api';
 import getNowFormatDate from 'utils/dateS';
 import ProjectType from 'components/projectType/projectType.vue';
 import { getStorage } from '../../utils/localstorageS';
-import { dateFormat } from '../../utils/utils';
+import { dateFormat, isEmpty } from '../../utils/utils';
 
 export default {
   components: {
@@ -142,7 +142,7 @@ export default {
         createUserId: '',
         name: '',
         industryType: [], // 行业类型
-        progressType: '售前支持', // 进展类型
+        progressType: '', // 进展类型
         chargePeople: '', // 负责人
         meetPeople: '', // 对接人员
         projectManager: '', // 项目经理
@@ -175,6 +175,14 @@ export default {
       ],
       isUpdate: this.$route.query.isUpdate,
       id: this.$route.query.id,
+      requiredData: [
+        { key: 'name', value: '项目名称' },
+        { key: 'industryType', value: '项目类型' },
+        { key: 'progressType', value: '项目进展' },
+        { key: 'chargePeople', value: '负责人' },
+        { key: 'meetPeople', value: '对接人' },
+        { key: 'createTime', value: '时间' },
+      ], // 所有表单必填项
     };
   },
   created() {
@@ -244,34 +252,14 @@ export default {
       }
       this.isShowLevel = false;
     },
-    isEmpty() {
-      const {
-        name,
-        industryType,
-        progressType,
-        chargePeople,
-        meetPeople,
-        createTime,
-      } = this.formList;
-      if (
-        name &&
-        industryType.length > 0 &&
-        progressType &&
-        chargePeople &&
-        meetPeople &&
-        createTime
-      ) {
-        return true;
-      }
-      return false;
-    },
     submitButton() {
-      if (this.isEmpty()) {
+      const allFormItem = Object.entries(this.formList);
+      const hasEmpty = isEmpty(this.requiredData, allFormItem);
+      if (!hasEmpty) {
         if (this.isUpdate) {
           this.formList.id = this.id;
         }
         addProject(this.formList).then((res) => {
-          console.warn(res);
           if (res.code === 200) {
             this.$toast.success(this.isUpdate ? '编辑成功' : '新建成功');
             this.$router.push({
@@ -281,7 +269,7 @@ export default {
           }
         });
       } else {
-        this.$toast.fail('请填写必选项');
+        this.$toast.fail(`请输入\n${hasEmpty.value}`);
       }
     },
     takeDataHandle(value) {

@@ -117,7 +117,7 @@
           <van-cell>
             <template #title>
               <span class="custom-title">中标金额</span>
-              <span class="moneyUnit">(单位/万元)</span>
+              <span class="newConrequired">*</span><span class="moneyUnit">(单位/万元)</span>
             </template>
             <template #default>
               <van-field
@@ -161,7 +161,7 @@ import UtilsPopup from 'components/utilsPopup/utilsPopup.vue';
 import { projectData } from 'utils/mapConfig';
 import { bidderAdd } from 'api/api';
 import ProjectType from 'components/projectType/projectType.vue';
-import { dateFormat } from '../../utils/utils';
+import { dateFormat, isEmpty } from '../../utils/utils';
 
 export default {
   components: {
@@ -222,6 +222,19 @@ export default {
         district: '', // 县id
         biddingTime: '',
       },
+      requiredData: [
+        { key: 'name', value: '名称' },
+        { key: 'tenderer', value: '招标单位' },
+        { key: 'subjectStatus', value: '标的状态' },
+        { key: 'participation', value: '是否参与' },
+        { key: 'biddingTime', value: '发布时间' },
+        { key: 'openTime', value: '开标时间' },
+        { key: 'deadlineTime', value: '投标截止时间' },
+        { key: 'contractTime', value: '合同履行期限' },
+        { key: 'budgetAmount', value: '预算金额' },
+        { key: 'ceilingPrice', value: '最高限额' },
+        { key: 'acceptancePrice', value: '中标金额' },
+      ], // 所有表单必填项
       isUpdate: this.$route.query.isUpdate,
       id: this.$route.query.id,
     };
@@ -277,44 +290,6 @@ export default {
       }
       this.isShowLevel = false;
     },
-    isEmpty() {
-      const {
-        name,
-        tenderer,
-        subjectStatus,
-        budgetAmount,
-        ceilingPrice,
-        participation,
-        industryTypeList,
-        openTime,
-        deadlineTime,
-        contractTime,
-        province,
-        city,
-        biddingTime,
-        district,
-      } = this.formList;
-      if (
-        name !== '' &&
-        tenderer !== '' &&
-        subjectStatus !== null &&
-        budgetAmount !== null &&
-        ceilingPrice !== null &&
-        participation !== '' &&
-        industryTypeList.length !== 0 &&
-        openTime !== '' &&
-        deadlineTime !== '' &&
-        contractTime !== '' &&
-        province !== '' &&
-        city !== '' &&
-        district !== '' &&
-        biddingTime !== ''
-      ) {
-        return true;
-      }
-      return false;
-      // return result; //都为空是true，有不为空的返回false
-    },
     selectUP(value) {
       this.subjectStatus = value;
       const { formList } = this;
@@ -333,7 +308,9 @@ export default {
       this.isShowParticipation = false;
     },
     submitButton() {
-      if (this.isEmpty()) {
+      const allFormItem = Object.entries(this.formList);
+      const hasEmpty = isEmpty(this.requiredData, allFormItem);
+      if (!hasEmpty) {
         bidderAdd(this.formList).then((res) => {
           this.$toast.success('新建成功');
           this.$router.push({
@@ -342,7 +319,7 @@ export default {
           });
         });
       } else {
-        this.$toast.fail('请填写必填项');
+        this.$toast.fail(`请输入\n${hasEmpty.value}`);
       }
     },
     takeDataHandle(value) {
@@ -364,6 +341,7 @@ export default {
     .headerTop {
       width: 100%;
       height: 0.24rem;
+      margin-bottom: 0.15rem;
       background: #e0e6f4;
       border-radius: 0.02rem;
       line-height: 0.24rem;
