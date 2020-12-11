@@ -1,16 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-08 10:46:54
+ * @LastEditTime: 2020-12-10 19:57:21
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \src\App.vue
 -->
 <template>
   <div id="app" ref="box">
-    <div class="header">
-      <Header v-if="this.$route.meta.isShow" />
-    </div>
+    <div class="header"></div>
     <div class="main" ref="mainScrool">
       <van-loading v-show="false" size="24px" class="kkkk" vertical>加载中...</van-loading>
       <!-- <keep-alive>
@@ -24,7 +22,7 @@
         <router-view :key="$route.fullPath" ref="scrollTop" />
       </transition>
     </div>
-    <FooterTab class="footer" v-if="!this.$route.meta.isShowLogin" />
+    <FooterTab class="footer" v-if="isShowLogin" />
   </div>
 </template>
 <script>
@@ -34,25 +32,23 @@ import Header from './components/header/index.vue';
 import { isShowStorage } from './utils/localstorageS';
 
 export default {
-  mounted() {
-    // document.addEventListener(
-    //   'touchmove',
-    //   (event) => {
-    //     console.warn(event);
-    //     if (event.touches.length > 1) {
-    //       event.preventDefault();
-    //     }
-    //   },
-    //   false
-    // );
+  data() {
+    return {
+      isShowLogin: false,
+    };
   },
+  mounted() {},
+  created() {},
   methods: {},
   components: {
     FooterTab,
-    Header,
   },
-  created() {},
-  watch: {},
+
+  watch: {
+    $route(to, from) {
+      this.isShowLogin = !to.meta.isShowLogin;
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -71,6 +67,7 @@ body,
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
+    background: rgb(248, 247, 250);
     .kkkk {
       position: absolute;
       top: 50%;
@@ -85,18 +82,7 @@ body,
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding: 0 0.37rem;
-  }
-}
-
-#nav {
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    padding: 0 0.39rem;
   }
 }
 </style>

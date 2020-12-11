@@ -1,7 +1,7 @@
 /*
  * @Author: 王磊
  * @Date: 2020-11-20 16:05:37
- * @LastEditTime: 2020-12-08 10:00:09
+ * @LastEditTime: 2020-12-10 22:12:03
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \.eslintrc.js
@@ -48,5 +48,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-irregular-whitespace': 'off',
     'no-param-reassign': 'off',
+    'no-unreachable': 'off',
   },
 };

@@ -2,13 +2,11 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:53
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-08 11:44:29
+ * @LastEditTime: 2020-12-10 21:11:01
  * @Description: Please set Description
  * @FilePath: \src\api\api.js
  */
 import service from 'utils/request';
-import Vue from 'vue';
-import urlConfig from '../../public/config';
 // import {config} from '../../static/config'
 // const urlConfig = require("urlConfig");
 // let base = urlConfig.url
@@ -62,7 +60,6 @@ export const getAllProject = () => {
 export const getAdcode = (params) => {
   return service.get(`/app/area/getAdcode`, { params: params });
 };
-// 全国省市县json数据
 
 export const getMapJson = (id) => {
   return service.get(`/json/${id}_full.json`);
@@ -73,8 +70,68 @@ export const getPermission = () => {
     roleKey: 2,
   });
 };
+/**
+ * @author: 王佳宾
+ * @description: 新建项目，对象
+ * @param {*} params
+ * @return {*}
+ */
 export const addProject = (params) => {
   return service.post(`/app/project/add`, params);
+};
+/**
+ * @author: 王佳宾
+ * @description: 查询项目进展
+ * @param {*} params
+ * @return {*}
+ */
+export const getUserPermission = (params) => {
+  return service.post(`/app/project/userPermission`, params);
+};
+/**
+ * @author: 王佳宾
+ * @description: 查询单个项目数据信息
+ * @param {*} params
+ * @return {*}
+ */
+export const getOneProject = (params) => {
+  return service.get(`/app/project/getOneProject`, { params: params });
+};
+/**
+ * @author: 王佳宾
+ * @description: 更新项目接口
+ * @param {*} params
+ * @return {*}
+ */
+export const updateOneProject = (params) => {
+  return service.put(`/app/project/check`, params);
+};
+/**
+ * @author: 王佳宾
+ * @description: 招标新建接口
+ * @param {*} params
+ * @return {*}
+ */
+export const bidderAdd = (params) => {
+  return service.post(`/app/bidder/add`, params);
+};
+/**
+ * @author: 王佳宾
+ * @description: 项目列表信息
+ * @param {*} params
+ * @return {*}
+ */
+export const getShowBidder = (params) => {
+  return service.get(`/app/bidder/showBidder`, { params: params });
+};
+/**
+ * @author: 王佳宾
+ * @description: 查询单个招标信息
+ * @param {*} params
+ * @return {*}
+ */
+export const getOneBidder = (params) => {
+  return service.get(`/app/bidder/getOneBidder`, { params: params });
 };
 // 验证码
 export const getPhoneCode = (params) => {

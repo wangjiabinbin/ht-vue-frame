@@ -1,42 +1,51 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:08
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-10 09:56:27
+ * @Description: 个人中心
+ * @FilePath: \src\views\person\person.vue
+-->
 <template>
   <div class="person">
-    <div class="myDetali">
-      <img
-        :src="
-          userMessge.roleName === '高管'
-            ? GGimg
-            : userMessge.roleName === '管理人员'
-            ? GLRYimg
-            : XSimg
-        "
-        alt=""
-      />
-      <div class="phoneTitle">
-        <span>{{ userMessge.userName }}</span>
-        <p>
-          手机号码：<span>{{ userMessge.phone }}</span>
-        </p>
+    <div class="myDetail">
+      <div class="myDetailTop">
+        <div class="myDetailTitle">
+          <img
+            :src="
+              userMessge.roleName === '高管'
+                ? GGimg
+                : userMessge.roleName === '管理人员'
+                ? GLRYimg
+                : XSimg
+            "
+            alt=""
+          />
+          <span>{{ userMessge.userName }}</span>
+        </div>
+        <div class="phoneTitle" @click="logout">退出</div>
+      </div>
+      <div class="myDetailBottom">
+        <div>
+          <span><img src="../../static/site.png" alt="" />{{ userMessge.provinceName }}</span>
+          <span><img src="../../static/post.png" alt="" />{{ userMessge.roleName }}</span>
+        </div>
+        <div>手机号码：{{ userMessge.phone }}</div>
       </div>
     </div>
-    <div class="myMain">
-      <div>
-        <div>地区</div>
-        <div>{{ userMessge.provinceName }}</div>
-      </div>
-      <div>
-        <div>职务</div>
-        <div>{{ userMessge.roleName }}</div>
-      </div>
-    </div>
-    <section class="logout" @click="logout">退出登录</section>
+    <ListItems />
   </div>
 </template>
 
 <script>
+import ListItems from '../newCon/listItems.vue';
 import { getTables } from '../../api/api';
 import { getStorage } from '../../utils/localstorageS';
 
 export default {
+  components: {
+    ListItems,
+  },
   data() {
     return {
       userMessge: {},
@@ -68,68 +77,77 @@ export default {
 .person {
   position: relative;
   width: 100%;
-  height: 100%;
-
-  .myDetali {
-    height: 0.99rem;
+  .myDetail {
+    margin: 0.15rem;
+    height: 0.9rem;
+    padding: 0 0.16rem 0 0.06rem;
+    border-radius: 0.02rem;
     background: url('../../static/loginImages/bj.png') #4063e7;
     background-size: 100% 100%;
     display: flex;
-    align-items: center;
-    img {
-      width: 0.6rem;
-      height: 0.6rem;
-      border-radius: 50%;
-      margin-left: 0.21rem;
-    }
-    .phoneTitle {
-      margin-left: 0.15rem;
-      margin-top: 0.12rem;
-      overflow: hidden;
-      > span {
-        height: 0.17rem;
-        font-size: 0.18rem;
-        font-family: Source Han Sans CN;
-        font-weight: 500;
-        color: #ffffff;
-        line-height: 0.18rem;
+    flex-direction: column;
+    justify-content: space-between;
+    .myDetailTop {
+      height: 0.47rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .myDetailTitle {
+        display: flex;
+        align-items: center;
+        img {
+          width: 0.6rem;
+          height: 0.6rem;
+          border-radius: 50%;
+          top: -0.13rem;
+          position: absolute;
+        }
+        > span {
+          margin-left: 0.76rem;
+          height: 0.17rem;
+          font-size: 0.18rem;
+          font-family: Source Han Sans CN;
+          font-weight: 500;
+          color: #ffffff;
+        }
       }
-      > p {
-        height: 0.12rem;
+      .phoneTitle {
         font-size: 0.12rem;
         font-family: Source Han Sans CN;
         font-weight: 400;
-        color: #f9f9fb;
-        // line-height: 0.32rem;
+        color: #ffffff;
       }
     }
-  }
-  .myMain {
-    > div {
-      padding: 0 0.15rem;
-      height: 0.5rem;
+    .myDetailBottom {
+      height: 0.42rem;
       display: flex;
       justify-content: space-between;
-      margin: 0 0.15rem;
-      height: 0.5rem;
-      > div:nth-child(1) {
-        font-size: 0.15rem;
-        font-family: Source Han Sans CN;
-        font-weight: 500;
-        color: #010713;
-        line-height: 0.5rem;
-        letter-spacing: 0.15rem;
+      align-items: center;
+      :first-child {
+        display: flex;
+        > span {
+          display: flex;
+          align-items: center;
+          font-size: 0.15rem;
+          font-family: Source Han Sans CN;
+          font-weight: 400;
+          color: #f9f9fb;
+          img {
+            width: 0.1rem;
+            height: 0.13rem;
+            margin-right: 0.06rem;
+          }
+        }
+        > span:first-child {
+          margin: 0 0.22rem 0 0.09rem;
+        }
       }
-      > div:nth-child(2) {
-        font-size: 0.15rem;
+      :last-child {
+        font-size: 0.12rem;
         font-family: Source Han Sans CN;
-        font-weight: 500;
-        color: #a4a4a4;
-        line-height: 0.5rem;
+        font-weight: 400;
+        color: #84a1ff;
       }
-    }
-    > div:nth-child(1) {
-      border-bottom: 1px solid #d0d0d0;
     }
   }
 

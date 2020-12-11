@@ -2,27 +2,29 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-08 11:57:27
+ * @LastEditTime: 2020-12-10 14:52:58
  * @Description: Please set Description
  * @FilePath: \src\views\newCon\issueCon.vue
 -->
 <template>
   <div class="issueCon">
     <div style="overflow: hidden">
+      <ReturnUp :title="title" />
       <div class="issueConMain">
         <div class="headerTop">*为必填项</div>
         <div class="newConCenter">
           <!--  -->
-          <van-cell is-link>
+          <van-cell>
             <template #title>
               <span class="custom-title">项目名称</span>
               <span class="newConrequired">*</span>：
             </template>
             <template #default>
-              <van-field v-model="formList.name" input-align="right" placeholder="请输入" />
-            </template>
-            <template #right-icon>
-              <van-icon name="arrow" />
+              <van-field
+                v-model="formList.name"
+                input-align="right"
+                placeholder="请填写项目名称"
+              />
             </template>
           </van-cell>
           <!--  项目类型 -->
@@ -32,7 +34,8 @@
               <span class="newConrequired">*</span>：
             </template>
           </van-cell>
-          <div class="Classification">
+          <ProjectType @sendData="takeDataHandle" />
+          <!-- <div class="Classification">
             <div
               :class="{
                 actictyClassi: seachSekectHandle(item),
@@ -44,7 +47,7 @@
             >
               {{ item.name }}
             </div>
-          </div>
+          </div> -->
           <!-- 项目类型 -->
           <!-- 项目进展 -->
           <van-cell>
@@ -65,7 +68,7 @@
           </div>
           <!-- 项目进展 -->
           <!--  -->
-          <van-cell v-for="(item, index) in vantCellData" :key="index" is-link>
+          <van-cell v-for="(item, index) in vantCellData" :key="index">
             <template #title>
               <span class="custom-title">{{ item.title }}</span>
               <span class="newConrequired">{{ item.required ? '*' : '' }}</span
@@ -75,11 +78,8 @@
               <van-field
                 v-model="formList[item.value]"
                 input-align="right"
-                placeholder="请输入"
+                :placeholder="'请输入' + item.title"
               />
-            </template>
-            <template #right-icon>
-              <van-icon name="arrow" />
             </template>
           </van-cell>
           <!--  -->
@@ -99,7 +99,12 @@
           <textarea class="textAreaInput" v-model="formList.remarkInfo"></textarea>
           <div class="submitButton" @click="submitButton">提交</div>
           <PopupDate :closed="closedDate" :isShowDate="isShowDate" :SelectTime="SelectTime" />
-          <LevelMenu :closed="closedDate" :confirm="SelectLevel" :isShowLevel="isShowLevel" />
+          <LevelMenu
+            :closed="closedDate"
+            :confirm="SelectLevel"
+            :isShowLevel="isShowLevel"
+            :cityId="provinceId"
+          />
         </div>
       </div>
     </div>
@@ -109,31 +114,35 @@
 <script>
 import PopupDate from 'components/Popup.vue';
 import LevelMenu from 'components/levelmenu/levelMenu.vue';
+import ReturnUp from 'components/returnUp.vue';
 import { ClassificationData, projectData } from 'utils/mapConfig';
-import { getPermission, addProject } from 'api/api';
+import { addProject, getOneProject } from 'api/api';
 import getNowFormatDate from 'utils/dateS';
+import ProjectType from 'components/projectType/projectType.vue';
 import { getStorage } from '../../utils/localstorageS';
+import { dateFormat } from '../../utils/utils';
 
 export default {
   components: {
     PopupDate,
     LevelMenu,
+    ReturnUp,
+    ProjectType,
   },
   data() {
     return {
-      ClassificationData: ClassificationData,
-      checkefAll: false,
+      title: '项目新建',
       projectData: projectData,
       progressIndex: -1,
       placeData: '',
       isShowDate: false,
       isShowLevel: false,
-      industryType: [],
+      provinceId: '',
       formList: {
         createUserId: '',
         name: '',
         industryType: [], // 行业类型
-        progressType: '', // 进展类型
+        progressType: '售前支持', // 进展类型
         chargePeople: '', // 负责人
         meetPeople: '', // 对接人员
         projectManager: '', // 项目经理
@@ -164,68 +173,43 @@ export default {
           value: 'technicalManager',
         },
       ],
+      isUpdate: this.$route.query.isUpdate,
+      id: this.$route.query.id,
     };
   },
   created() {
-    this.formList.createUserId = getStorage().id;
+    if (this.isUpdate) {
+      getOneProject({ id: this.id }).then((res) => {
+        this.progressIndex = this.projectData.findIndex(
+          (item) => item.name === res.data.progressTypeName
+        );
+        const { data } = res;
+        data.industryType.forEach((item) => {
+          this.industryType.push(item);
+          this.formList.industryType.push(item);
+        });
+        this.placeData = data.ProvinceName;
+        data.district !== null
+          ? (this.provinceId = data.district)
+          : (this.provinceId = data.cityId);
+        // res.data.cityId !== null
+        // ? (this.provinceId = res.data.cityId)
+        // : res.data.provinceId !== null
+        // ? (this.provinceId = res.data.provinceId)
+        // : (this.provinceId = '');
+        this.formList = data;
+      });
+    } else {
+      this.formList.createUserId = getStorage().id;
+    }
   },
   methods: {
-    selectHandle(item, index) {
-      const Data = this.industryType;
-      if (item.name === '总包') {
-        this.checkefAll = !this.checkefAll;
-        if (this.checkefAll) {
-          this.formList.industryType = [];
-          this.industryType = [];
-          ClassificationData.forEach((i) => {
-            if (i.name === '总包') return;
-            this.industryType.push(i.type);
-          });
-          this.formList.industryType.push(item.type);
-        } else {
-          this.formList.industryType = [];
-          this.industryType = [];
-        }
-        return;
-      }
-      if (Data.indexOf(item.type) !== -1) {
-        Data.splice(Data.indexOf(item.type), 1);
-        this.isCheckefAll();
-      } else {
-        Data.push(item.type);
-        this.isCheckefAll();
-      }
-    },
-    seachSekectHandle(item) {
-      if (this.industryType.indexOf(item.type) !== -1) {
-        return true;
-      }
-      return false;
-    },
-    isCheckefAll() {
-      if (this.industryType.length === ClassificationData.length - 1) {
-        this.checkefAll = true;
-      } else {
-        this.checkefAll = false;
-      }
-    },
     progressTap(item, index) {
       this.progressIndex = index;
       this.formList.progressType = item.type;
     },
-    SelectTime() {
-      console.warn(this.$children[5].$refs);
-      let createDate = '';
-      this.$children[5].$refs.getDateVlue
-        .getPicker()
-        .getValues()
-        .forEach((item, index) => {
-          if (index === 2) {
-            createDate += item;
-            return;
-          }
-          createDate += item + '-';
-        });
+    SelectTime(value) {
+      let createDate = dateFormat(new Date(value), 'yyyy-MM-dd');
       createDate += ' ' + getNowFormatDate().date;
       this.formList.createTime = createDate;
       this.isShowDate = false;
@@ -235,23 +219,47 @@ export default {
       this.isShowLevel = false;
     },
     SelectLevel(value) {
-      this.formList.provinceId = value[0].code;
-      this.formList.cityId = value[1].code;
-      if (value[2]) {
-        this.formList.district = value[2].code;
+      const [ProvinceName, CityName, DistrictName] = value;
+      const { formList } = this;
+      if (
+        CityName.name === '北京' ||
+        CityName.name === '天津' ||
+        CityName.name === '上海' ||
+        CityName.name === '重庆'
+      ) {
+        this.placeData = ProvinceName.name + '/' + DistrictName.name;
+        formList.cityId = null;
+      } else if (DistrictName) {
+        this.placeData = ProvinceName.name + '/' + value[1].name + '/' + DistrictName.name;
+        formList.cityId = value[1].code;
       } else {
-        this.formList.district = null;
+        this.placeData = ProvinceName.name + '/' + value[1].name;
+        formList.cityId = value[1].code;
+      }
+      formList.provinceId = ProvinceName.code;
+      if (DistrictName) {
+        formList.district = DistrictName.code;
+      } else {
+        formList.district = null;
       }
       this.isShowLevel = false;
     },
     isEmpty() {
+      const {
+        name,
+        industryType,
+        progressType,
+        chargePeople,
+        meetPeople,
+        createTime,
+      } = this.formList;
       if (
-        this.formList.name &&
-        this.formList.industryType.length > 0 &&
-        this.formList.progressType &&
-        this.formList.chargePeople &&
-        this.formList.meetPeople &&
-        this.formList.createTime
+        name &&
+        industryType.length > 0 &&
+        progressType &&
+        chargePeople &&
+        meetPeople &&
+        createTime
       ) {
         return true;
       }
@@ -259,20 +267,25 @@ export default {
     },
     submitButton() {
       if (this.isEmpty()) {
+        if (this.isUpdate) {
+          this.formList.id = this.id;
+        }
         addProject(this.formList).then((res) => {
+          console.warn(res);
           if (res.code === 200) {
-            this.$toast.success('新建成功');
+            this.$toast.success(this.isUpdate ? '编辑成功' : '新建成功');
             this.$router.push({
-              name: 'newCon',
+              name: 'person',
               replace: true,
             });
           }
         });
-
-        console.warn(this.formList);
       } else {
         this.$toast.fail('请填写必选项');
       }
+    },
+    takeDataHandle(value) {
+      this.formList.industryType = value;
     },
   },
 };
@@ -280,7 +293,6 @@ export default {
 
 <style scped lang="scss">
 .issueCon {
-  background: rgb(248, 247, 250);
   .issueConMain {
     height: 100%;
     margin: 0.15rem 0.15rem 0 0.15rem;
@@ -312,51 +324,6 @@ export default {
       }
       /deep/.van-cell::after {
         display: none !important;
-      }
-      .Classification {
-        background: #fff;
-        height: 0.92rem;
-        flex-direction: row-reverse;
-        padding: 0.1rem 0.15rem 0 0.15rem;
-        margin-left: -0.18rem;
-        width: 102%;
-        display: flex;
-        flex-wrap: wrap;
-        > div {
-          float: right;
-          width: 17.8%;
-          height: 0.24rem;
-          font-family: 'CNRegular';
-          font-weight: 400;
-          color: #010713;
-          line-height: 0.24rem;
-          text-align: center;
-        }
-        > div:not(:nth-child(1), :nth-child(6)) {
-          margin: 0 1.06%;
-        }
-        > div:last-child {
-          float: right;
-        }
-        // class 样式
-        .actictyClassi {
-          background: #4063e7;
-          border-radius: 0.02rem;
-          color: #fff;
-          font-family: Source Han Sans CN;
-        }
-        .actictyClassiAll {
-          background: #4063e7;
-          border-radius: 0.02rem;
-          color: #fff;
-          font-family: Source Han Sans CN;
-        }
-        .progressIndex {
-          width: 83px;
-          height: 0.34rem;
-          background: #e0e6f4;
-          border-radius: 0.02rem;
-        }
       }
       @import '../../style/progreesClassi/progressClassi.scss';
       .progressClassin {

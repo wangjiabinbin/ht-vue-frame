@@ -2,15 +2,16 @@
 /*
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-07 20:51:22
+ * @LastEditTime: 2020-12-10 22:12:44
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \vue.config.js
  */
 // 生产环境，测试和正式
+'use strict';
 const path = require('path');
 const resolve = (dir) => path.join(__dirname, dir);
-// const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
+const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 // externals
 const externals = {
   vue: 'Vue',
@@ -42,16 +43,15 @@ const CDN = {
 };
 module.exports = {
   // 静态资源
-  // configureWebpack: {
-  //   externals: {
-  //     vue: 'Vue',
-  //     'vue-router': 'VueRouter',
-  //     vuex: 'Vuex',
-  //     axios: 'axios',
-  //     echarts: 'echarts',
-  //     vant: 'vant',
-  //   },
-  // },
+  configureWebpack: {
+    // externals: {
+    //   vue: 'Vue',
+    //   'vue-router': 'VueRouter',
+    //   vuex: 'Vuex',
+    //   axios: 'axios',
+    //   echarts: 'echarts',
+    // },
+  },
   publicPath: './',
   outputDir: 'build',
   // 热更新
@@ -89,12 +89,11 @@ module.exports = {
     config.plugin('html').tap((args) => {
       args[0].title = '航天宏图风险普查';
       // if (IS_PROD) {
-      //   console.warn(IS_PROD);
-      // args[0].cdn = CDN.build;
-      console.warn(args);
+      //   args[0].cdn = CDN.build;
       // } else {
-      //   args[0].cdn = cdn.dev;
+      //   args[0].cdn = CDN.dev;
       // }
+      // args[0].cdn = CDN.build;
       return args;
     });
     // 别名 alias

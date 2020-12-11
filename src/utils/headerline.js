@@ -1,3 +1,11 @@
+/*
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 17:15:55
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-09 10:32:37
+ * @Description: Please set Description
+ * @FilePath: \src\utils\headerline.js
+ */
 export const headerLineS = [
   {
     name: '数据说明',
@@ -21,3 +29,14 @@ export const headerLineS = [
 export const Logo = require('../static/loginImages/logo.png');
 export const WX = require('../static/loginImages/icon_w.png');
 export const SJ = require('../static/loginImages/icon_i.png');
+export const auditIing = require('../static/images/addProject/auditing.png');
+export const auditNot = require('../static/images/addProject/auditNot.png');
+export const auditPass = require('../static/images/addProject/auditPass.png');
+export const toAudit = require('../static/images/addProject/toAudit.png');
+
+export const levelJudgeImgS = {
+  auditIing,
+  auditNot,
+  auditPass,
+  toAudit,
+};

@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-08 10:35:39
+ * @LastEditTime: 2020-12-10 11:12:02
  * @Description: 登录
  * @FilePath: \src\views\login\login.vue
 -->
@@ -90,11 +90,11 @@ export default {
         getPhoneCode({
           phone: this.phone,
         }).then((res) => {
-          if (res.data.code === 502) {
+          if (res.code === 502) {
             this.$toast.fail('没有权限登录');
-          } else if (res.data.code === 200) {
+          } else if (res.code === 200) {
             this.$toast.success('已发送验证码');
-          } else if (res.data.code === 501) {
+          } else if (res.code === 501) {
             this.$toast.fail('没有权限登录');
           }
         });

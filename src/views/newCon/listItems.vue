@@ -2,9 +2,9 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-09 17:05:57
+ * @LastEditTime: 2020-12-10 21:55:10
  * @Description: 新建页面
- * @FilePath: \src\views\newCon\newCon.vue
+ * @FilePath: \src\views\newCon\listItems.vue
 -->
 <template>
   <div class="newCon">
@@ -47,9 +47,6 @@
         </div>
       </div>
       <div v-if="noEmpty">暂时没数据。。。</div>
-    </div>
-    <div class="posictionRoter" @click="prevRouterAdd">
-      <img src="../../static/images/addProject/new-built.png" alt="" />
     </div>
   </div>
 </template>
@@ -140,32 +137,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../style/ListProject/listProject.scss';
+
 .newCon {
-  .posictionRoter {
-    width: 0.6rem;
-    // background-color: #ffffff;
-    // border: 1px solid rgba(64, 99, 231, 0.1);
-    // box-shadow: 0px 4px 5px 0px rgba(64, 99, 231, 0.1);
-    border-radius: 0.2rem 0 0 0.2rem;
-    position: fixed;
-    right: 0;
-    bottom: 0.9rem;
-    z-index: 999;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
+  padding: 0 0.15rem;
   .headerNav {
     display: flex;
     height: 0.42rem;
-    width: 92%;
-    padding: 0 0.15rem;
+    width: 100%;
+
     justify-content: space-around;
-    position: fixed;
     background: rgb(248, 247, 250);
     z-index: 999;
-    top: 0;
     > div {
       font-size: 0.15rem;
       color: #4063e7;
@@ -181,84 +164,6 @@ export default {
     }
   }
   .newConMain {
-    padding: 0 0.15rem;
-    margin-top: 0.42rem;
-    .newConMainCenter {
-      display: flex;
-      flex-direction: column;
-      > div {
-        padding: 0 0.13rem;
-        background: #fff;
-        margin-top: 0.15rem;
-        position: relative;
-        height: 0.9rem;
-        .auditImg {
-          width: 0.7rem;
-          height: 0.34rem;
-          position: absolute;
-          right: 0.13rem;
-          top: 0.15rem;
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-        .projectType {
-          display: flex;
-          flex-wrap: wrap;
-          > div {
-            width: 0.52rem;
-            height: 0.18rem;
-            background: #e0e6f4;
-            border: 0.005rem solid #a4a4a4;
-            border-radius: 0.02rem;
-            font-size: 0.12rem;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #4063e7;
-            line-height: 0.18rem;
-            text-align: center;
-            margin-right: 0.08rem;
-            margin-bottom: 0.08rem;
-          }
-        }
-        > div:first-child {
-          height: 0.35rem;
-          font-size: 0.15rem;
-          font-family: Source Han Sans CN;
-          font-weight: bold;
-          color: #4a4a4a;
-          line-height: 0.36rem;
-        }
-        > div:last-child {
-          display: flex;
-          justify-content: space-between;
-          height: 0.23rem;
-          align-items: center;
-          > div:first-child {
-            font-size: 0.12rem;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #a4a4a4;
-          }
-          > div:last-child {
-            font-size: 0.12rem;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #2e6fd7;
-            display: flex;
-            align-items: center;
-          }
-        }
-      }
-      > div:last-child {
-        margin-bottom: 0.13rem;
-      }
-    }
-    .newConMainCenter::before {
-      content: '';
-      display: table;
-    }
   }
 }
 </style>

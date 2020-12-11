@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:08
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-09 11:02:20
+ * @Description: Please set Description
+ * @FilePath: \src\components\tables.vue
+-->
 <template>
   <div>
     <div class="projectCont">
@@ -139,7 +147,9 @@ export default {
     font-size: 0.12rem;
     height: 0.3rem;
     margin-bottom: 0.03rem;
-
+    > span {
+      white-space: nowrap;
+    }
     > span:not(:first-child) {
       width: 0.6rem;
       text-align: center;

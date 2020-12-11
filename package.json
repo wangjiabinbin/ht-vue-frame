@@ -49,5 +49,6 @@
       "vue-cli-service lint",
       "git add"
     ]
-  }
+  },
+  "proxy": "http://211.154.196.244:8081/app"
 }

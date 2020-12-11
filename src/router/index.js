@@ -1,3 +1,11 @@
+/*
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 17:15:55
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-10 22:50:58
+ * @Description: Please set Description
+ * @FilePath: \src\router\index.js
+ */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -9,6 +17,14 @@ VueRouter.prototype.push = function push(to) {
 const routes = [
   {
     path: '/',
+
+    redirect: '/Home',
+    meta: {
+      index: 0,
+    },
+  },
+  {
+    path: '/Home',
     name: 'home',
     component: () => import('../views/home/Home.vue'),
     meta: {
@@ -30,6 +46,23 @@ const routes = [
     component: () => import('../views/newCon/issueCon.vue'),
     meta: {
       index: 2,
+      isShowLogin: true,
+    },
+  },
+  {
+    path: '/NewConIndex',
+    name: 'newConIndex',
+    component: () => import('../views/newCon/index.vue'),
+    meta: {
+      index: 2,
+    },
+  },
+  {
+    path: '/NewConDetail',
+    name: 'newConDetail',
+    component: () => import('../views/newCon/projectDetail.vue'),
+    meta: {
+      isShowLogin: true,
     },
   },
   // 个人中心
@@ -38,7 +71,7 @@ const routes = [
     name: 'person',
     component: () => import('../views/person/person.vue'),
     meta: {
-      index: 3,
+      index: 4,
     },
   },
   // 项目
@@ -57,6 +90,7 @@ const routes = [
     component: () => import('../views/newCon/issueCon.vue'),
     meta: {
       isShow: true,
+      isShowLogin: true,
     },
   },
   //详情
@@ -81,6 +115,31 @@ const routes = [
     path: '/WxAccredit',
     name: 'wxAccredit',
     component: () => import('../views/login/index.vue'),
+    meta: {
+      isShowLogin: true,
+    },
+  },
+  // 招标模块
+  {
+    path: '/InvitationTender',
+    name: 'invitationTender',
+    component: () => import('../views/invitationTender/invitationTender.vue'),
+    meta: {
+      index: 3,
+    },
+  },
+  {
+    path: '/InvitationAdd',
+    name: 'invitationAdd',
+    component: () => import('../views/invitationTender/invitationAdd.vue'),
+    meta: {
+      isShowLogin: true,
+    },
+  },
+  {
+    path: '/TenderDetails',
+    name: 'tenderDetails',
+    component: () => import('../views/invitationTender/invitationTenderDetails.vue'),
     meta: {
       isShowLogin: true,
     },

@@ -2,12 +2,12 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-07 17:07:39
+ * @LastEditTime: 2020-12-09 22:42:01
  * @Description: Please set Description
  * @FilePath: \src\views\home\Home.vue
 -->
 <template>
-  <div style="background: #f8f7fa">
+  <div>
     <!-- banner -->
     <div class="imgBanner">
       <img src="../../static/banner.png" alt="" />

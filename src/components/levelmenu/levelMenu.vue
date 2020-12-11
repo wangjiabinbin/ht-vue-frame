@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-07 17:15:10
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-08 10:29:10
+ * @LastEditTime: 2020-12-10 22:39:17
  * @Description: 三级联动菜单 省市县
  * @FilePath: \src\components\levelmenu\levelMenu.vue
 -->
@@ -14,9 +14,15 @@
     position="bottom"
     :style="{ height: '35%' }"
   >
-    <van-area @confirm="confirm" @cancel="cancel" :area-list="areaList" :columns-num="num">
+    <van-area
+      v-model="cityId"
+      @confirm="confirm"
+      @cancel="cancel"
+      :area-list="areaList"
+      :columns-num="columns"
+    >
       <template #title>
-        <span>你好</span>
+        <span></span>
       </template>
     </van-area>
   </van-popup>
@@ -33,12 +39,14 @@ export default {
     },
     closed: Function,
     confirm: Function,
+    cityId: String,
+    columns: String,
+    isAdd: Boolean,
   },
   data() {
     return {
       areaList: {},
       isShow: false,
-      num: 3,
     };
   },
   created() {
@@ -54,9 +62,11 @@ export default {
           }
         }
       }
+      if (this.isAdd) {
+        res.data.province_list[100000] = '全国';
+      }
       // res.data.province_list = bbb;
       this.areaList = res.data;
-      console.warn(this.areaList);
     });
   },
   methods: {
