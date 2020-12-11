@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 09:41:39
+ * @LastEditTime: 2020-12-11 13:08:31
  * @Description: 底部标签
  * @FilePath: \src\components\footerTab\index.vue
 -->
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { ProjectReview } from 'utils/localstorageS';
+
 export default {
   data() {
     return {
@@ -114,6 +116,10 @@ export default {
       });
     },
     popupHandle() {
+      if (ProjectReview.ratingInfo() === 2) {
+        this.$toast.fail('没有权限查看');
+        return;
+      }
       this.visible = !this.visible;
     },
     cutProjectHandle(item, index) {

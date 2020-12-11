@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 15:41:50
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-08 15:45:24
+ * @LastEditTime: 2020-12-11 13:37:16
  * @Description: Please set Description
  * @FilePath: \src\utils\utils.js
  */
@@ -36,5 +36,31 @@ export function dateFormat(date, fmt) {
   }
   return fmt;
 }
-
-export function add() {}
+/**
+ * @author: 王佳宾
+ * @description: 筛选
+ * @param {*} type
+ * @return {*}
+ */
+export function selectAudit(type) {
+  switch (type) {
+    case '1':
+      return { name: '招标中', color: '#79CBEA' };
+      break;
+    case '2':
+      return { name: '已中标', color: '#EF9228' };
+      break;
+    case '3':
+      return { name: '未中标', color: '#C7DC52' };
+      break;
+    default:
+      return '';
+      break;
+  }
+}
+export function selectParticipation(type) {
+  if (type === '0') {
+    return '未参与';
+  }
+  return '参与';
+}

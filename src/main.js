@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-09 22:25:26
+ * @LastEditTime: 2020-12-11 13:59:54
  * @Description: Please set Description
  * @FilePath: \src\main.js
  */
@@ -25,16 +25,6 @@ router.afterEach((to, from) => {
   document.querySelector('.main').scrollTop = 0;
 });
 router.beforeEach((to, from, next) => {
-  // if (!isShowStorage() && to.name !== 'login') {
-  //   next({
-  //     name: 'login',
-  //     replace: true,
-  //     query: {
-  //       redirect: to.fullPath,
-  //     },
-  //   });
-  // }
-  // next();
   if (!isShowStorage() && to.name !== 'login') {
     next('/Login');
   }

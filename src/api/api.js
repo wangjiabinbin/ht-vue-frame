@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:53
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 21:11:01
+ * @LastEditTime: 2020-12-11 13:22:31
  * @Description: Please set Description
  * @FilePath: \src\api\api.js
  */
@@ -122,7 +122,7 @@ export const bidderAdd = (params) => {
  * @return {*}
  */
 export const getShowBidder = (params) => {
-  return service.get(`/app/bidder/showBidder`, { params: params });
+  return service.post(`/app/bidder/showBidder`, params);
 };
 /**
  * @author: 王佳宾
@@ -132,6 +132,15 @@ export const getShowBidder = (params) => {
  */
 export const getOneBidder = (params) => {
   return service.get(`/app/bidder/getOneBidder`, { params: params });
+};
+/**
+ * @author: 王佳宾
+ * @description: 更新单个招标信息
+ * @param {*} params
+ * @return {*}
+ */
+export const updateBidder = (params) => {
+  return service.post(`/app/bidder/updateBidder`, params);
 };
 // 验证码
 export const getPhoneCode = (params) => {

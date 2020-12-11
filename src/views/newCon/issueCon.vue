@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 14:52:58
+ * @LastEditTime: 2020-12-11 15:54:20
  * @Description: Please set Description
  * @FilePath: \src\views\newCon\issueCon.vue
 -->
@@ -34,20 +34,7 @@
               <span class="newConrequired">*</span>：
             </template>
           </van-cell>
-          <ProjectType @sendData="takeDataHandle" />
-          <!-- <div class="Classification">
-            <div
-              :class="{
-                actictyClassi: seachSekectHandle(item),
-                actictyClassiAll: item.name === '总包' && checkefAll,
-              }"
-              v-for="(item, index) in ClassificationData"
-              :key="index"
-              @click="selectHandle(item, index)"
-            >
-              {{ item.name }}
-            </div>
-          </div> -->
+          <ProjectType :industryTypeS="industryType" @sendData="takeDataHandle" />
           <!-- 项目类型 -->
           <!-- 项目进展 -->
           <van-cell>
@@ -68,7 +55,7 @@
           </div>
           <!-- 项目进展 -->
           <!--  -->
-          <van-cell v-for="(item, index) in vantCellData" :key="index">
+          <van-cell v-for="(item, index) in vantCellData" class="paddingCell" :key="index">
             <template #title>
               <span class="custom-title">{{ item.title }}</span>
               <span class="newConrequired">{{ item.required ? '*' : '' }}</span
@@ -78,7 +65,7 @@
               <van-field
                 v-model="formList[item.value]"
                 input-align="right"
-                :placeholder="'请输入' + item.title"
+                :placeholder="'请填写' + item.title"
               />
             </template>
           </van-cell>
@@ -88,15 +75,25 @@
               <span class="custom-title">时间</span>
               <span class="newConrequired">*</span>：
             </template>
+            <template #default v-if="formList.createTime ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写时间'" />
+            </template>
           </van-cell>
           <!--  -->
           <van-cell @click="isShowLevel = true" is-link :value="placeData">
             <template #title> <span class="custom-title">地点</span>： </template>
+            <template #default v-if="placeData ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写地点'" />
+            </template>
           </van-cell>
           <van-cell>
             <template #title> <span class="custom-title">备注</span>： </template>
           </van-cell>
-          <textarea class="textAreaInput" v-model="formList.remarkInfo"></textarea>
+          <textarea
+            class="textAreaInput"
+            placeholder="备注信息填写"
+            v-model="formList.remarkInfo"
+          ></textarea>
           <div class="submitButton" @click="submitButton">提交</div>
           <PopupDate :closed="closedDate" :isShowDate="isShowDate" :SelectTime="SelectTime" />
           <LevelMenu
@@ -115,9 +112,8 @@
 import PopupDate from 'components/Popup.vue';
 import LevelMenu from 'components/levelmenu/levelMenu.vue';
 import ReturnUp from 'components/returnUp.vue';
-import { ClassificationData, projectData } from 'utils/mapConfig';
+import { projectData } from 'utils/mapConfig';
 import { addProject, getOneProject } from 'api/api';
-import getNowFormatDate from 'utils/dateS';
 import ProjectType from 'components/projectType/projectType.vue';
 import { getStorage } from '../../utils/localstorageS';
 import { dateFormat } from '../../utils/utils';
@@ -131,13 +127,14 @@ export default {
   },
   data() {
     return {
-      title: '项目新建',
+      title: '新建项目',
       projectData: projectData,
       progressIndex: -1,
       placeData: '',
       isShowDate: false,
       isShowLevel: false,
       provinceId: '',
+      industryType: [],
       formList: {
         createUserId: '',
         name: '',
@@ -186,17 +183,11 @@ export default {
         const { data } = res;
         data.industryType.forEach((item) => {
           this.industryType.push(item);
-          this.formList.industryType.push(item);
         });
         this.placeData = data.ProvinceName;
         data.district !== null
           ? (this.provinceId = data.district)
           : (this.provinceId = data.cityId);
-        // res.data.cityId !== null
-        // ? (this.provinceId = res.data.cityId)
-        // : res.data.provinceId !== null
-        // ? (this.provinceId = res.data.provinceId)
-        // : (this.provinceId = '');
         this.formList = data;
       });
     } else {
@@ -209,8 +200,7 @@ export default {
       this.formList.progressType = item.type;
     },
     SelectTime(value) {
-      let createDate = dateFormat(new Date(value), 'yyyy-MM-dd');
-      createDate += ' ' + getNowFormatDate().date;
+      const createDate = dateFormat(new Date(value), 'yyyy-MM-dd');
       this.formList.createTime = createDate;
       this.isShowDate = false;
     },
@@ -270,14 +260,17 @@ export default {
         if (this.isUpdate) {
           this.formList.id = this.id;
         }
+        this.formList.roleKey = getStorage().roleKey;
+        this.formList.regionId = getStorage().regionId;
         addProject(this.formList).then((res) => {
-          console.warn(res);
-          if (res.code === 200) {
+          if (res.data.message === 'yes') {
             this.$toast.success(this.isUpdate ? '编辑成功' : '新建成功');
             this.$router.push({
               name: 'person',
               replace: true,
             });
+          } else if (res.data.message === 'no') {
+            this.$toast.fail('请选择本地区');
           }
         });
       } else {
@@ -313,18 +306,7 @@ export default {
       color: #4063e7;
     }
     .newConCenter {
-      /deep/.van-cell {
-        padding: 0;
-        height: 0.45rem;
-        background: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-      }
-      /deep/.van-cell::after {
-        display: none !important;
-      }
+      @import '../../style/vant.scss';
       @import '../../style/progreesClassi/progressClassi.scss';
       .progressClassin {
         margin: 0;
@@ -359,16 +341,6 @@ export default {
         content: '';
         margin-bottom: 0.13rem;
       }
-    }
-    /deep/.van-cell-clickable:first-child {
-      border-bottom: 0.01rem solid #e5e5e5;
-    }
-    /deep/.van-cell:nth-child(2) {
-      height: 0.5rem;
-      line-height: 0.54rem;
-    }
-    /deep/.van-field__control {
-      color: #010713;
     }
   }
 }

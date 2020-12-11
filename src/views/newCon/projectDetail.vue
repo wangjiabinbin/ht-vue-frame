@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 21:51:43
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 14:29:46
+ * @LastEditTime: 2020-12-11 15:48:24
  * @Description: 新建项目详情页
  * @FilePath: \src\views\newCon\projectDetail.vue
 -->
@@ -158,6 +158,9 @@ export default {
         this.remarkInfo = data.checkOpinion;
       }
       this.projectDetailList = data;
+      this.projectDetailList.provinceName = `${data.provinceName}${
+        data.cityName !== null ? data.cityName + '' : ''
+      }${data.districtName !== null ? data.districtName : ''}`;
     });
   },
   methods: {
@@ -295,7 +298,6 @@ export default {
         width: 100% !important;
         resize: none;
         caret-color: #555454;
-        text-indent: 0.05rem;
         color: #010713;
       }
       .textAreaInput:disabled {

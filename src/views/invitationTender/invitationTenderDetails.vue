@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-10 22:49:07
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 09:11:34
+ * @LastEditTime: 2020-12-11 14:58:06
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationTenderDetails.vue
 -->
@@ -13,7 +13,7 @@
       <div class="tenderDetailTop">
         <div>
           <p>{{ formList.name }}</p>
-          <router-link tag="div" :to="{ name: 'login' }">编辑</router-link>
+          <div @click="toDetailSHandle">编辑</div>
         </div>
         <div class="projectList">
           <span v-for="(item, index) in formList.industryTypeListName" :key="index">
@@ -21,8 +21,10 @@
           </span>
         </div>
         <div class="projectStatus">
-          <span>参与</span>
-          <span>已中标</span>
+          <span>{{ selectParticipation(formList.participation) }}</span>
+          <span :style="{ color: selectAudit(formList.subjectStatus).color }">{{
+            selectAudit(formList.subjectStatus).name
+          }}</span>
         </div>
         <div>
           <span>
@@ -67,7 +69,25 @@
           </template>
         </van-cell>
         <!-- 单位 -->
-        <div class="confirmHandle">确定</div>
+        <div class="timerShaft">时间轴</div>
+        <div
+          class="flowImgMain"
+          v-for="(item, index) in isTimerShaft ? timerShaft : timerShaftOff"
+          :key="index"
+        >
+          <div class="flowImgMainTime">
+            <div>{{ item.time }}</div>
+            <div></div>
+          </div>
+          <div class="flowIcon">
+            <span></span>
+          </div>
+          <div>
+            <span>{{ item.title }}</span
+            ><span>{{ item.name }}</span>
+          </div>
+        </div>
+        <div class="confirmHandle" @click="$router.go(-1)">确定</div>
       </div>
     </div>
   </div>
@@ -76,6 +96,8 @@
 <script>
 import ReturnUp from 'components/returnUp.vue';
 import { getOneBidder } from 'api/api';
+import { selectAudit, selectParticipation } from 'utils/utils';
+import { ProjectReview } from '../../utils/localstorageS';
 
 export default {
   components: {
@@ -83,9 +105,10 @@ export default {
   },
   data() {
     return {
-      title: '招标详情',
+      title: '招标',
       bidderId: this.$route.query.id,
       formList: {},
+      isTimerShaft: false,
       timePopup: [
         {
           name: '标的状态',
@@ -104,17 +127,63 @@ export default {
           type: 'contractTime',
         },
       ],
+      timerShaft: [
+        {
+          time: '',
+          title: '中标公示',
+          name: '',
+        },
+        {
+          time: '',
+          title: '招标公示',
+          name: '',
+        },
+      ],
+      timerShaftOff: [
+        {
+          time: '',
+          title: '招标公示',
+          name: '',
+        },
+      ],
+      selectAudit,
+      selectParticipation,
     };
   },
   created() {
     getOneBidder({ id: this.bidderId }).then((res) => {
+      if (res.data.subjectStatus === '2') {
+        this.isTimerShaft = true;
+        this.timerShaft[0].time = res.data.openTime;
+        this.timerShaft[0].name = res.data.bidder;
+        this.timerShaft[1].time = res.data.biddingTime;
+        this.timerShaft[1].name = res.data.name;
+      } else {
+        this.isTimerShaft = false;
+        this.timerShaftOff[0].time = res.data.biddingTime;
+        this.timerShaftOff[0].name = res.data.name;
+      }
+
       this.formList = res.data;
     });
+  },
+  methods: {
+    toDetailSHandle() {
+      if (ProjectReview.ratingInfo() !== 2) {
+        this.$router.push({
+          name: 'invitationAdd',
+          query: { id: this.formList.id, update: true },
+        });
+      } else {
+        this.$toast.fail('没有权限编辑');
+      }
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@import '../../style/vant.scss';
 .tenderDetailBoss {
   .tenderDetailMain {
     padding: 0.15rem 0.15rem 0 0.15rem;
@@ -200,22 +269,7 @@ export default {
   }
   .tenderMain {
     margin-top: 0.26rem;
-    .moneyStyles {
-      background: #fff !important;
-      height: 0.4rem !important;
-      padding: 0 0.36rem 0 0.15rem !important;
-      margin-left: -0.15rem;
-      width: 109%;
-      // display: flex;
-      // flex-wrap: wrap;
-    }
-    .paddingCell {
-      padding: 0 0.2rem 0 0;
-    }
-    .moneyUnit {
-      font-size: 0.1rem;
-      color: #4063e7;
-    }
+
     .confirmHandle {
       width: 100%;
       height: 0.43rem;
@@ -227,19 +281,72 @@ export default {
       font-weight: 400;
       color: #ffffff;
       line-height: 0.43rem;
+      margin-top: 0.13rem;
     }
-  }
-  /deep/.van-cell {
-    padding: 0;
-    height: 0.45rem;
-    background: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-  }
-  /deep/.van-cell::after {
-    display: none !important;
+    .timerShaft {
+      height: 0.45rem;
+      border-top: 0.01rem solid #e5e5e5;
+      font-size: 0.15rem;
+      font-family: Source Han Sans CN;
+      font-weight: 550;
+      color: #010713;
+      line-height: 0.45rem;
+    }
+    .flowImgMain {
+      height: 0.76rem;
+      .flowImgMainTime {
+        margin: 0 0.09rem 0 0.35rem;
+        display: flex;
+        flex-direction: column;
+        white-space: nowrap;
+        float: left;
+      }
+      > div:last-child {
+        padding-left: 0.09rem;
+        display: flex;
+        flex-direction: column;
+        > span:first-child {
+          font-size: 0.12rem;
+          font-family: Source Han Sans CN;
+          font-weight: 400;
+          color: #010713;
+        }
+        > span:last-child {
+          font-size: 0.12rem;
+          font-family: Source Han Sans CN;
+          font-weight: 400;
+          color: #a4a4a4;
+          margin-top: 0.04rem;
+        }
+      }
+      .flowIcon {
+        float: left;
+        width: 0.12rem;
+        height: 0.12rem;
+        background: rgba(64, 99, 231, 0.3);
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        > span {
+          width: 0.06rem;
+          height: 0.06rem;
+          background: #4063e7;
+          border-radius: 50%;
+        }
+      }
+      .flowIcon::after {
+        content: '';
+        width: 0.01rem;
+        height: 0.75rem;
+        background: rgba(64, 99, 231, 0.5);
+        // background-image: linearge-gradient(red, blue);
+        // background-image: linear-gradient(rgba(64, 99, 231, 0.5), 60%, #fff, 100%);
+        position: absolute;
+        top: 50%;
+      }
+    }
   }
 }
 </style>

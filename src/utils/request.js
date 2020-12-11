@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-07 16:58:12
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-07 20:58:56
+ * @LastEditTime: 2020-12-11 14:41:38
  * @Description: Please set Description
  * @FilePath: \src\utils\request.js
  */
@@ -43,6 +43,7 @@ service.interceptors.response.use(
     Toast.clear();
     const res = response.data;
     if (res.status && res.status !== 200) {
+      Toast.fail('网络错误');
       // 登录超时,重新登录
       // if (res.status === 401) {
       //   store.dispatch('FedLogOut').then(() => {
@@ -56,6 +57,7 @@ service.interceptors.response.use(
   },
   (error) => {
     Toast.clear();
+    Toast.fail('网络错误');
     console.log('err' + error); // for debug
     return Promise.reject(error);
   }

@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 10:55:12
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 09:28:43
+ * @LastEditTime: 2020-12-11 13:38:06
  * @Description: 招标信息列表
  * @FilePath: \src\views\invitationTender\invitationTender.vue
 -->
@@ -11,12 +11,13 @@
     <div class="invitationRouteMain">
       <div class="invitationRouteTop">
         <div @click="isShowLevel = true">
-          全国<van-icon :name="isShowLevel ? 'arrow-down' : 'arrow-up'" />
+          {{ cityTitle }}<van-icon :name="isShowLevel ? 'arrow-down' : 'arrow-up'" />
         </div>
         <div class="seach">
           <input type="text" class="seachInput" placeholder="请输入想要查询的投标信息" />
         </div>
-        <div class="tabLable" v-if="isShowIcon">
+        <div class="tabLable" v-show="isShowIcon">
+          <ProjectType @sendData="takeDataHandle" />
           <div class="tablableIcon"></div>
         </div>
         <div class="iconImgType" @click="isShowIcon = !isShowIcon">
@@ -29,12 +30,13 @@
           中标总金额（单位/万元）：<span>{{ totalPrice }}</span>
         </div>
         <div class="classifyProject">
-          <div class="classifyAll">全部</div>
+          <div class="classifyAll" @click="seachTypeHandle(null)">全部</div>
           <div>
             <div
               class="classifyProgress"
               v-for="(item, index) in classifyProgressData"
               :key="index"
+              @click="seachTypeHandle(item.type)"
             >
               <span :style="{ color: item.color }">{{ item.num }}</span>
               <span>{{ item.name }}</span>
@@ -50,7 +52,7 @@
           >
             <div>{{ item.name }}</div>
             <div class="projectType">
-              <div v-for="(i, n) in item.industryType" :key="n">
+              <div v-for="(i, n) in item.industryTypeListName" :key="n">
                 {{ i }}
               </div>
             </div>
@@ -67,6 +69,7 @@
               <div>预算：{{ item.budgetAmount }}万</div>
             </div>
           </div>
+          <div v-show="isShowEmpty">暂时没有数据。。。</div>
         </div>
         <LevelMenu
           :closed="closedDate"
@@ -82,11 +85,14 @@
 
 <script>
 import LevelMenu from 'components/levelmenu/levelMenu.vue';
+import ProjectType from 'components/projectType/projectType.vue';
 import { getShowBidder } from 'api/api';
+import { selectAudit, selectParticipation } from 'utils/utils';
 
 export default {
   components: {
     LevelMenu,
+    ProjectType,
   },
   data() {
     return {
@@ -96,14 +102,17 @@ export default {
         {
           name: '招标中',
           color: '#79CBEA',
+          type: '1',
         },
         {
           name: '已中标',
           color: '#EF9228',
+          type: '2',
         },
         {
           name: '未中标',
           color: '#C7DC52',
+          type: '3',
         },
       ],
       totalPrice: '',
@@ -112,12 +121,16 @@ export default {
       columns: '1',
       isAdd: true,
       isShowIcon: false,
+      cityTitle: '全国',
       o_getData: {
-        name: '',
-        province: '',
+        name: null,
+        province: null,
         industryTypeList: [],
-        status: '',
+        status: null,
       },
+      isShowEmpty: true,
+      selectAudit,
+      selectParticipation,
     };
   },
   created() {
@@ -125,39 +138,29 @@ export default {
   },
   methods: {
     getData() {
-      getShowBidder().then((res) => {
+      getShowBidder(this.o_getData).then((res) => {
         const { data } = res;
         this.totalPrice = data.totalPrice;
         this.classifyProgressData[0].num = data.BD;
         this.classifyProgressData[1].num = data.WBD;
         this.classifyProgressData[2].num = data.NBD;
+        if (data.bidderList.length === 0) {
+          this.isShowEmpty = true;
+        } else {
+          this.isShowEmpty = false;
+        }
         this.projectDataList = data.bidderList;
       });
     },
-    selectAudit(type) {
-      switch (type) {
-        case '1':
-          return { name: '招标中', color: '#79CBEA' };
-          break;
-        case '2':
-          return { name: '已中标', color: '#EF9228' };
-          break;
-        case '3':
-          return { name: '未中标', color: '#C7DC52' };
-          break;
-        default:
-          return '';
-          break;
-      }
-    },
-    selectParticipation(type) {
-      if (type === '0') {
-        return '未参与';
-      }
-      return '参与';
-    },
     SelectLevel(value) {
-      console.warn(value);
+      this.cityTitle = value[0].name;
+      if (value[0].name === '全国') {
+        this.o_getData.province = null;
+      } else {
+        this.o_getData.province = value[0].code;
+      }
+      this.isShowLevel = false;
+      this.getData();
     },
     closedDate() {
       this.isShowLevel = false;
@@ -169,6 +172,16 @@ export default {
           id: item.id,
         },
       });
+    },
+    takeDataHandle(value) {
+      console.warn(value);
+      this.o_getData.industryTypeList = value;
+      console.warn(this.o_getData);
+      this.getData();
+    },
+    seachTypeHandle(type) {
+      this.o_getData.status = type;
+      this.getData();
     },
   },
 };
@@ -200,6 +213,7 @@ export default {
         z-index: 9999;
         top: 0.73rem;
         .tablableIcon {
+          z-index: -1;
           background-color: #ffffff;
           width: 29px;
           height: 30px;

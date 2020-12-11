@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 09:56:27
+ * @LastEditTime: 2020-12-11 14:53:32
  * @Description: 个人中心
  * @FilePath: \src\views\person\person.vue
 -->
@@ -33,14 +33,14 @@
         <div>手机号码：{{ userMessge.phone }}</div>
       </div>
     </div>
-    <ListItems />
+    <ListItems v-if="!isJurisdiction" />
   </div>
 </template>
 
 <script>
 import ListItems from '../newCon/listItems.vue';
 import { getTables } from '../../api/api';
-import { getStorage } from '../../utils/localstorageS';
+import { getStorage, ProjectReview } from '../../utils/localstorageS';
 
 export default {
   components: {
@@ -52,10 +52,14 @@ export default {
       GGimg: require('../../static/person/GGimg.png'),
       GLRYimg: require('../../static/person/GLRYimg.png'),
       XSimg: require('../../static/person/XSimg.png'),
+      isJurisdiction: false,
     };
   },
   async created() {
     this.userMessge = getStorage();
+    if (ProjectReview.ratingInfo() === 2) {
+      this.isJurisdiction = true;
+    }
   },
   methods: {
     logout() {

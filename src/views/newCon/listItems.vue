@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 21:55:10
+ * @LastEditTime: 2020-12-11 11:49:58
  * @Description: 新建页面
  * @FilePath: \src\views\newCon\listItems.vue
 -->
@@ -88,6 +88,9 @@ export default {
   created() {
     getUserPermission(getStorage()).then((res) => {
       this.UserPermissionList = res.data;
+      if (!res.data.all.length) {
+        this.noEmpty = true;
+      }
       this.dataList = res.data.all;
     });
     if (!ProjectReview.ratingInfo()) {

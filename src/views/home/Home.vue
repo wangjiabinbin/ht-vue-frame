@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-09 22:42:01
+ * @LastEditTime: 2020-12-11 10:25:05
  * @Description: Please set Description
  * @FilePath: \src\views\home\Home.vue
 -->
@@ -587,7 +587,7 @@ export default {
 .actives {
   box-shadow: none !important;
   background-color: #ffffff !important;
-  // background-image: linear-gradient(#ffffff, #ffffff) !important;
+  // background-ima: linearge-gradient(#ffffff, #ffffff) !important;
   font-weight: bold;
 }
 .homeProjectMainS {

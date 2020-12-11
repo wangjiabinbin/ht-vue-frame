@@ -128,6 +128,7 @@ const routes = [
       index: 3,
     },
   },
+  // 招标新建
   {
     path: '/InvitationAdd',
     name: 'invitationAdd',
@@ -136,6 +137,7 @@ const routes = [
       isShowLogin: true,
     },
   },
+  // 招标详情
   {
     path: '/TenderDetails',
     name: 'tenderDetails',

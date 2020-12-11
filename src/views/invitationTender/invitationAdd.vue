@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 09:24:04
+ * @LastEditTime: 2020-12-11 15:58:33
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationAdd.vue
 -->
@@ -37,7 +37,7 @@
               <van-field
                 v-model="formList.tenderer"
                 input-align="right"
-                placeholder="请填写项目名称"
+                placeholder="请填写招标单位"
               />
             </template>
           </van-cell>
@@ -45,21 +45,31 @@
           <!-- 地点 -->
           <van-cell @click="isShowLevel = true" is-link :value="placeData">
             <template #title> <span class="custom-title">地点</span>： </template>
+            <template #default v-if="placeData ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写地点'" />
+            </template>
           </van-cell>
+
           <!--  -->
           <!--  项目类型 -->
-          <ProjectType @sendData="takeDataHandle" />
+          <ProjectType @sendData="takeDataHandle" :industryTypeS="industryType" />
           <!-- 项目进展 -->
           <van-cell is-link @click="isShowUP = true" :value="subjectStatus">
             <template #title>
               <span class="custom-title">标的状态</span>
               <span class="newConrequired">*</span>：
             </template>
+            <template #default v-if="subjectStatus ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写标的状态'" />
+            </template>
           </van-cell>
           <van-cell is-link @click="isShowParticipation = true" :value="pationDataValue">
             <template #title>
               <span class="custom-title">是否参与</span>
               <span class="newConrequired">*</span>：
+            </template>
+            <template #default v-if="pationDataValue ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写是否参与'" />
             </template>
           </van-cell>
 
@@ -75,6 +85,9 @@
             <template #title>
               <span class="custom-title">{{ item.name }}</span>
               <span class="newConrequired">*</span>：
+            </template>
+            <template #default v-if="formList[item.type] ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写' + item.name" />
             </template>
           </van-cell>
           <!-- 金额 -->
@@ -158,10 +171,10 @@ import PopupDate from 'components/Popup.vue';
 import LevelMenu from 'components/levelmenu/levelMenu.vue';
 import ReturnUp from 'components/returnUp.vue';
 import UtilsPopup from 'components/utilsPopup/utilsPopup.vue';
-import { projectData } from 'utils/mapConfig';
-import { bidderAdd } from 'api/api';
 import ProjectType from 'components/projectType/projectType.vue';
-import { dateFormat } from '../../utils/utils';
+import { projectData } from 'utils/mapConfig';
+import { bidderAdd, updateBidder, getOneBidder } from 'api/api';
+import { dateFormat, selectAudit, selectParticipation } from '../../utils/utils';
 
 export default {
   components: {
@@ -186,6 +199,7 @@ export default {
       isShowParticipation: false,
       provinceId: '',
       subjectStatus: '',
+      industryType: [],
       timePopup: [
         {
           name: '发布时间',
@@ -222,11 +236,27 @@ export default {
         district: '', // 县id
         biddingTime: '',
       },
-      isUpdate: this.$route.query.isUpdate,
+      isUpdate: this.$route.query.update,
       id: this.$route.query.id,
     };
   },
-  created() {},
+  created() {
+    if (this.isUpdate) {
+      getOneBidder({ id: this.id }).then((res) => {
+        const { data } = res;
+        data.industryTypeList.forEach((item) => {
+          this.industryType.push(item);
+        });
+        this.placeData = data.provinceName;
+        data.district !== null
+          ? (this.provinceId = data.district)
+          : (this.provinceId = data.city);
+        this.subjectStatus = selectAudit(data.subjectStatus).name;
+        this.pationDataValue = selectParticipation(data.participation);
+        this.formList = data;
+      });
+    }
+  },
   methods: {
     SelectTime(value) {
       const FormList = this.formList;
@@ -244,7 +274,6 @@ export default {
     selectTimeHandle(index) {
       this.dateValue = index;
       this.isShowDate = true;
-      console.warn(index);
     },
     closedDate() {
       this.isShowDate = false;
@@ -334,13 +363,25 @@ export default {
     },
     submitButton() {
       if (this.isEmpty()) {
-        bidderAdd(this.formList).then((res) => {
-          this.$toast.success('新建成功');
-          this.$router.push({
-            name: 'invitationTender',
-            replace: true,
+        if (this.isUpdate) {
+          updateBidder(this.formList).then((res) => {
+            if (res.data.updateBidderMessage === 'ok') {
+              this.$toast.success('更新成功');
+              this.$router.push({
+                name: 'invitationTender',
+                replace: true,
+              });
+            }
           });
-        });
+        } else {
+          bidderAdd(this.formList).then((res) => {
+            this.$toast.success('新建成功');
+            this.$router.push({
+              name: 'invitationTender',
+              replace: true,
+            });
+          });
+        }
       } else {
         this.$toast.fail('请填写必填项');
       }
@@ -374,18 +415,7 @@ export default {
       color: #4063e7;
     }
     .newConCenter {
-      /deep/.van-cell {
-        padding: 0;
-        height: 0.45rem;
-        background: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-      }
-      /deep/.van-cell::after {
-        display: none !important;
-      }
+      @import '../../style/vant.scss';
       .submitButton {
         height: 0.43rem;
         background: #4063e7;
@@ -415,16 +445,6 @@ export default {
         font-size: 0.1rem;
         color: #4063e7;
       }
-    }
-    /deep/.van-cell-clickable:first-child {
-      border-bottom: 0.01rem solid #e5e5e5;
-    }
-    /deep/.van-cell:nth-child(2) {
-      height: 0.5rem;
-      line-height: 0.54rem;
-    }
-    /deep/.van-field__control {
-      color: #010713;
     }
   }
 }

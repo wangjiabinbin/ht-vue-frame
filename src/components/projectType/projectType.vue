@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 16:17:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 15:10:55
+ * @LastEditTime: 2020-12-11 14:49:27
  * @Description: Please set Description
  * @FilePath: \src\components\projectType\projectType.vue
 -->
@@ -29,6 +29,9 @@ import { ClassificationData } from 'utils/mapConfig';
 
 export default {
   name: 'projectType',
+  props: {
+    industryTypeS: Array,
+  },
   components: {},
   data() {
     return {
@@ -50,7 +53,7 @@ export default {
           this.formList.industryType = [];
           this.industryType = [];
           ClassificationData.forEach((i) => {
-            if (i.name === '总包') return;
+            if (i.name !== '总包') return;
             this.industryType.push(i.type);
           });
           this.formList.industryType.push(item.type);
@@ -89,6 +92,12 @@ export default {
     },
     inputHandle() {
       console.warn(this.formList);
+    },
+  },
+  watch: {
+    industryTypeS(value) {
+      this.formList.industryType = value;
+      this.industryType = value;
     },
   },
 };
