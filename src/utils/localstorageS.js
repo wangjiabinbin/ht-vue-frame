@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 10:39:58
+ * @LastEditTime: 2020-12-14 14:47:34
  * @Description: Please set Description
  * @FilePath: \src\utils\localstorageS.js
  */
@@ -35,7 +35,7 @@ export const ProjectReview = {
       return 2;
     }
   },
-  stateMessages: function (name) {
+  stateMessages: (name) => {
     switch (name) {
       case '待审核':
         return 0;

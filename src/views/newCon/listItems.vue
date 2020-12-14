@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 10:38:54
+ * @LastEditTime: 2020-12-14 16:43:58
  * @Description: 新建页面
  * @FilePath: \src\views\newCon\listItems.vue
 -->
@@ -21,7 +21,16 @@
     <div class="newConMain">
       <!-- main -->
       <div class="newConMainCenter">
-        <div v-for="(item, index) in dataList" :key="index">
+        <div
+          v-for="(item, index) in dataList"
+          :key="index"
+          @click="
+            $router.push({
+              name: `newConDetail`,
+              query: { id: item.id, name: item.versionName },
+            })
+          "
+        >
           <div>{{ item.name }}</div>
           <div class="projectType">
             <div v-for="(i, n) in item.industryTypeName" :key="n">

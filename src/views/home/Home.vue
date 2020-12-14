@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 10:25:05
+ * @LastEditTime: 2020-12-14 15:57:55
  * @Description: Please set Description
  * @FilePath: \src\views\home\Home.vue
 -->
@@ -212,7 +212,7 @@
 
 <script>
 import { getTables, getMapInfo, getMapJson, getAllProject } from '../../api/api';
-import getNowFormatDate from '../../utils/dateS';
+import { getNowFormatDate } from '../../utils/utils';
 import { headerLineS } from '../../utils/headerline';
 import { ProjectProgress, LineChartsMap, Tables } from '../../utils/routers';
 import { tabMap, tabLineMap, projectData, colorData } from '../../utils/mapConfig';

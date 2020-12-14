@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-10 22:49:07
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-13 20:53:57
+ * @LastEditTime: 2020-12-14 16:24:04
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationTenderDetails.vue
 -->
@@ -161,14 +161,13 @@ export default {
         this.isTimerShaft = true;
         this.timerShaft[0].time = res.data.openTime;
         this.timerShaft[0].name = res.data.bidder + '中标';
-        this.timerShaft[1].time = res.data.biddingTime;
+        this.timerShaft[1].time = res.data.biddingTime.split(' ')[0];
         this.timerShaft[1].name = res.data.name;
       } else {
         this.isTimerShaft = false;
-        this.timerShaftOff[0].time = res.data.biddingTime;
+        this.timerShaftOff[0].time = res.data.biddingTime.split(' ')[0];
         this.timerShaftOff[0].name = res.data.name;
       }
-
       this.formList = res.data;
     });
   },

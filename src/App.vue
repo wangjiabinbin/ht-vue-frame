@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-14 13:34:27
+ * @LastEditTime: 2020-12-14 15:08:39
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \src\App.vue
@@ -83,6 +83,7 @@ body,
     align-items: center;
     box-sizing: border-box;
     padding: 0 0.39rem;
+    position: static;
   }
 }
 </style>

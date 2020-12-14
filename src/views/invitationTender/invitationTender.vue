@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 10:55:12
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-12 22:35:15
+ * @LastEditTime: 2020-12-14 15:04:02
  * @Description: 招标信息列表
  * @FilePath: \src\views\invitationTender\invitationTender.vue
 -->
@@ -14,7 +14,12 @@
           {{ cityTitle }}<van-icon :name="isShowLevel ? 'arrow-down' : 'arrow-up'" />
         </div>
         <div class="seach">
-          <input type="text" class="seachInput" placeholder="请输入想要查询的投标信息" />
+          <input
+            type="text"
+            v-model="seachDataInput"
+            class="seachInput"
+            placeholder="请输入想要查询的投标信息"
+          />
         </div>
         <div class="tabLable" v-show="isShowIcon">
           <ProjectType @sendData="takeDataHandle" />
@@ -96,6 +101,7 @@ export default {
   },
   data() {
     return {
+      seachDataInput: '',
       projectProgressOff: require('../../static/images/callBidsImg/projectProgressOff.png'),
       projectProgressOn: require('../../static/images/callBidsImg/projectProgress.png'),
       classifyProgressData: [
@@ -180,6 +186,20 @@ export default {
     seachTypeHandle(type) {
       this.o_getData.status = type;
       this.getData();
+    },
+    seachDataInputHandle() {
+      if (window.lazy) {
+        window.clearTimeout(window.lazy);
+      }
+      window.lazy = setTimeout(() => {
+        this.getData();
+      }, 500);
+    },
+  },
+  watch: {
+    seachDataInput(value) {
+      this.o_getData.name = value;
+      this.seachDataInputHandle();
     },
   },
 };

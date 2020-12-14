@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 11:17:27
+ * @LastEditTime: 2020-12-14 16:17:51
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationAdd.vue
 -->
@@ -82,7 +82,7 @@
             v-for="(item, index) in timePopup"
             :key="index"
             is-link
-            :value="formList[item.type]"
+            :value="item.type === 'biddingTime' ? biddingTime : formList[item.type]"
           >
             <template #title>
               <span class="custom-title">{{ item.name }}</span>
@@ -180,7 +180,13 @@ import UtilsPopup from 'components/utilsPopup/utilsPopup.vue';
 import ProjectType from 'components/projectType/projectType.vue';
 import { projectData } from 'utils/mapConfig';
 import { bidderAdd, updateBidder, getOneBidder } from 'api/api';
-import { dateFormat, selectAudit, selectParticipation, isEmpty } from '../../utils/utils';
+import {
+  dateFormat,
+  selectAudit,
+  selectParticipation,
+  isEmpty,
+  getNowFormatDate,
+} from '../../utils/utils';
 
 export default {
   components: {
@@ -206,6 +212,7 @@ export default {
       provinceId: '',
       subjectStatus: '',
       industryType: [],
+      biddingTime: '',
       timePopup: [
         {
           name: '发布时间',
@@ -268,6 +275,7 @@ export default {
           this.industryType.push(item);
         });
         this.placeData = data.provinceName;
+        this.biddingTime = data.biddingTime.split(' ')[0];
         data.district !== null
           ? (this.provinceId = data.district)
           : (this.provinceId = data.city);
@@ -283,7 +291,8 @@ export default {
       const createDate = dateFormat(new Date(value), 'yyyy-MM-dd');
       // createDate += ' ' + getNowFormatDate().date;
       this.dateValue === 0
-        ? (FormList.biddingTime = createDate)
+        ? ((FormList.biddingTime = createDate + getNowFormatDate().date),
+          (this.biddingTime = createDate))
         : this.dateValue === 1
         ? (FormList.openTime = createDate)
         : this.dateValue === 2
@@ -362,7 +371,7 @@ export default {
         } else {
           this.formList.bidder ? null : delete this.formList.bidder;
           this.formList.acceptancePrice ? null : delete this.formList.acceptancePrice;
-          bidderAdd(this.formList).then((res) => {
+          bidderAdd(this.formList).then(() => {
             this.$toast.success('新建成功');
             this.$router.push({
               name: 'invitationTender',

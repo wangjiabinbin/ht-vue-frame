@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 21:51:43
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 11:27:33
+ * @LastEditTime: 2020-12-14 16:59:45
  * @Description: 新建项目详情页
  * @FilePath: \src\views\newCon\projectDetail.vue
 -->
@@ -162,6 +162,7 @@ export default {
       this.projectDetailList.provinceName = `${data.provinceName}${
         data.cityName !== null ? data.cityName + '' : ''
       }${data.districtName !== null ? data.districtName : ''}`;
+      this.projectDetailList.createTime = data.createTime.split(' ')[0];
     });
   },
   methods: {

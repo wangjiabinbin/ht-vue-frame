@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 11:46:17
+ * @LastEditTime: 2020-12-14 14:46:33
  * @Description: Please set Description
  * @FilePath: \src\main.js
  */
@@ -20,7 +20,7 @@ import './style/normalize.css';
 import { isShowStorage } from './utils/localstorageS';
 
 Vue.use(Vant).use(VueAwesomeSwiper);
-router.afterEach((to, from) => {
+router.afterEach(() => {
   // 跳转路由滚动条归零
   document.querySelector('.main').scrollTop = 0;
 });
