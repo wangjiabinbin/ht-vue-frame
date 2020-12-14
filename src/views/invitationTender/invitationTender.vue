@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 10:55:12
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 13:38:06
+ * @LastEditTime: 2020-12-12 22:35:15
  * @Description: 招标信息列表
  * @FilePath: \src\views\invitationTender\invitationTender.vue
 -->
@@ -27,7 +27,7 @@
 
       <div class="invitationRouteCenter">
         <div class="amountMoney">
-          中标总金额（单位/万元）：<span>{{ totalPrice }}</span>
+          中标总金额（万元）：<span>{{ totalPrice }}</span>
         </div>
         <div class="classifyProject">
           <div class="classifyAll" @click="seachTypeHandle(null)">全部</div>
@@ -66,7 +66,7 @@
               <div>
                 开标时间：<span>{{ item.openTime }}</span>
               </div>
-              <div>预算：{{ item.budgetAmount }}万</div>
+              <div>预算：{{ item.budgetAmount }}万元</div>
             </div>
           </div>
           <div v-show="isShowEmpty">暂时没有数据。。。</div>
@@ -174,9 +174,7 @@ export default {
       });
     },
     takeDataHandle(value) {
-      console.warn(value);
       this.o_getData.industryTypeList = value;
-      console.warn(this.o_getData);
       this.getData();
     },
     seachTypeHandle(type) {

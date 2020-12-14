@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 11:12:02
+ * @LastEditTime: 2020-12-11 17:20:19
  * @Description: 登录
  * @FilePath: \src\views\login\login.vue
 -->
@@ -39,8 +39,9 @@
     </div>
     <!-- 版本 -->
     <div class="copy">
-      <span>若手机号未注册，请返回&nbsp;微信登录</span>
-      <span>版本信息V0.1.0</span>
+      <!-- <span>若手机号未注册，请返回&nbsp;微信登录</span> -->
+      <span>若手机号未注册，请联系各省负责人。</span>
+      <span>版本信息V0.2.0</span>
     </div>
   </div>
 </template>
@@ -184,7 +185,7 @@ export default {
       font-weight: 400;
       color: #4063e7;
       button {
-        min-width: 0.9rem;
+        min-width: 1rem;
         box-sizing: border-box;
         background: none;
         border: none;

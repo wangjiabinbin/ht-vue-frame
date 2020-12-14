@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-10 19:57:21
+ * @LastEditTime: 2020-12-14 13:34:27
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \src\App.vue
@@ -67,7 +67,7 @@ body,
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
-    background: rgb(248, 247, 250);
+    background: #f8f9fb;
     .kkkk {
       position: absolute;
       top: 50%;

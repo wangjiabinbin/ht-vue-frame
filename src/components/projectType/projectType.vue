@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 16:17:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 14:49:27
+ * @LastEditTime: 2020-12-13 21:13:21
  * @Description: Please set Description
  * @FilePath: \src\components\projectType\projectType.vue
 -->
@@ -44,7 +44,7 @@ export default {
     };
   },
   methods: {
-    selectHandle(item, index) {
+    selectHandle(item) {
       const Data = this.industryType;
       const DataType = this.formList.industryType;
       if (item.name === '总包') {
@@ -64,15 +64,17 @@ export default {
         this.$emit('sendData', this.formList.industryType);
         return;
       }
+      this.checkefAll = false;
+      Data.splice(Data.indexOf('IA'), Data.indexOf('IA') !== -1 ? 1 : 0);
+      DataType.splice(DataType.indexOf('IA'), DataType.indexOf('IA') !== -1 ? 1 : 0);
       if (Data.indexOf(item.type) !== -1) {
         Data.splice(Data.indexOf(item.type), 1);
-        DataType.splice(Data.indexOf(item.type), 1);
-        this.iSCheckefAll();
+        DataType.splice(DataType.indexOf(item.type), 1);
       } else {
         Data.push(item.type);
         DataType.push(item.type);
-        this.iSCheckefAll();
       }
+      this.$emit('sendData', this.formList.industryType);
     },
     seachSekectHandle(item) {
       if (this.industryType.indexOf(item.type) !== -1) {
@@ -90,14 +92,12 @@ export default {
       }
       this.$emit('sendData', this.formList.industryType);
     },
-    inputHandle() {
-      console.warn(this.formList);
-    },
+    inputHandle() {},
   },
   watch: {
     industryTypeS(value) {
-      this.formList.industryType = value;
-      this.industryType = value;
+      this.formList.industryType = [...value];
+      this.industryType = [...value];
     },
   },
 };

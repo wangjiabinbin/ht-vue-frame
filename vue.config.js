@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-10 22:12:44
+ * @LastEditTime: 2020-12-14 13:36:34
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \vue.config.js
@@ -44,13 +44,13 @@ const CDN = {
 module.exports = {
   // 静态资源
   configureWebpack: {
-    // externals: {
-    //   vue: 'Vue',
-    //   'vue-router': 'VueRouter',
-    //   vuex: 'Vuex',
-    //   axios: 'axios',
-    //   echarts: 'echarts',
-    // },
+    externals: {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      vuex: 'Vuex',
+      axios: 'axios',
+      echarts: 'echarts',
+    },
   },
   publicPath: './',
   outputDir: 'build',
@@ -69,6 +69,14 @@ module.exports = {
           '^/app': '/',
         },
       },
+      // '/app': {
+      //   target: 'http://192.168.1.249:8080/app',
+      //   changeOrigin: true, //跨域
+      //   secure: false, // 使用的是http协议则设置为false，https协议则设置为true
+      //   pathRewrite: {
+      //     '^/app': '/',
+      //   },
+      // },
       '/json': {
         target: 'http://area.zzpeng.cn',
         changeOrigin: true, //跨域

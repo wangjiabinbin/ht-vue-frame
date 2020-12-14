@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 15:41:50
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 13:37:16
+ * @LastEditTime: 2020-12-12 22:00:25
  * @Description: Please set Description
  * @FilePath: \src\utils\utils.js
  */
@@ -63,4 +63,26 @@ export function selectParticipation(type) {
     return '未参与';
   }
   return '参与';
+}
+
+/**
+ * 表单必填项非空判断
+ * @param {*} requiredData 所有必填项
+ * @param {*} allFormItem 所有表单项
+ */
+export function isEmpty(requiredData, allFormItem) {
+  for (let i = 0; i < requiredData.length; i++) {
+    for (let j = 0; j < allFormItem.length; j++) {
+      const requiredKey = requiredData[i].key;
+      const itemKey = allFormItem[j][0];
+      const itemValue = allFormItem[j][1];
+      if (requiredKey === itemKey) {
+        if (!itemValue || !itemValue.length) {
+          return requiredData[i];
+        }
+        break;
+      }
+    }
+  }
+  return false;
 }

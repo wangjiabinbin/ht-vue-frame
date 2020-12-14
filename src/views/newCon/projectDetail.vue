@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 21:51:43
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 15:48:24
+ * @LastEditTime: 2020-12-14 11:27:33
  * @Description: 新建项目详情页
  * @FilePath: \src\views\newCon\projectDetail.vue
 -->
@@ -33,11 +33,12 @@
         <span class="detailText">审批意见：</span>
         <textarea
           class="textAreaInput"
+          :placeholder="jurisdiction.principalIs ? '请填写审批意见' : ''"
           v-model="remarkInfo"
-          :disabled="jurisdiction.principalIs"
+          :disabled="!jurisdiction.principalIs"
         ></textarea>
       </div>
-      <div v-if="!jurisdiction.principalIs" class="ifPass">
+      <div v-if="jurisdiction.principalIs" class="ifPass">
         <div @click="updateProject(2)">通过</div>
         <div @click="updateProject(3)">不通过</div>
       </div>
@@ -106,7 +107,7 @@ export default {
       projectDetailList: {},
       jurisdiction: {
         marketIs: false,
-        principalIs: true,
+        principalIs: false,
       },
       levelJudgeImgS: levelJudgeImgS,
       levelIMG: null,
@@ -119,7 +120,7 @@ export default {
     this.levelIMG = this.iSLevelJudgeImg(this.$route.query.name);
     if (ProjectReview.ratingInfo() === 1) {
       switch (ProjectReview.stateMessages(this.$route.query.name)) {
-        case 2:
+        case 3:
           this.jurisdiction.marketIs = true;
           break;
 
@@ -130,10 +131,10 @@ export default {
     } else if (!ProjectReview.ratingInfo()) {
       switch (ProjectReview.stateMessages(this.$route.query.name)) {
         case 0:
-          this.jurisdiction.principalIs = false;
+          this.jurisdiction.principalIs = true;
           break;
         default:
-          this.jurisdiction.principalIs = true;
+          this.jurisdiction.principalIs = false;
           break;
       }
     }
@@ -152,7 +153,7 @@ export default {
           this.industryType += item + ' ';
         });
       }
-      if (!this.jurisdiction.principalIs) {
+      if (this.jurisdiction.principalIs) {
         this.remarkInfo = '';
       } else {
         this.remarkInfo = data.checkOpinion;

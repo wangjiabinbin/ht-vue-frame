@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-09 09:46:33
+ * @LastEditTime: 2020-12-14 10:39:58
  * @Description: Please set Description
  * @FilePath: \src\utils\localstorageS.js
  */
@@ -42,9 +42,9 @@ export const ProjectReview = {
       case '审核中':
         return 1;
       case '审核不通过':
-        return 2;
-      case '审核通过':
         return 3;
+      case '审核通过':
+        return 2;
       default:
         return 0;
     }

@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 15:54:20
+ * @LastEditTime: 2020-12-14 11:28:28
  * @Description: Please set Description
  * @FilePath: \src\views\newCon\issueCon.vue
 -->
@@ -81,7 +81,9 @@
           </van-cell>
           <!--  -->
           <van-cell @click="isShowLevel = true" is-link :value="placeData">
-            <template #title> <span class="custom-title">地点</span>： </template>
+            <template #title>
+              <span class="custom-title">地点</span><span class="newConrequired">*</span>：
+            </template>
             <template #default v-if="placeData ? false : true">
               <van-field input-align="right" disabled :placeholder="'请填写地点'" />
             </template>
@@ -116,7 +118,7 @@ import { projectData } from 'utils/mapConfig';
 import { addProject, getOneProject } from 'api/api';
 import ProjectType from 'components/projectType/projectType.vue';
 import { getStorage } from '../../utils/localstorageS';
-import { dateFormat } from '../../utils/utils';
+import { dateFormat, isEmpty } from '../../utils/utils';
 
 export default {
   components: {
@@ -127,7 +129,7 @@ export default {
   },
   data() {
     return {
-      title: '新建项目',
+      title: this.$route.query.isUpdate ? '项目编辑页' : '项目新建',
       projectData: projectData,
       progressIndex: -1,
       placeData: '',
@@ -139,7 +141,7 @@ export default {
         createUserId: '',
         name: '',
         industryType: [], // 行业类型
-        progressType: '售前支持', // 进展类型
+        progressType: '', // 进展类型
         chargePeople: '', // 负责人
         meetPeople: '', // 对接人员
         projectManager: '', // 项目经理
@@ -172,6 +174,15 @@ export default {
       ],
       isUpdate: this.$route.query.isUpdate,
       id: this.$route.query.id,
+      requiredData: [
+        { key: 'name', value: '项目名称' },
+        { key: 'industryType', value: '项目类型' },
+        { key: 'progressType', value: '项目进展' },
+        { key: 'chargePeople', value: '负责人' },
+        { key: 'meetPeople', value: '对接人' },
+        { key: 'createTime', value: '时间' },
+        { key: 'provinceId', value: '地点' },
+      ], // 所有表单必填项
     };
   },
   created() {
@@ -184,7 +195,10 @@ export default {
         data.industryType.forEach((item) => {
           this.industryType.push(item);
         });
-        this.placeData = data.ProvinceName;
+
+        this.placeData = `${data.provinceName}${
+          data.cityName !== null ? data.cityName + '' : ''
+        }${data.districtName !== null ? data.districtName : ''}`;
         data.district !== null
           ? (this.provinceId = data.district)
           : (this.provinceId = data.cityId);
@@ -234,29 +248,10 @@ export default {
       }
       this.isShowLevel = false;
     },
-    isEmpty() {
-      const {
-        name,
-        industryType,
-        progressType,
-        chargePeople,
-        meetPeople,
-        createTime,
-      } = this.formList;
-      if (
-        name &&
-        industryType.length > 0 &&
-        progressType &&
-        chargePeople &&
-        meetPeople &&
-        createTime
-      ) {
-        return true;
-      }
-      return false;
-    },
     submitButton() {
-      if (this.isEmpty()) {
+      const allFormItem = Object.entries(this.formList);
+      const hasEmpty = isEmpty(this.requiredData, allFormItem);
+      if (!hasEmpty) {
         if (this.isUpdate) {
           this.formList.id = this.id;
         }
@@ -274,7 +269,7 @@ export default {
           }
         });
       } else {
-        this.$toast.fail('请填写必选项');
+        this.$toast.fail(`请输入\n${hasEmpty.value}`);
       }
     },
     takeDataHandle(value) {

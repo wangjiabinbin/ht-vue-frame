@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-10 22:50:58
+ * @LastEditTime: 2020-12-14 11:37:48
  * @Description: Please set Description
  * @FilePath: \src\router\index.js
  */
@@ -31,15 +31,6 @@ const routes = [
       index: 0,
     },
   },
-  // 新增发布
-  {
-    path: '/NewCon',
-    name: 'newCon',
-    component: () => import('../views/newCon/newCon.vue'),
-    meta: {
-      index: 2,
-    },
-  },
   {
     path: '/IssueCon',
     name: 'issueCon',
@@ -47,14 +38,6 @@ const routes = [
     meta: {
       index: 2,
       isShowLogin: true,
-    },
-  },
-  {
-    path: '/NewConIndex',
-    name: 'newConIndex',
-    component: () => import('../views/newCon/index.vue'),
-    meta: {
-      index: 2,
     },
   },
   {

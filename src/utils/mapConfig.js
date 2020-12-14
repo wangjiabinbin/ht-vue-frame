@@ -1,3 +1,11 @@
+/*
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 17:15:55
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-12 22:37:27
+ * @Description: Please set Description
+ * @FilePath: \src\utils\mapConfig.js
+ */
 export function randomData() {
   return Math.round(Math.random() * 100);
 }
@@ -66,7 +74,7 @@ export function mapOption(isShow, option, name, permissions) {
         {
           gt: 30,
           label: ' > 30',
-          color: '#7f1100',
+          color: '#E8989B',
         },
         {
           gt: 20,

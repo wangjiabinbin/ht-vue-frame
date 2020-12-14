@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-10 22:49:07
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 14:58:06
+ * @LastEditTime: 2020-12-13 20:53:57
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationTenderDetails.vue
 -->
@@ -12,8 +12,8 @@
     <div class="tenderDetailMain">
       <div class="tenderDetailTop">
         <div>
-          <p>{{ formList.name }}</p>
-          <div @click="toDetailSHandle">编辑</div>
+          <span>{{ formList.name }}</span>
+          <div v-if="isEditB" @click="toDetailSHandle" style="color: #4063e7">编辑</div>
         </div>
         <div class="projectList">
           <span v-for="(item, index) in formList.industryTypeListName" :key="index">
@@ -42,30 +42,29 @@
       <div class="tenderMain">
         <van-cell
           v-for="(item, index) in timePopup"
-          :is-link="index === 0 ? false : true"
-          :class="{ paddingCell: index === 0 }"
+          :class="{ paddingCell: true }"
           :key="index"
           :title="item.name"
-          :value="formList[item.type]"
+          :value="index === 0 ? selectAudit(formList.subjectStatus).name : formList[item.type]"
         />
         <van-cell class="moneyStyles" :value="formList.budgetAmount">
           <template #title>
             <span class="custom-title">预算金额</span>
-            <span class="newConrequired">*</span><span class="moneyUnit">(单位/万元)</span>
+            <span class="moneyUnit">(万元)</span>
           </template>
         </van-cell>
         <van-cell class="moneyStyles" :value="formList.ceilingPrice">
           <template #title>
             <span class="custom-title">最高限额</span>
-            <span class="moneyUnit">(单位/万元)</span>
+            <span class="moneyUnit">(万元)</span>
           </template>
         </van-cell>
         <!-- 单位 -->
-        <van-cell title="投标单位" class="paddingCell" :value="formList.bidder"> </van-cell>
-        <van-cell :value="1222" class="paddingCell">
+        <van-cell title="投标单位：" class="paddingCell" :value="formList.bidder"> </van-cell>
+        <van-cell :value="formList.acceptancePrice" class="paddingCell">
           <template #title>
             <span class="custom-title">中标金额</span>
-            <span class="moneyUnit">(单位/万元)</span>
+            <span class="moneyUnit">(万元)</span>：
           </template>
         </van-cell>
         <!-- 单位 -->
@@ -105,25 +104,26 @@ export default {
   },
   data() {
     return {
-      title: '招标',
+      title: '招标详情页',
       bidderId: this.$route.query.id,
       formList: {},
       isTimerShaft: false,
+      isEditB: false,
       timePopup: [
         {
-          name: '标的状态',
+          name: '标的状态：',
           type: 'participation',
         },
         {
-          name: '开标时间',
+          name: '开标时间：',
           type: 'openTime',
         },
         {
-          name: '投标截止时间',
+          name: '投标截止时间：',
           type: 'deadlineTime',
         },
         {
-          name: '合同履行期限',
+          name: '合同履行期限：',
           type: 'contractTime',
         },
       ],
@@ -151,11 +151,16 @@ export default {
     };
   },
   created() {
+    if (ProjectReview.ratingInfo() !== 2) {
+      this.isEditB = true;
+    } else {
+      this.isEditB = false;
+    }
     getOneBidder({ id: this.bidderId }).then((res) => {
       if (res.data.subjectStatus === '2') {
         this.isTimerShaft = true;
         this.timerShaft[0].time = res.data.openTime;
-        this.timerShaft[0].name = res.data.bidder;
+        this.timerShaft[0].name = res.data.bidder + '中标';
         this.timerShaft[1].time = res.data.biddingTime;
         this.timerShaft[1].name = res.data.name;
       } else {
@@ -174,8 +179,6 @@ export default {
           name: 'invitationAdd',
           query: { id: this.formList.id, update: true },
         });
-      } else {
-        this.$toast.fail('没有权限编辑');
       }
     },
   },
@@ -198,13 +201,17 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 0.33rem;
+      min-height: 0.33rem;
       font-size: 0.15rem;
       font-family: Source Han Sans CN;
       font-weight: 600;
       color: #4a4a4a;
+      margin-bottom: 0.13rem;
       > div {
         color: #4a4a4a;
+      }
+      > span {
+        width: 70%;
       }
     }
     > div:nth-child(2) {
@@ -226,6 +233,7 @@ export default {
         margin-right: 0.08rem;
         margin-bottom: 0.08rem;
       }
+      margin-bottom: 0.1rem;
     }
     .projectStatus {
       position: absolute;

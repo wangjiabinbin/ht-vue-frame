@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 15:58:33
+ * @LastEditTime: 2020-12-14 11:17:27
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationAdd.vue
 -->
@@ -44,7 +44,9 @@
           <!--  -->
           <!-- 地点 -->
           <van-cell @click="isShowLevel = true" is-link :value="placeData">
-            <template #title> <span class="custom-title">地点</span>： </template>
+            <template #title>
+              <span class="custom-title">地点</span><span class="newConrequired">*</span>：
+            </template>
             <template #default v-if="placeData ? false : true">
               <van-field input-align="right" disabled :placeholder="'请填写地点'" />
             </template>
@@ -54,15 +56,7 @@
           <!--  项目类型 -->
           <ProjectType @sendData="takeDataHandle" :industryTypeS="industryType" />
           <!-- 项目进展 -->
-          <van-cell is-link @click="isShowUP = true" :value="subjectStatus">
-            <template #title>
-              <span class="custom-title">标的状态</span>
-              <span class="newConrequired">*</span>：
-            </template>
-            <template #default v-if="subjectStatus ? false : true">
-              <van-field input-align="right" disabled :placeholder="'请填写标的状态'" />
-            </template>
-          </van-cell>
+
           <van-cell is-link @click="isShowParticipation = true" :value="pationDataValue">
             <template #title>
               <span class="custom-title">是否参与</span>
@@ -72,7 +66,15 @@
               <van-field input-align="right" disabled :placeholder="'请填写是否参与'" />
             </template>
           </van-cell>
-
+          <van-cell is-link @click="isShowUP = true" :value="subjectStatus">
+            <template #title>
+              <span class="custom-title">标的状态</span>
+              <span class="newConrequired">*</span>：
+            </template>
+            <template #default v-if="subjectStatus ? false : true">
+              <van-field input-align="right" disabled :placeholder="'请填写标的状态'" />
+            </template>
+          </van-cell>
           <!-- 项目进展 -->
           <!--  -->
           <van-cell
@@ -94,10 +96,11 @@
           <van-cell class="moneyStyles">
             <template #title>
               <span class="custom-title">预算金额</span>
-              <span class="newConrequired">*</span><span class="moneyUnit">(单位/万元)</span>
+              <span class="newConrequired">*</span><span class="moneyUnit">(万元)</span>
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.budgetAmount"
                 input-align="right"
                 placeholder="请填写预算金额"
@@ -107,10 +110,11 @@
           <van-cell class="moneyStyles">
             <template #title>
               <span class="custom-title">最高限额</span>
-              <span class="newConrequired">*</span><span class="moneyUnit">(单位/万元)</span>
+              <span class="newConrequired">*</span><span class="moneyUnit">(万元)</span>
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.ceilingPrice"
                 input-align="right"
                 placeholder="请填写最高限额"
@@ -121,6 +125,7 @@
             <template #title> <span class="custom-title">投标单位</span>： </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.bidder"
                 input-align="right"
                 placeholder="请填写投标单位"
@@ -130,10 +135,11 @@
           <van-cell>
             <template #title>
               <span class="custom-title">中标金额</span>
-              <span class="moneyUnit">(单位/万元)</span>
+              <span class="moneyUnit">(万元)</span>：
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.acceptancePrice"
                 input-align="right"
                 placeholder="请填写中标金额"
@@ -174,7 +180,7 @@ import UtilsPopup from 'components/utilsPopup/utilsPopup.vue';
 import ProjectType from 'components/projectType/projectType.vue';
 import { projectData } from 'utils/mapConfig';
 import { bidderAdd, updateBidder, getOneBidder } from 'api/api';
-import { dateFormat, selectAudit, selectParticipation } from '../../utils/utils';
+import { dateFormat, selectAudit, selectParticipation, isEmpty } from '../../utils/utils';
 
 export default {
   components: {
@@ -188,7 +194,7 @@ export default {
     return {
       ParticipationData: ['参与', '未参与'],
       columns: ['招标中', '已中标', '未中标'],
-      title: '招标新建',
+      title: this.$route.query.update ? '招标编辑页' : '招标新建',
       projectData: projectData,
       placeData: '',
       dateValue: null,
@@ -237,6 +243,20 @@ export default {
         biddingTime: '',
       },
       isUpdate: this.$route.query.update,
+      requiredData: [
+        { key: 'name', value: '名称' },
+        { key: 'tenderer', value: '招标单位' },
+        { key: 'province', value: '地点' },
+        { key: 'industryTypeList', value: '行业类型' },
+        { key: 'subjectStatus', value: '标的状态' },
+        { key: 'participation', value: '是否参与' },
+        { key: 'biddingTime', value: '发布时间' },
+        { key: 'openTime', value: '开标时间' },
+        { key: 'deadlineTime', value: '投标截止时间' },
+        { key: 'contractTime', value: '合同履行期限' },
+        { key: 'budgetAmount', value: '预算金额' },
+        { key: 'ceilingPrice', value: '最高限额' },
+      ], // 所有表单必填项
       id: this.$route.query.id,
     };
   },
@@ -306,44 +326,6 @@ export default {
       }
       this.isShowLevel = false;
     },
-    isEmpty() {
-      const {
-        name,
-        tenderer,
-        subjectStatus,
-        budgetAmount,
-        ceilingPrice,
-        participation,
-        industryTypeList,
-        openTime,
-        deadlineTime,
-        contractTime,
-        province,
-        city,
-        biddingTime,
-        district,
-      } = this.formList;
-      if (
-        name !== '' &&
-        tenderer !== '' &&
-        subjectStatus !== null &&
-        budgetAmount !== null &&
-        ceilingPrice !== null &&
-        participation !== '' &&
-        industryTypeList.length !== 0 &&
-        openTime !== '' &&
-        deadlineTime !== '' &&
-        contractTime !== '' &&
-        province !== '' &&
-        city !== '' &&
-        district !== '' &&
-        biddingTime !== ''
-      ) {
-        return true;
-      }
-      return false;
-      // return result; //都为空是true，有不为空的返回false
-    },
     selectUP(value) {
       this.subjectStatus = value;
       const { formList } = this;
@@ -362,8 +344,12 @@ export default {
       this.isShowParticipation = false;
     },
     submitButton() {
-      if (this.isEmpty()) {
+      const allFormItem = Object.entries(this.formList);
+      const hasEmpty = isEmpty(this.requiredData, allFormItem);
+      if (!hasEmpty) {
         if (this.isUpdate) {
+          this.formList.bidder ? null : delete this.formList.bidder;
+          this.formList.acceptancePrice ? null : delete this.formList.acceptancePrice;
           updateBidder(this.formList).then((res) => {
             if (res.data.updateBidderMessage === 'ok') {
               this.$toast.success('更新成功');
@@ -374,6 +360,8 @@ export default {
             }
           });
         } else {
+          this.formList.bidder ? null : delete this.formList.bidder;
+          this.formList.acceptancePrice ? null : delete this.formList.acceptancePrice;
           bidderAdd(this.formList).then((res) => {
             this.$toast.success('新建成功');
             this.$router.push({
@@ -383,7 +371,7 @@ export default {
           });
         }
       } else {
-        this.$toast.fail('请填写必填项');
+        this.$toast.fail(`请输入\n${hasEmpty.value}`);
       }
     },
     takeDataHandle(value) {
@@ -405,6 +393,7 @@ export default {
     .headerTop {
       width: 100%;
       height: 0.24rem;
+      margin-bottom: 0.15rem;
       background: #e0e6f4;
       border-radius: 0.02rem;
       line-height: 0.24rem;
@@ -416,6 +405,7 @@ export default {
     }
     .newConCenter {
       @import '../../style/vant.scss';
+
       .submitButton {
         height: 0.43rem;
         background: #4063e7;
@@ -435,7 +425,7 @@ export default {
       .moneyStyles {
         background: #fff !important;
         height: 0.4rem !important;
-        padding: 0 0.15rem !important;
+        padding: 0 0.19rem 0 0.15rem !important;
         margin-left: -0.15rem;
         width: 109%;
         // display: flex;

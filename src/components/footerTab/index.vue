@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 13:08:31
+ * @LastEditTime: 2020-12-13 20:44:46
  * @Description: 底部标签
  * @FilePath: \src\components\footerTab\index.vue
 -->
@@ -34,9 +34,7 @@
           >
             <div
               :style="{
-                'background-image': `url(${
-                  cutProjectIndex === index ? item.iconsGrey : item.icons
-                })`,
+                'background-image': `url(${item.iconsGrey})`,
               }"
             >
               <!-- <img :src="cutProjectIndex === index ? item.iconsGrey : item.icons" alt="" /> -->
@@ -94,18 +92,21 @@ export default {
         {
           name: '项目新建',
           path: 'issue',
-          icons: require('../../static/projectAddOff.png'),
-          iconsGrey: require('../../static/projectAddOn.png'),
+          iconsGrey: require('../../static/auditOnicon.png'),
         },
         {
           name: '招标新建',
           path: 'invitationAdd',
-          icons: require('../../static/auditOfficon.png'),
-          iconsGrey: require('../../static/auditOnicon.png'),
+          iconsGrey: require('../../static/projectAddOn.png'),
         },
       ],
       cutProjectIndex: -1,
     };
+  },
+  created() {
+    if (ProjectReview.ratingInfo() === 2) {
+      this.tabbar[2].icons = require('../../static/projectOffIcon.png');
+    }
   },
   methods: {
     tabbarCut(index, item) {
@@ -117,7 +118,6 @@ export default {
     },
     popupHandle() {
       if (ProjectReview.ratingInfo() === 2) {
-        this.$toast.fail('没有权限查看');
         return;
       }
       this.visible = !this.visible;
@@ -130,7 +130,6 @@ export default {
       this.visible = false;
     },
   },
-  created() {},
 };
 </script>
 
@@ -142,7 +141,7 @@ export default {
   justify-content: center;
   align-items: center;
   .van-overlay {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.4);
   }
   .newFolder {
     .iconImgParent {
