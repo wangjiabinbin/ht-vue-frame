@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-13 20:44:46
+ * @LastEditTime: 2020-12-14 17:36:52
  * @Description: 底部标签
  * @FilePath: \src\components\footerTab\index.vue
 -->
@@ -135,11 +135,13 @@ export default {
 
 <style scoped lang="scss">
 .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 0.39rem;
   width: 100%;
   height: 0.49rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   .van-overlay {
     background-color: rgba(0, 0, 0, 0.4);
   }

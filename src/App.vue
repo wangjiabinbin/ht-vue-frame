@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-14 15:08:39
+ * @LastEditTime: 2020-12-14 17:48:15
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \src\App.vue
@@ -34,10 +34,25 @@ import { isShowStorage } from './utils/localstorageS';
 export default {
   data() {
     return {
-      isShowLogin: false,
+      // isShowLogin: false,
+      // docmHeight: document.documentElement.clientHeight, //默认屏幕高度
+      // showHeight: document.documentElement.clientHeight, //实时屏幕高度
+      // isResize: false, //默认屏幕高度是否已获取
     };
   },
-  mounted() {},
+  mounted() {
+    // window.onresize = () => {
+    //   return (() => {
+    //     if (!this.isResize) {
+    //       //默认屏幕高度
+    //       this.docmHeight = document.documentElement.clientHeight;
+    //       this.isResize = true;
+    //     }
+    //     //实时屏幕高度
+    //     this.showHeight = document.body.clientHeight;
+    //   })();
+    // };
+  },
   created() {},
   methods: {},
   components: {
@@ -48,6 +63,13 @@ export default {
     $route(to, from) {
       this.isShowLogin = !to.meta.isShowLogin;
     },
+    // showHeight() {
+    //   if (this.docmHeight >= this.showHeight) {
+    //     this.isShowLogin = false;
+    //   } else {
+    //     this.isShowLogin = true;
+    //   }
+    // },
   },
 };
 </script>
@@ -76,14 +98,6 @@ body,
       right: 0;
       z-index: 999999999;
     }
-  }
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 0 0.39rem;
-    position: static;
   }
 }
 </style>
