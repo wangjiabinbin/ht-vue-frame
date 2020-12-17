@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 15:57:55
+ * @LastEditTime: 2020-12-17 09:12:19
  * @Description: Please set Description
  * @FilePath: \src\views\home\Home.vue
 -->
@@ -125,14 +125,14 @@
         >
           <swiper-slide
             ><ProjectProgress
-              :serversData="serversData"
+              :serversData="serversDataOne"
               :jsonData="jsonData"
               :isShow="isShowMinistries"
               :name="china"
           /></swiper-slide>
           <swiper-slide
             ><ProjectProgress
-              :serversData="serversData2"
+              :serversData="serversDataTwo"
               :jsonData="jsonData"
               :isShow="!isShowMinistries"
               :name="china"
@@ -196,24 +196,15 @@
     <!-- table -->
     <div class="tableDetail" style="background-color: #f8f8fa; margin-top: 0.2rem">
       <div class="projectTableTitle">全国省市县项目</div>
-      <!-- <van-list
-        v-model="tableS.loading"
-        :finished="tableS.finished"
-        finished-text="没有更多啦"
-        offset="40"
-        @load="loadHandle"
-      > -->
-      <Tables :tableData="tableS.tableData" :isShowMinistries="isShowMinistries" />
-      <!-- </van-list> -->
+      <Tables :tableData="tableData" :isShowMinistries="isShowMinistries" />
     </div>
-    <div class="bottomTitle" v-if="tableS.tableData.length ? true : false">没有更多啦</div>
+    <div class="bottomTitle" v-if="tableData.length ? true : false">没有更多啦</div>
   </div>
 </template>
 
 <script>
-import { getTables, getMapInfo, getMapJson, getAllProject } from '../../api/api';
-import { getNowFormatDate } from '../../utils/utils';
-import { headerLineS } from '../../utils/headerline';
+import { mapState, mapActions } from 'vuex';
+import { getNowFormatDate, headerLineS } from '../../utils/utils';
 import { ProjectProgress, LineChartsMap, Tables } from '../../utils/routers';
 import { tabMap, tabLineMap, projectData, colorData } from '../../utils/mapConfig';
 
@@ -227,9 +218,6 @@ export default {
     return {
       dataDeclaration: headerLineS,
       overlayShow: false,
-      serversData2: [],
-      serversData: [],
-      jsonData: null,
       china: 'china',
       swiperOptions: {
         observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
@@ -241,75 +229,43 @@ export default {
       tapsituationIndex: 1,
       taptendencyMapIndex: 0,
       isShowData: true,
-      projectDataAll: [],
-      projectDataWeek: [],
       projectData: projectData,
       colorData: colorData,
       tabMap: tabMap,
       tabLineMap: tabLineMap,
-      tableS: {
-        tableData: [],
-        load: this.loadHandle,
-        page: 0,
-        finished: false,
-        loading: false,
-        totals: 4,
-      },
       getDate: '',
-      lineCutData: {},
       isShowMinistries: false,
     };
   },
   async created() {
-    this.getTableData();
-    // 折线图
-    getAllProject().then((res) => {
-      this.projectData.forEach((i, n) => {
-        res.data.week.forEach((item, index) => {
-          if (i.name === item.progress) {
-            item.num === 0
-              ? this.projectDataWeek.push('无变化')
-              : item.num < 0
-              ? this.projectDataWeek.push(item.num)
-              : this.projectDataWeek.push('+' + item.num);
-          }
-        });
-      });
-      this.projectData.forEach((i, n) => {
-        res.data.All.forEach((item, index) => {
-          if (i.name === item.progress) {
-            this.projectDataAll.push(item.num);
-          }
-        });
-      });
-      this.lineCutData.XZZB = res.data.Classify[0].addWBD;
-      this.lineCutData.XZYS = res.data.Classify[0].addCBA;
-      this.lineCutData.SQZC = res.data.Classify[0].PST;
-      this.lineCutData.SQSS = res.data.Classify[0].PIT;
-      this.lineCutData.YZB = res.data.Classify[0].WBD;
-      this.lineCutData.ZSSS = res.data.Classify[0].FIE;
-      this.lineCutData.YSJX = res.data.Classify[0].CBA;
-    });
-    await getMapJson(100000).then((res) => {
-      this.jsonData = res;
-    });
-    // JSon  数据
-    getMapInfo({
-      parent: 100000,
-      type: 1,
-    }).then((res) => {
-      this.serversData2 = res.data;
-    });
-    // 地图数据
-    getMapInfo({
-      parent: 100000,
-      type: 0,
-    }).then((res) => {
-      this.serversData = res.data;
-    });
+    this.getMapInfoOneAsync();
+    this.getMapInfoAsync();
+    this.getMapJsonAsync();
+    this.getAllProjectAsync();
+  },
+  mounted() {
+    this.getTableDataAsync();
+    this.getDate = getNowFormatDate().currentdate;
+  },
+  computed: {
+    ...mapState('HomeStore', [
+      'serversDataTwo',
+      'projectDataWeek',
+      'projectDataAll',
+      'lineCutData',
+      'serversDataOne',
+      'jsonData',
+      'tableData',
+    ]),
   },
   methods: {
-    clickHandle() {},
+    ...mapActions('HomeStore', [
+      'getMapInfoAsync',
+      'getAllProjectAsync',
+      'getMapInfoOneAsync',
+      'getMapJsonAsync',
+      'getTableDataAsync',
+    ]),
     // 点击轮播
     tapsituation(i) {
       this.tapsituationIndex = i;
@@ -320,22 +276,8 @@ export default {
       this.taptendencyMapIndex = i;
       this.$refs.tendencyMapSwiper.$swiper.slideTo(i + 1);
     },
-    // 下拉加载
-    // async loadHandle() {
-    //   this.tableS.page++;
-    //   await this.getTableData(this.tableS.page);
-    //   this.tableS.loading = false;
-    //   if (this.tableS.page === this.tableS.totals) {
-    //     this.tableS.finished = true;
-    //   }
-    // },
     // 获取table数据
-    async getTableData() {
-      const res = await getTables({
-        parent: 100000,
-      });
-      this.tableS.tableData = res.data;
-    },
+
     // 左右按钮切换
     cutSwiperHandle(val) {
       if (!val) {
@@ -352,10 +294,6 @@ export default {
         this.$refs.tendencyMapSwiper.$swiper.slideTo(this.taptendencyMapIndex + 1);
       }
     },
-  },
-
-  mounted() {
-    this.getDate = getNowFormatDate().currentdate;
   },
 };
 </script>

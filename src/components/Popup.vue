@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-07 15:24:23
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-07 21:46:46
+ * @LastEditTime: 2020-12-15 11:32:03
  * @Description: Please set Description
  * @FilePath: \src\components\Popup.vue
 -->
@@ -21,6 +21,8 @@
       type="date"
       @confirm="SelectTime"
       @cancel="cancel"
+      :min-date="minDate"
+      :max-date="maxDate"
     />
   </van-popup>
 </template>
@@ -36,11 +38,18 @@ export default {
     },
     SelectTime: Function,
     closed: Function,
+    minDate: {
+      type: Date,
+      default() {
+        return new Date(1999, 0, 1);
+      },
+    },
+    maxDate: {
+      type: Date,
+    },
   },
   data() {
     return {
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
       currentDate: new Date(),
       isShow: false,
     };

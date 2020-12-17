@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-10 22:49:07
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 16:24:04
+ * @LastEditTime: 2020-12-16 15:45:30
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationTenderDetails.vue
 -->
@@ -47,16 +47,22 @@
           :title="item.name"
           :value="index === 0 ? selectAudit(formList.subjectStatus).name : formList[item.type]"
         />
-        <van-cell class="moneyStyles" :value="formList.budgetAmount">
+        <van-cell class="moneyStyles">
           <template #title>
             <span class="custom-title">预算金额</span>
             <span class="moneyUnit">(万元)</span>
           </template>
+          <template #default>
+            <span class="paddingCell">{{ formList.budgetAmount }}</span>
+          </template>
         </van-cell>
-        <van-cell class="moneyStyles" :value="formList.ceilingPrice">
+        <van-cell class="moneyStyles">
           <template #title>
             <span class="custom-title">最高限额</span>
             <span class="moneyUnit">(万元)</span>
+          </template>
+          <template #default>
+            <span class="paddingCell">{{ formList.ceilingPrice }}</span>
           </template>
         </van-cell>
         <!-- 单位 -->
@@ -96,7 +102,7 @@
 import ReturnUp from 'components/returnUp.vue';
 import { getOneBidder } from 'api/api';
 import { selectAudit, selectParticipation } from 'utils/utils';
-import { ProjectReview } from '../../utils/localstorageS';
+import { ProjectReview } from '../../utils/cookies';
 
 export default {
   components: {
@@ -290,70 +296,7 @@ export default {
       line-height: 0.43rem;
       margin-top: 0.13rem;
     }
-    .timerShaft {
-      height: 0.45rem;
-      border-top: 0.01rem solid #e5e5e5;
-      font-size: 0.15rem;
-      font-family: Source Han Sans CN;
-      font-weight: 550;
-      color: #010713;
-      line-height: 0.45rem;
-    }
-    .flowImgMain {
-      height: 0.76rem;
-      .flowImgMainTime {
-        margin: 0 0.09rem 0 0.35rem;
-        display: flex;
-        flex-direction: column;
-        white-space: nowrap;
-        float: left;
-      }
-      > div:last-child {
-        padding-left: 0.09rem;
-        display: flex;
-        flex-direction: column;
-        > span:first-child {
-          font-size: 0.12rem;
-          font-family: Source Han Sans CN;
-          font-weight: 400;
-          color: #010713;
-        }
-        > span:last-child {
-          font-size: 0.12rem;
-          font-family: Source Han Sans CN;
-          font-weight: 400;
-          color: #a4a4a4;
-          margin-top: 0.04rem;
-        }
-      }
-      .flowIcon {
-        float: left;
-        width: 0.12rem;
-        height: 0.12rem;
-        background: rgba(64, 99, 231, 0.3);
-        border-radius: 50%;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        > span {
-          width: 0.06rem;
-          height: 0.06rem;
-          background: #4063e7;
-          border-radius: 50%;
-        }
-      }
-      .flowIcon::after {
-        content: '';
-        width: 0.01rem;
-        height: 0.75rem;
-        background: rgba(64, 99, 231, 0.5);
-        // background-image: linearge-gradient(red, blue);
-        // background-image: linear-gradient(rgba(64, 99, 231, 0.5), 60%, #fff, 100%);
-        position: absolute;
-        top: 50%;
-      }
-    }
+    @import '../../style/timerShaft.scss';
   }
 }
 </style>

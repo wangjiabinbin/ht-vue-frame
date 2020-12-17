@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 14:53:32
+ * @LastEditTime: 2020-12-16 16:49:39
  * @Description: 个人中心
  * @FilePath: \src\views\person\person.vue
 -->
@@ -33,14 +33,13 @@
         <div>手机号码：{{ userMessge.phone }}</div>
       </div>
     </div>
-    <ListItems v-if="!isJurisdiction" />
+    <ListItems />
   </div>
 </template>
 
 <script>
 import ListItems from '../newCon/listItems.vue';
-import { getTables } from '../../api/api';
-import { getStorage, ProjectReview } from '../../utils/localstorageS';
+import { ProjectReview } from '../../utils/cookies';
 
 export default {
   components: {
@@ -52,21 +51,22 @@ export default {
       GGimg: require('../../static/person/GGimg.png'),
       GLRYimg: require('../../static/person/GLRYimg.png'),
       XSimg: require('../../static/person/XSimg.png'),
-      isJurisdiction: false,
+      // isJurisdiction: false,
     };
   },
   async created() {
-    this.userMessge = getStorage();
-    if (ProjectReview.ratingInfo() === 2) {
-      this.isJurisdiction = true;
-    }
+    this.userMessge = this.$cookies.getCookie('token');
+    // 权限判断
+    // if (ProjectReview.ratingInfo() === 2) {
+    //   this.isJurisdiction = true;
+    // }
   },
   methods: {
     logout() {
       this.$dialog
         .confirm({ message: '您确认要退出吗？' })
         .then(() => {
-          window.localStorage.removeItem('token');
+          this.$cookies.clearCookie('token');
           this.$router.push({
             name: 'wxAccredit',
           });

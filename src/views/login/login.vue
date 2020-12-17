@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-11 17:20:19
+ * @LastEditTime: 2020-12-15 11:45:41
  * @Description: 登录
  * @FilePath: \src\views\login\login.vue
 -->
@@ -48,9 +48,7 @@
 
 <script>
 import { loginByPhone, getPhoneCode } from '../../api/api';
-import { setStorage } from '../../utils/localstorageS';
-import testPhone from '../../utils/verify';
-import { Logo } from '../../utils/headerline';
+import { Logo, testPhone } from '../../utils/utils';
 
 export default {
   data() {
@@ -71,7 +69,8 @@ export default {
           code: this.code,
         }).then((res) => {
           if (res.code === 200) {
-            setStorage(JSON.stringify(res.data));
+            sessionStorage.setItem('name', res.data.userName);
+            this.$cookies.setCookie('token', JSON.stringify(res.data), 30);
             this.code = '';
             this.phone = '';
             this.$router.push({

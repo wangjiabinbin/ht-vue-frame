@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-08 15:41:50
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 16:18:31
+ * @LastEditTime: 2020-12-15 09:42:10
  * @Description: Please set Description
  * @FilePath: \src\utils\utils.js
  */
@@ -30,7 +30,7 @@ export function getNowFormatDate() {
   if (minutef >= 0 && minutef <= 9) {
     minutef = '0' + minutef;
   }
-  const seconds = date.getSeconds();
+  let seconds = date.getSeconds();
   if (seconds >= 0 && seconds <= 9) {
     seconds = '0' + seconds;
   }
@@ -129,4 +129,53 @@ export function isEmpty(requiredData, allFormItem) {
     }
   }
   return false;
+}
+/**
+ * @author: 王佳宾
+ * @description: 图片引入
+ * @param {*}
+ * @return {*}
+ */
+export const headerLineS = [
+  {
+    name: '数据说明',
+  },
+  {
+    name: '1)数据来源：',
+    children: ['各地区负责人的在线表格数据；'],
+  },
+  {
+    name: '2)实时数据统计原则：',
+    children: [
+      'a.累计项目数据为各地上报的项目数据,数据会根据实时数据发生变化。',
+      'b.[较上周+]数据使用当前全国数据总数减去上一周的数据总数，数据为截止至上周日的数据。',
+    ],
+  },
+  {
+    name: '3)风险普查趋势图：',
+    children: ['全国数据使用各地公布上报的数量数据,数据会根据实时数据发生变化。'],
+  },
+];
+export const Logo = require('../static/loginImages/logo.png');
+export const WX = require('../static/loginImages/icon_w.png');
+export const SJ = require('../static/loginImages/icon_i.png');
+export const auditIing = require('../static/images/addProject/auditing.png');
+export const auditNot = require('../static/images/addProject/auditNot.png');
+export const auditPass = require('../static/images/addProject/auditPass.png');
+export const toAudit = require('../static/images/addProject/toAudit.png');
+
+export const levelJudgeImgS = {
+  auditIing,
+  auditNot,
+  auditPass,
+  toAudit,
+};
+/**
+ * @author: 王佳宾
+ * @description: 手机号验证
+ * @param {String} value
+ * @return {*}
+ */
+export function testPhone(value) {
+  return /^[1][3,4,5,7,8][0-9]{9}$/.test(value);
 }

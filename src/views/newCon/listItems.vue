@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 16:43:58
+ * @LastEditTime: 2020-12-16 18:12:22
  * @Description: 新建页面
  * @FilePath: \src\views\newCon\listItems.vue
 -->
@@ -62,8 +62,8 @@
 
 <script>
 import { getUserPermission } from 'api/api';
-import { levelJudgeImgS } from '../../utils/headerline';
-import { getStorage, ProjectReview } from '../../utils/localstorageS';
+import { levelJudgeImgS } from '../../utils/utils';
+import { ProjectReview } from '../../utils/cookies';
 
 export default {
   data() {
@@ -95,14 +95,14 @@ export default {
     };
   },
   created() {
-    getUserPermission(getStorage()).then((res) => {
+    getUserPermission(this.$cookies.getCookie('token')).then((res) => {
       this.UserPermissionList = res.data;
       if (!res.data.all.length) {
         this.noEmpty = true;
       }
       this.dataList = res.data.all;
     });
-    if (!ProjectReview.ratingInfo()) {
+    if (!ProjectReview.ratingInfo() || ProjectReview.ratingInfo() === 2) {
       this.isAudit = '待审核';
     } else {
       this.isAudit = '审核中';
@@ -174,8 +174,6 @@ export default {
       color: #4063e7;
       border-bottom: 0.02rem solid #4063e7;
     }
-  }
-  .newConMain {
   }
 }
 </style>

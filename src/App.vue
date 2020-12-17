@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-29 11:47:25
- * @LastEditTime: 2020-12-14 17:48:15
+ * @LastEditTime: 2020-12-15 09:57:24
  * @LastEditors: 王佳宾
  * @Description: In User Settings Edit
  * @FilePath: \src\App.vue
@@ -29,12 +29,11 @@
 /* eslint-disable */
 import FooterTab from './components/footerTab/index.vue';
 import Header from './components/header/index.vue';
-import { isShowStorage } from './utils/localstorageS';
 
 export default {
   data() {
     return {
-      // isShowLogin: false,
+      isShowLogin: false,
       // docmHeight: document.documentElement.clientHeight, //默认屏幕高度
       // showHeight: document.documentElement.clientHeight, //实时屏幕高度
       // isResize: false, //默认屏幕高度是否已获取

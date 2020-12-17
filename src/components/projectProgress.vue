@@ -1,3 +1,11 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 20:46:09
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-16 17:15:40
+ * @Description: Please set Description
+ * @FilePath: \src\components\projectProgress.vue
+-->
 <template>
   <div ref="projectProgressMap" class="projectProgressMap"></div>
 </template>
@@ -5,7 +13,7 @@
 <script>
 import echarts from 'echarts';
 import { mapOption } from '../utils/mapConfig';
-import { permissions } from '../utils/localstorageS';
+import { permissions } from '../utils/cookies';
 
 export default {
   props: {
@@ -51,7 +59,7 @@ export default {
   // 监听父组件传过来的数据在渲染
   watch: {
     jsonData(val) {
-      if (this.serversData) {
+      if (this.serversData.length !== 0) {
         echarts.registerMap(this.$props.name, this.$props.jsonData);
         this.option = val;
         this.initMap();

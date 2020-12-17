@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 11:28:28
+ * @LastEditTime: 2020-12-16 16:33:33
  * @Description: Please set Description
  * @FilePath: \src\views\newCon\issueCon.vue
 -->
@@ -21,6 +21,7 @@
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.name"
                 input-align="right"
                 placeholder="请填写项目名称"
@@ -80,7 +81,12 @@
             </template>
           </van-cell>
           <!--  -->
-          <van-cell @click="isShowLevel = true" is-link :value="placeData">
+          <van-cell
+            @click="isShowLevel = true"
+            is-link
+            :value="placeData"
+            class="lastChlidren"
+          >
             <template #title>
               <span class="custom-title">地点</span><span class="newConrequired">*</span>：
             </template>
@@ -88,6 +94,21 @@
               <van-field input-align="right" disabled :placeholder="'请填写地点'" />
             </template>
           </van-cell>
+          <!--  -->
+          <div v-for="(item, index) in configList" :key="index">
+            <van-cell>
+              <template #title>
+                <span class="custom-title">{{ item.title }}</span
+                >：
+              </template>
+            </van-cell>
+            <textarea
+              class="textAreaInput textAreaConfig"
+              :placeholder="'请填写' + item.title"
+              v-model="formList[item.type]"
+            ></textarea>
+          </div>
+          <!--  -->
           <van-cell>
             <template #title> <span class="custom-title">备注</span>： </template>
           </van-cell>
@@ -117,7 +138,6 @@ import ReturnUp from 'components/returnUp.vue';
 import { projectData } from 'utils/mapConfig';
 import { addProject, getOneProject } from 'api/api';
 import ProjectType from 'components/projectType/projectType.vue';
-import { getStorage } from '../../utils/localstorageS';
 import { dateFormat, isEmpty } from '../../utils/utils';
 
 export default {
@@ -137,6 +157,20 @@ export default {
       isShowLevel: false,
       provinceId: '',
       industryType: [],
+      configList: [
+        {
+          title: '项目进展计划',
+          type: 'progressPlan',
+        },
+        {
+          title: '项目人员分配',
+          type: 'peoplePositioning',
+        },
+        {
+          title: '项目的问题',
+          type: 'projectIssues',
+        },
+      ],
       formList: {
         createUserId: '',
         name: '',
@@ -151,15 +185,18 @@ export default {
         cityId: '', // 市id
         district: '', // 县id
         remarkInfo: '', // 备注信息
+        progressPlan: null, //项目计划
+        peoplePositioning: null, // 项目人员配置
+        projectIssues: null, // 项目的问题
       },
       vantCellData: [
         {
-          title: '负责人',
+          title: '销售负责人',
           value: 'chargePeople',
           required: true,
         },
         {
-          title: '对接人',
+          title: '对接单位',
           value: 'meetPeople',
           required: true,
         },
@@ -189,24 +226,26 @@ export default {
     if (this.isUpdate) {
       getOneProject({ id: this.id }).then((res) => {
         this.progressIndex = this.projectData.findIndex(
-          (item) => item.name === res.data.progressTypeName
+          (item) => item.name === res.data.project.progressTypeName
         );
-        const { data } = res;
-        data.industryType.forEach((item) => {
+        const { project } = res.data;
+        project.industryType.forEach((item) => {
           this.industryType.push(item);
         });
-
-        this.placeData = `${data.provinceName}${
-          data.cityName !== null ? data.cityName + '' : ''
-        }${data.districtName !== null ? data.districtName : ''}`;
-        data.district !== null
-          ? (this.provinceId = data.district)
-          : (this.provinceId = data.cityId);
-        this.formList = data;
+        this.placeData = `${project.provinceName}${
+          project.cityName !== null ? project.cityName + '' : ''
+        }${project.districtName !== null ? project.districtName : ''}`;
+        project.district !== null
+          ? (this.provinceId = project.district)
+          : (this.provinceId = project.cityId);
+        this.formList = project;
+        this.formList.createUserId = this.$cookies.getCookie('token').id;
+        this.formList.peopleName = this.$cookies.getCookie('token').userName;
       });
-    } else {
-      this.formList.createUserId = getStorage().id;
     }
+    this.formList.createUserId = this.$cookies.getCookie('token').id;
+    this.formList.peopleName = this.$cookies.getCookie('token').userName;
+    console.warn(this.formList);
   },
   methods: {
     progressTap(item, index) {
@@ -255,8 +294,8 @@ export default {
         if (this.isUpdate) {
           this.formList.id = this.id;
         }
-        this.formList.roleKey = getStorage().roleKey;
-        this.formList.regionId = getStorage().regionId;
+        this.formList.roleKey = this.$cookies.getCookie('token').roleKey;
+        this.formList.regionId = this.$cookies.getCookie('token').regionId;
         addProject(this.formList).then((res) => {
           if (res.data.message === 'yes') {
             this.$toast.success(this.isUpdate ? '编辑成功' : '新建成功');
@@ -288,6 +327,9 @@ export default {
     .newConrequired {
       color: #4063e7;
     }
+    .lastChlidren {
+      border-bottom: 1px solid #e5e5e5;
+    }
     .headerTop {
       width: 100%;
       height: 0.24rem;
@@ -317,8 +359,14 @@ export default {
         width: 98% !important;
         resize: none;
         caret-color: #555454;
-        text-indent: 0.05rem;
         color: #010713;
+        border: 1px solid #ededed;
+      }
+      .textAreaInput::placeholder {
+        color: #d0d0d0;
+      }
+      .textAreaConfig {
+        height: 0.64rem !important;
       }
       .submitButton {
         height: 0.43rem;

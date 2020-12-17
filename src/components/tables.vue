@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-09 11:02:20
+ * @LastEditTime: 2020-12-15 10:03:09
  * @Description: Please set Description
  * @FilePath: \src\components\tables.vue
 -->
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { permissions } from '../utils/localstorageS';
+import { permissions } from '../utils/cookies';
 
 export default {
   props: {

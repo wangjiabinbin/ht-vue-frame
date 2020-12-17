@@ -1,39 +1,27 @@
+<!--
+ * @Author: 王佳宾
+ * @Date: 2020-12-02 17:15:55
+ * @LastEditors: 王佳宾
+ * @LastEditTime: 2020-12-16 17:57:49
+ * @Description: Please set Description
+ * @FilePath: \src\views\projects\projects.vue
+-->
 <template>
-  <div class="projectS">
+  <!-- <div class="projectS">
     <div class="yetCityS">
       <div class="yetCityBJ"></div>
       <div class="YetTitle">页面建设中，敬请期待~~</div>
     </div>
-    <!-- 缺省页 -->
-    <!-- <div class="main">
-      <div class="mainTitle">项目进展</div>
-      项目进展
-      <div class="projectEvolve">
-        <div
-          v-for="(item, index) in projectData"
-          :key="index"
-          class="projectClassifyData"
-        >
-          <span>{{ item.num }}</span>
-          <div>{{ item.name }}</div>
+  </div> -->
+  <div class="projectB">
+    <div class="dataList" v-for="(item, index) in project" :key="index">
+      <span>{{ item.name }}</span>
+      <section>
+        <div v-for="(i, n) in item.children" :key="n">
+          <div :style="{ width: i.num - (n + 1) * 100 + '%' }"></div>
         </div>
-      </div>
-      项目进展
-      <div class="mainTitle">项目进展</div>
-      项目类型
-      <div class="projectPropress">
-        <div
-          v-for="(item, index) in projectData2"
-          :key="index"
-          class="projectClassifyData"
-        >
-          <div @click="clickHandle(index)" :class="{ actives: activtiy === index }">
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
-      项目类型
-    </div> -->
+      </section>
+    </div>
   </div>
 </template>
 
@@ -112,74 +100,57 @@ export default {
           name: '全部',
         },
       ],
+      project: [
+        {
+          name: '梁子湖',
+          children: [
+            {
+              num: 500,
+            },
+            {
+              num: 500,
+            },
+            {
+              num: 500,
+            },
+            {
+              num: 500,
+            },
+          ],
+        },
+      ],
       activtiy: 0,
     };
   },
   created() {},
   methods: {
-    clickHandle(value) {
-      this.activtiy = value;
-    },
+    // clickHandle(value) {
+    //   this.activtiy = value;
+    // },
   },
+  computed: {},
 };
 </script>
 
 <style scoped lang="scss">
 @import '../../style/yetCity/yetCity.scss';
-.projectS {
+.projectB {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-// 缺省页
-.projectEvolve {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-  padding: 0 0.1rem;
-  .projectClassifyData {
-    width: 30%;
+  .dataList {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin: 0.05rem 0.05rem 0.05rem 0;
-    > div {
-      width: 100%;
-      height: 0.3rem;
-      border: 1px solid #232323;
-      text-align: center;
-      line-height: 0.3rem;
-    }
-  }
-}
-.projectPropress {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-  padding: 0 0.1rem;
-  .projectClassifyData {
-    min-width: 19%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin: 0.05rem 0.05rem 0.05rem 0;
-    > div {
-      width: 100%;
-      height: 0.2rem;
-      border: 1px solid #232323;
-      text-align: center;
-      line-height: 0.2rem;
-      border-radius: 0.1rem;
-    }
-    .actives {
-      background: rgb(145, 190, 192);
+    > section {
+      display: flex;
+      > div {
+        height: 0.3rem;
+        width: 0.6rem;
+        background: rgb(199, 195, 195);
+        margin-left: 0.1rem;
+        > div {
+          height: 0.3rem;
+          background: red;
+        }
+      }
     }
   }
 }

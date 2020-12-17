@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-09 10:55:12
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 15:04:02
+ * @LastEditTime: 2020-12-15 17:44:46
  * @Description: 招标信息列表
  * @FilePath: \src\views\invitationTender\invitationTender.vue
 -->
@@ -89,9 +89,9 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations } from 'vuex';
 import LevelMenu from 'components/levelmenu/levelMenu.vue';
 import ProjectType from 'components/projectType/projectType.vue';
-import { getShowBidder } from 'api/api';
 import { selectAudit, selectParticipation } from 'utils/utils';
 
 export default {
@@ -104,69 +104,39 @@ export default {
       seachDataInput: '',
       projectProgressOff: require('../../static/images/callBidsImg/projectProgressOff.png'),
       projectProgressOn: require('../../static/images/callBidsImg/projectProgress.png'),
-      classifyProgressData: [
-        {
-          name: '招标中',
-          color: '#79CBEA',
-          type: '1',
-        },
-        {
-          name: '已中标',
-          color: '#EF9228',
-          type: '2',
-        },
-        {
-          name: '未中标',
-          color: '#C7DC52',
-          type: '3',
-        },
-      ],
-      totalPrice: '',
-      projectDataList: [],
       isShowLevel: false,
       columns: '1',
       isAdd: true,
       isShowIcon: false,
       cityTitle: '全国',
-      o_getData: {
-        name: null,
-        province: null,
-        industryTypeList: [],
-        status: null,
-      },
-      isShowEmpty: true,
       selectAudit,
       selectParticipation,
     };
   },
   created() {
-    this.getData();
+    this.getShowBidderAsync();
+  },
+  computed: {
+    ...mapState('InvitationStore', [
+      'classifyProgressData',
+      'o_getData',
+      'totalPrice',
+      'projectDataList',
+      'isShowEmpty',
+    ]),
   },
   methods: {
-    getData() {
-      getShowBidder(this.o_getData).then((res) => {
-        const { data } = res;
-        this.totalPrice = data.totalPrice;
-        this.classifyProgressData[0].num = data.BD;
-        this.classifyProgressData[1].num = data.WBD;
-        this.classifyProgressData[2].num = data.NBD;
-        if (data.bidderList.length === 0) {
-          this.isShowEmpty = true;
-        } else {
-          this.isShowEmpty = false;
-        }
-        this.projectDataList = data.bidderList;
-      });
-    },
+    ...mapMutations('InvitationStore', ['setData']),
+    ...mapActions('InvitationStore', ['getShowBidderAsync']),
     SelectLevel(value) {
       this.cityTitle = value[0].name;
       if (value[0].name === '全国') {
-        this.o_getData.province = null;
+        this.setData(['province', null]);
       } else {
-        this.o_getData.province = value[0].code;
+        this.setData(['province', value[0].code]);
       }
       this.isShowLevel = false;
-      this.getData();
+      this.getShowBidderAsync();
     },
     closedDate() {
       this.isShowLevel = false;
@@ -180,25 +150,25 @@ export default {
       });
     },
     takeDataHandle(value) {
-      this.o_getData.industryTypeList = value;
-      this.getData();
+      this.setData(['industryTypeList', value]);
+      this.getShowBidderAsync();
     },
     seachTypeHandle(type) {
-      this.o_getData.status = type;
-      this.getData();
+      this.setData(['status', type]);
+      this.getShowBidderAsync();
     },
     seachDataInputHandle() {
       if (window.lazy) {
         window.clearTimeout(window.lazy);
       }
       window.lazy = setTimeout(() => {
-        this.getData();
+        this.getShowBidderAsync();
       }, 500);
     },
   },
   watch: {
     seachDataInput(value) {
-      this.o_getData.name = value;
+      this.setData(['name', value]);
       this.seachDataInputHandle();
     },
   },

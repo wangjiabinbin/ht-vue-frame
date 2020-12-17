@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 17:36:52
+ * @LastEditTime: 2020-12-16 16:50:42
  * @Description: 底部标签
  * @FilePath: \src\components\footerTab\index.vue
 -->
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { ProjectReview } from 'utils/localstorageS';
+import { ProjectReview } from 'utils/cookies';
 
 export default {
   data() {
@@ -104,9 +104,9 @@ export default {
     };
   },
   created() {
-    if (ProjectReview.ratingInfo() === 2) {
-      this.tabbar[2].icons = require('../../static/projectOffIcon.png');
-    }
+    // if (ProjectReview.ratingInfo() === 2) {
+    //   this.tabbar[2].icons = require('../../static/projectOffIcon.png');
+    // }
   },
   methods: {
     tabbarCut(index, item) {
@@ -117,9 +117,9 @@ export default {
       });
     },
     popupHandle() {
-      if (ProjectReview.ratingInfo() === 2) {
-        return;
-      }
+      // if (ProjectReview.ratingInfo() === 2) {
+      //   return;
+      // }
       this.visible = !this.visible;
     },
     cutProjectHandle(item, index) {

@@ -2,13 +2,13 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 20:46:08
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-07 17:08:41
+ * @LastEditTime: 2020-12-15 17:46:49
  * @Description: Please set Description
  * @FilePath: \src\views\detailProject\detailProject.vue
 -->
 <template>
   <div class="mainScrool">
-    <van-nav-bar left-text="返回" title="项目详情" left-arrow @click-left="onClickLeft" />
+    <ReturnUp :title="title" />
     <div class="projectTop">
       <div class="detailTitle">
         {{ queryS.name }}项目
@@ -18,14 +18,7 @@
           >切换省份</span
         > -->
       </div>
-      <!-- <van-popup
-        v-model="areaList"
-        position="bottom"
-        :get-container="getContainer"
-        :style="{ height: '50%' }"
-      >
-        <van-area title="标题" :area-list="areaList2" />
-      </van-popup> -->
+
       <div class="projectDetail">
         <!-- 较上周增加数量 -->
         <div
@@ -46,7 +39,11 @@
       <div class="detailTitle">城市项目分布</div>
       <div class="mapProject">
         <!-- 组件传参到地图组件中 -->
-        <ProjectProgress :serversData="serversData" :jsonData="jsonData" :name="queryS.name" />
+        <ProjectProgress
+          :serversData="serversDataOne"
+          :jsonData="jsonData"
+          :name="queryS.name"
+        />
       </div>
       <!-- 组件传参到Table组件中 -->
       <Tables :tableData="tableData" />
@@ -56,7 +53,8 @@
 </template>
 
 <script>
-import { getTables, getMapInfo, getMapJson, getAdcode } from '../../api/api';
+import { mapState, mapActions } from 'vuex';
+import ReturnUp from 'components/returnUp.vue';
 import { ProjectProgress, Tables } from '../../utils/routers';
 import { projectData, colorData } from '../../utils/mapConfig';
 
@@ -64,85 +62,36 @@ export default {
   components: {
     ProjectProgress,
     Tables,
+    ReturnUp,
   },
   data() {
     return {
+      title: '项目详情',
       areaList: false,
       queryS: {},
       projectData: projectData,
       colorData: colorData,
-      projectDataNum: [],
-      serversData: null,
-      tableData: [],
-      jsonData: null,
-      areaList2: {
-        province_list: {
-          110000: '北京',
-          120000: '天津',
-        },
-        city_list: {
-          110100: '北京',
-          120100: '天津',
-        },
-        county_list: {
-          120103: '河西',
-          120104: '南开',
-          120105: '河北',
-          110101: '东城',
-          110102: '西城',
-          110105: '朝阳',
-          110106: '丰台',
-          120101: '和平',
-          120102: '河东',
-        },
-      },
     };
   },
   async created() {
     this.queryS = this.$route.query;
-    getAdcode({ adcode: this.queryS.id }).then((r) => {
-      this.projectData.forEach((i, n) => {
-        r.data.forEach((item, index) => {
-          if (i.name === item.progress) {
-            this.projectDataNum.push(item.num);
-          }
-        });
-      });
-    });
-    await getMapJson(this.queryS.id).then((res) => {
-      this.jsonData = res;
-    });
-    getMapInfo({
-      parent: this.queryS.id,
-      type: 0,
-    }).then((res) => {
-      this.serversData = res.data;
-    });
-    getTables({
-      parent: this.queryS.id,
-    }).then((res) => {
-      // this.tableData = res.data.list;
-      // res.data.sort((a, b) => {
-      //   return b.detail[0].num - a.detail[0].num;
-      // });
-      // res.data.forEach((item, index) => {
-      //   if (item.name === '省厅' || item.name === '市局') {
-      //     const city = res.data.splice(index, 1);
-      //     res.data.unshift(city[0]);
-      //   }
-      // });
-      this.tableData = res.data;
-    });
-
-    // 数据分类
+    this.getAdcodeAsync(this.queryS.id);
+    this.getMapJsonAsync(this.queryS.id);
+    this.getMapInfoOneAsync(this.queryS.id);
+  },
+  mounted() {
+    this.getTableDataAsync(this.queryS.id);
+  },
+  computed: {
+    ...mapState('HomeStore', ['projectDataNum', 'jsonData', 'serversDataOne', 'tableData']),
   },
   methods: {
-    getContainer() {
-      return this.$parent.$refs.mainScrool;
-    },
-    onClickLeft() {
-      this.$router.go(-1);
-    },
+    ...mapActions('HomeStore', [
+      'getAdcodeAsync',
+      'getMapJsonAsync',
+      'getMapInfoOneAsync',
+      'getTableDataAsync',
+    ]),
   },
 };
 </script>

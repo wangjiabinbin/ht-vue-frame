@@ -2,7 +2,7 @@
  * @Author: 王佳宾
  * @Date: 2020-12-02 17:15:55
  * @LastEditors: 王佳宾
- * @LastEditTime: 2020-12-14 16:17:51
+ * @LastEditTime: 2020-12-16 17:01:43
  * @Description: Please set Description
  * @FilePath: \src\views\invitationTender\invitationAdd.vue
 -->
@@ -21,6 +21,7 @@
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.name"
                 input-align="right"
                 placeholder="请填写项目名称"
@@ -35,6 +36,7 @@
             </template>
             <template #default>
               <van-field
+                class="paddingCell"
                 v-model="formList.tenderer"
                 input-align="right"
                 placeholder="请填写招标单位"
@@ -289,7 +291,6 @@ export default {
     SelectTime(value) {
       const FormList = this.formList;
       const createDate = dateFormat(new Date(value), 'yyyy-MM-dd');
-      // createDate += ' ' + getNowFormatDate().date;
       this.dateValue === 0
         ? ((FormList.biddingTime = createDate + getNowFormatDate().date),
           (this.biddingTime = createDate))
@@ -338,11 +339,15 @@ export default {
     selectUP(value) {
       this.subjectStatus = value;
       const { formList } = this;
-      value === '招标中'
-        ? (formList.subjectStatus = '1')
-        : value === '已中标'
-        ? (formList.subjectStatus = '2')
-        : (formList.subjectStatus = '3');
+      const aaa = { key: 'bidder', value: '投标单位' };
+      if (value === '招标中') {
+        formList.subjectStatus = '1';
+      } else if (value === '已中标') {
+        formList.subjectStatus = '2';
+        this.requiredData.push(aaa);
+      } else {
+        formList.subjectStatus = '3';
+      }
       this.isShowUP = false;
     },
     selectParticipation(value) {
@@ -350,12 +355,15 @@ export default {
       value === '参与'
         ? (this.formList.participation = '1')
         : (this.formList.participation = '0');
+
       this.isShowParticipation = false;
     },
     submitButton() {
       const allFormItem = Object.entries(this.formList);
       const hasEmpty = isEmpty(this.requiredData, allFormItem);
       if (!hasEmpty) {
+        this.formList.createUserId = this.$cookies.getCookie('token').id;
+        this.formList.peopleName = this.$cookies.getCookie('token').userName;
         if (this.isUpdate) {
           this.formList.bidder ? null : delete this.formList.bidder;
           this.formList.acceptancePrice ? null : delete this.formList.acceptancePrice;
@@ -434,8 +442,8 @@ export default {
       .moneyStyles {
         background: #fff !important;
         height: 0.4rem !important;
-        padding: 0 0.19rem 0 0.15rem !important;
-        margin-left: -0.15rem;
+        padding: 0 4.2% 0 5% !important;
+        margin-left: -5%;
         width: 109%;
         // display: flex;
         // flex-wrap: wrap;
